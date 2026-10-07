@@ -708,9 +708,11 @@ tr:hover td { background:#f8fafc; }
 </div></div>
 
 <script>
-const STORAGE_KEY='opticalRecords';
-const adminPassword='Shail';
+const STORAGE_KEY = 'opticalRecords';
+const adminPassword = 'Shail';
+const FIREBASE_URL = 'https://specsnshades11-default-rtdb.firebaseio.com/records.json';
 
+let globalRecords = [];
 let currentPayingId=null, currentEditingId=null, activeItem=null;
 let isSummaryOpen = false;
 let currentDeliveryId = null;
@@ -724,7 +726,39 @@ function showToast(msg, isError = false) {
   setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
 }
 
-// SMART UPLOAD SIGNATURE FUNCTION
+// SMART CLOUD SYNC FUNCTIONS
+async function fetchFirebaseData() {
+    try {
+        const response = await fetch(FIREBASE_URL);
+        const data = await response.json();
+        if(data) {
+            globalRecords = Array.isArray(data) ? data : Object.values(data);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(globalRecords));
+        } else {
+            globalRecords = [];
+        }
+    } catch(e) {
+        console.error("Cloud Sync Failed", e);
+        globalRecords = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    }
+    loadRecords();
+}
+
+function getRecords() { 
+    return globalRecords; 
+}
+
+function setRecords(r) { 
+    globalRecords = r; 
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(r)); 
+    fetch(FIREBASE_URL, { 
+        method: 'PUT', 
+        body: JSON.stringify(r), 
+        headers:{'Content-Type':'application/json'} 
+    }).catch(e => console.error("Firebase save error", e));
+}
+
+
 function uploadSignature(e) {
   const file = e.target.files[0];
   if(!file) return;
@@ -734,7 +768,7 @@ function uploadSignature(e) {
     showToast('✅ Signature/Stamp Saved for PDFs!');
   };
   reader.readAsDataURL(file);
-  e.target.value = ''; // reset input
+  e.target.value = '';
 }
 
 function toggleSummaryPanel() {
@@ -748,7 +782,6 @@ function formatDate(iso){ if(!iso || iso==='-') return '-'; const p=String(iso).
 function money(n){ return '₹'+(Number(n)||0).toLocaleString('en-IN'); }
 function esc(v){ return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
 
-// SMART PR GRID LOGIC
 function checkPR(sel, prId) {
     const grid = document.getElementById(prId);
     if(!grid) return;
@@ -761,7 +794,6 @@ function checkPR(sel, prId) {
     }
 }
 
-// DISABLE P BUTTON FOR FC, HM, PL/PR
 function checkDisableP(sel, btnId) {
     const val = sel.value;
     const btn = document.getElementById(btnId);
@@ -775,17 +807,12 @@ function checkDisableP(sel, btnId) {
     }
 }
 
-// SMART GET AND SET VALUES FOR P AND PR
 function getValP(selId, btnId, prId) {
     let v = document.getElementById(selId).value;
     if (v === 'VN' || v === '') return '';
-    
     let out = v;
     const btn = document.getElementById(btnId);
-    if (btn && btn.classList.contains('active') && !btn.disabled) {
-        out += ' P';
-    }
-    
+    if (btn && btn.classList.contains('active') && !btn.disabled) { out += ' P'; }
     if (v.includes('PL/PR')) {
         const grid = document.getElementById(prId);
         if(grid) {
@@ -801,37 +828,25 @@ function setValP(selId, btnId, prId, val) {
     let baseVal = val || '';
     let isP = false;
     let prMatches = [];
-    
     if(baseVal.includes(' (PR: ')) {
         let parts = baseVal.split(' (PR: ');
         baseVal = parts[0];
         let prStr = parts[1].replace(')', '');
         prMatches = prStr.split(',');
     }
-    
-    if (baseVal.endsWith(' P')) {
-        isP = true;
-        baseVal = baseVal.slice(0, -2);
-    }
+    if (baseVal.endsWith(' P')) { isP = true; baseVal = baseVal.slice(0, -2); }
     
     const sel = document.getElementById(selId);
-    if(baseVal === '' && selId.includes('Vision')) sel.value = ''; 
-    else sel.value = baseVal;
+    if(baseVal === '' && selId.includes('Vision')) sel.value = ''; else sel.value = baseVal;
     
     const btn = document.getElementById(btnId);
     if(btn) {
-        if (isP) btn.classList.add('active');
-        else btn.classList.remove('active');
+        if (isP) btn.classList.add('active'); else btn.classList.remove('active');
         checkDisableP(sel, btnId);
     }
-    
     checkPR(sel, prId);
     const grid = document.getElementById(prId);
-    if(grid) {
-        grid.querySelectorAll('.pr-chk').forEach(c => {
-            c.checked = prMatches.includes(c.value);
-        });
-    }
+    if(grid) { grid.querySelectorAll('.pr-chk').forEach(c => { c.checked = prMatches.includes(c.value); }); }
 }
 
 function formatPower(v) { 
@@ -852,8 +867,6 @@ const fe = (s,c,a,v, ad, nv) => {
   return x ? `${b} <span style="color:var(--accent);font-weight:700;">(Add: ${x})</span>` : b;
 };
 
-function getRecords(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||[]; }catch(e){ return[]; } }
-function setRecords(r){ localStorage.setItem(STORAGE_KEY,JSON.stringify(r)); }
 function finalTotal(item){ return Math.max(0,(Number(item.totalAmount)||0)-(Number(item.discountAmount)||0)); }
 function paidFromPayments(item){
  if(Array.isArray(item.payments)) return item.payments.reduce((s,p)=>s+(Number(p.amount)||0),0);
@@ -889,7 +902,6 @@ function checkAgeForAdd() {
     }
 }
 
-// SMART NEXT VISIT CALCULATOR
 function updateNextVisitDate() {
     if(!activeItem) return;
     const wrap = document.getElementById('previewNextVisitWrap');
@@ -907,12 +919,13 @@ function updateNextVisitDate() {
     }
 }
 
-window.onload=function(){
+window.onload = async function() {
   populateDropdownOptions();
   populateMonthFilter();
-  loadRecords();
   
-  // INIT P-BUTTON CHECKS
+  showToast("Syncing Database...");
+  await fetchFirebaseData();
+  
   ['reUnaided','leUnaided','reVision','leVision'].forEach(id => {
       const el = document.getElementById(id);
       if(el) { checkDisableP(el, 'btn' + id.charAt(0).toUpperCase() + id.slice(1) + 'P'); checkPR(el, id + 'PR'); }
@@ -1337,12 +1350,15 @@ function openPrescriptionModal(id){
    </div>
    
    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; margin-bottom:15px; font-size:12px;">
-     <div style="font-size:12px; font-weight:900; color:var(--text-main); border-bottom:1px solid #cbd5e1; padding-bottom:4px; margin-bottom:8px;">PATIENT DETAILS:</div>
+     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #cbd5e1; padding-bottom:4px; margin-bottom:8px;">
+       <span style="font-size:12px; font-weight:900; color:var(--text-main);">PATIENT DETAILS:</span>
+       <span style="font-size:12px; font-weight:900; color:var(--primary);">Eye Test Date: ${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</span>
+     </div>
      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
        <div><b>Name:</b> <span style="font-size:13px; font-weight:700; color:var(--text-main);">${esc(item.customerName)}</span></div>
-       <div style="text-align:right;"><b>Eye Test Date:</b> <span style="font-weight:600;">${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</span></div>
+       <div style="text-align:right;"><b>Phone:</b> ${esc(item.phone)}</div>
        <div><b>Age / Gender:</b> ${esc(item.age)} / ${esc(item.gender)}</div>
-       <div style="text-align:right;"><b>Mobile:</b> ${esc(item.phone)}</div>
+       <div></div>
        ${item.address ? `<div style="grid-column: span 2;"><b>Address:</b> ${esc(item.address)}</div>` : ''}
      </div>
    </div>
@@ -1446,12 +1462,15 @@ function openBillModal(id){
  </div>
  
  <div style="font-size:13px; margin-bottom:15px; display:grid; grid-template-columns:1fr 1fr; gap:8px; background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
-   <div style="grid-column: span 2; font-size:12px; font-weight:900; color:var(--text-main); border-bottom:1px solid #cbd5e1; padding-bottom:4px; margin-bottom:4px;">BILL TO:</div>
+   <div style="display:flex; justify-content:space-between; align-items:center; grid-column: span 2; border-bottom:1px solid #cbd5e1; padding-bottom:4px; margin-bottom:4px;">
+     <span style="font-size:12px; font-weight:900; color:var(--text-main);">BILL TO:</span>
+     <span style="font-size:12px; font-weight:900; color:var(--accent);">Invoice Date: ${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</span>
+   </div>
    <div><b>Name:</b> <span style="font-size:13px; font-weight:700; color:var(--text-main);">${esc(item.customerName)}</span></div>
-   <div style="text-align:right;"><b>Invoice Date:</b> <span style="font-weight:600;">${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</span></div>
+   <div style="text-align:right;"><b>Phone:</b> ${esc(item.phone)}</div>
    <div><b>Age / Gender:</b> ${esc(item.age)} / ${esc(item.gender)}</div>
-   <div style="text-align:right;"><b>Mobile:</b> ${esc(item.phone)}</div>
-   ${item.address ? `<div style="grid-column: span 2;"><b>Address:</b> ${esc(item.address)}</div>` : ''}
+   <div></div>
+   ${addr}
  </div>
  
  <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:15px;">
@@ -1806,7 +1825,7 @@ function exportBackup(){
 }
 function importBackup(e){
  const file=e.target.files[0]; if(!file)return; const reader=new FileReader();
- reader.onload=function(){try{const d=JSON.parse(reader.result),r=Array.isArray(d)?d:d.records; if(!Array.isArray(r))throw Error(); if(!confirm('Restore backup? Existing data will be replaced.'))return; setRecords(r); migrateRecords(); loadRecords(); showToast('Data Restored!');}catch(err){showToast('Invalid backup file.', true);}}; reader.readAsText(file); e.target.value='';
+ reader.onload=function(){try{const d=JSON.parse(reader.result),r=Array.isArray(d)?d:d.records; if(!Array.isArray(r))throw Error(); if(!confirm('Restore backup? Existing data will be replaced.'))return; setRecords(r); loadRecords(); showToast('Data Restored!');}catch(err){showToast('Invalid backup file.', true);}}; reader.readAsText(file); e.target.value='';
 }
 </script>
 </body>
