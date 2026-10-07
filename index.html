@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MALTI VISION PLUS - Software</title>
+
+<!-- Google Fonts: Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- jsPDF for PDF generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>window.jsPDF = window.jspdf.jsPDF;</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+:root {
+  --primary: #0284c7; --primary-hover: #0369a1; --success: #16a34a; --danger: #dc2626; --accent: #ea580c;
+  --bg-color: #f1f5f9; --card-bg: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --border-color: #cbd5e1;
+}
+*{box-sizing:border-box}
+body{font-family:'Inter',sans-serif;margin:0;padding:0 10px 80px 10px;background:var(--bg-color);color:var(--text-main);font-size:13px; -webkit-tap-highlight-color: transparent;}
+.container{max-width:1100px;margin:auto;}
+
+/* Color Utility Classes */
+.text-green { color: var(--success) !important; }
+.text-blue { color: var(--primary) !important; }
+.text-red { color: var(--danger) !important; }
+
+/* MODERN COLORFUL GRADIENT HEADER */
+.app-header {
+    background: linear-gradient(135deg, #0ea5e9, #4f46e5); 
+    padding: 16px 15px;
+    text-align: center;
+    border-bottom: none;
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    margin: 0 -10px 15px -10px; 
+    border-radius: 0 0 16px 16px;
+    color: #fff;
+}
+.app-header::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg, #fcd34d, #f97316, #ec4899); 
+    border-radius: 16px 16px 0 0;
+}
+.app-header h1 { margin:0; color:#fff; font-size:20px; font-weight:800; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:2px; text-shadow:0 2px 4px rgba(0,0,0,0.15);}
+.app-header .subtitle { font-size:11px; font-weight:600; color:#e0f2fe; margin-top:4px; letter-spacing:0.5px;}
+.app-header .powered { font-size:8.5px; font-weight:700; color:#c7d2fe; margin-top:3px; text-transform:uppercase; letter-spacing: 0.5px;}
+
+@media(min-width:769px){
+    body { padding-top:10px; }
+    .app-header { margin: 0 0 20px 0; border-radius: 16px; top: 10px; }
+    .app-header h1 { font-size: 24px; }
+    .app-header .subtitle { font-size: 12px; }
+    .app-header .powered { font-size: 10px; }
+}
+
+/* Navigation Desktop */
+.nav-tabs { display:flex; gap:10px; margin-bottom:20px; }
+.nav-tab { flex:1; padding:12px; font-size:13px; font-weight:600; border:1px solid var(--border-color); border-radius:8px; cursor:pointer; background:#f8fafc; color:var(--text-muted); transition:0.2s; display:flex; justify-content:center; align-items:center; gap:6px;}
+.nav-tab:hover { background:#e2e8f0; }
+.nav-tab.active { background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 4px 10px rgba(2,132,199,0.3); }
+
+/* Mobile Bottom Nav */
+.bottom-nav{display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; box-shadow:0 -4px 15px rgba(0,0,0,.06); z-index:99; padding:10px 0 12px; justify-content:space-around; border-top-left-radius:16px; border-top-right-radius:16px;}
+.bottom-nav-item{text-align:center; flex:1; color:#94a3b8; font-size:11px; font-weight:600; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; transition:all 0.2s;}
+.bottom-nav-item i{font-size:20px}
+.bottom-nav-item.active{color:var(--primary)}
+.bottom-nav-item.active i{transform:scale(1.1)}
+
+.page-section{display:none; animation:fadeIn 0.2s;}
+.page-section.active{display:block;}
+@keyframes fadeIn { from{opacity:0;transform:translateY(5px);} to{opacity:1;transform:translateY(0);} }
+
+/* Forms & Cards */
+.form-card { background:#fff; border:1px solid var(--border-color); border-radius:10px; padding:15px; margin-bottom:15px; box-shadow:0 2px 4px rgba(0,0,0,0.02);}
+
+/* COLORFUL ENTRY CARD BACKGROUNDS */
+#card-customer { background-color: #eff6ff; border-color: #bfdbfe; }
+#card-refraction { background-color: #f5f3ff; border-color: #ddd6fe; }
+#card-order { background-color: #fff7ed; border-color: #fed7aa; }
+#card-payment { background-color: #f0fdf4; border-color: #bbf7d0; }
+
+#card-customer .card-header { border-bottom-color: #bfdbfe; }
+#card-refraction .card-header { border-bottom-color: #ddd6fe; }
+#card-order .card-header { border-bottom-color: #fed7aa; }
+#card-payment .card-header { border-bottom-color: #bbf7d0; }
+
+.card-header { font-size:13px; font-weight:800; color:var(--text-main); margin-bottom:12px; text-transform:uppercase; display:flex; align-items:center; gap:6px; border-bottom:2px solid #e2e8f0; padding-bottom:8px;}
+.card-header i { color:var(--primary); font-size:15px;}
+
+.row { display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap;}
+.col { flex:1; min-width:140px; position:relative; }
+label { font-size:10.5px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;}
+input, select { width:100%; padding:10px; font-family:'Inter',sans-serif; font-size:13px; border:1px solid var(--border-color); border-radius:6px; background:#fff; color:var(--text-main); outline:none; transition:0.2s;}
+input:focus, select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(2,132,199,0.15);}
+
+/* P Button Style */
+.btn-p { background: #f1f5f9; border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 6px; font-size: 13px; font-family:'Inter',sans-serif; font-weight: 800; padding: 0 10px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; height:100%;}
+.btn-p:hover:not(:disabled) { background: #e2e8f0; }
+.btn-p.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 2px 6px rgba(2,132,199,0.3); }
+.btn-p:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* PR Grid Checkboxes */
+.pr-grid label { font-size: 11px; display: flex; align-items: center; gap: 4px; cursor: pointer; text-transform: none; font-weight: 700; color: var(--primary); margin:0; padding: 2px 6px; background: #e0f2fe; border-radius: 4px; border: 1px solid #bae6fd;}
+.pr-grid input[type="checkbox"] { width: 13px; height: 13px; margin:0; accent-color: var(--primary);}
+
+/* Smart Auto-Fill Prompt */
+#autoFillPrompt { display:none; background:#dcfce7; color:#166534; font-size:11.5px; font-weight:600; padding:8px 12px; border-radius:6px; margin-top:8px; border:1px solid #86efac; cursor:pointer; text-align:center; transition:0.2s;}
+#autoFillPrompt:active { transform:scale(0.98); }
+
+/* Refraction Grid styling */
+.eye-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; margin-bottom:15px; background:#ffffff; padding:10px; border-radius:8px; border:1px solid #e2e8f0;}
+.eye-title { grid-column: span 4; font-size:12px; font-weight:700; color:var(--primary); margin-bottom:4px;}
+.le-title { color:var(--accent); }
+.eye-grid .col { min-width:0; }
+.eye-grid select { padding:8px 4px; font-size:12px; text-align:center; }
+.add-nv-row { grid-column: span 4; display:grid; grid-template-columns: repeat(2, 1fr); gap:8px; margin-top:2px; display:none; }
+
+/* Item Checkboxes */
+.item-check-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; font-weight:700; font-size:12px;}
+.item-check-row input[type="checkbox"] { width:16px; height:16px; accent-color:var(--primary); }
+
+/* Bill Summary Box */
+.bill-summary { background:#ffffff; padding:15px; border-radius:8px; border:1px dashed #cbd5e1; }
+.bill-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12.5px; font-weight:500; color:var(--text-muted);}
+.bill-row input { width:100px; padding:6px; text-align:right; font-weight:600; font-size:13px;}
+.bill-row.strong { font-weight:800; color:var(--text-main); font-size:14px; border-top:1px solid #cbd5e1; padding-top:8px; margin-top:4px;}
+.bill-row.balance { color:var(--danger); font-size:15px; }
+
+.btn-main { width:100%; background:var(--primary); color:#fff; border:none; padding:14px; font-family:'Inter',sans-serif; font-size:14px; font-weight:700; border-radius:8px; cursor:pointer; margin-top:10px; transition:0.2s; display:flex; align-items:center; justify-content:center; gap:8px;}
+.btn-main:hover { background:var(--primary-hover); }
+.btn-main:disabled { background:#94a3b8; cursor:not-allowed; }
+
+/* Records Area Filter */
+.filter-bar { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;}
+.filter-bar select, .filter-bar input { width:auto; flex:1; min-width:150px; }
+.btn-secondary { background:#f8fafc; color:var(--text-main); border:1px solid var(--border-color); padding:10px 15px; font-weight:600; border-radius:6px; cursor:pointer; font-size:12px; transition:0.2s; display:flex; align-items:center; justify-content:center; gap:5px;}
+.btn-secondary:hover { background:#e2e8f0; }
+
+/* ULTRA COMPACT DASHBOARD DESKTOP */
+.dash-section-title { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 15px 0 8px 4px; letter-spacing: 0.5px; }
+.dash-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
+.dash-card { padding: 12px 6px; border-radius: 8px; border: 1px solid var(--border-color); text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+.dash-card i { font-size: 14px; margin-bottom: 5px; color: var(--text-muted); }
+.dash-title { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0; line-height: 1.2; }
+.dash-value { font-size: 14px; font-weight: 800; color: var(--text-main); margin-top: 4px; }
+
+/* Dashboard Pastel Colors */
+.dash-card.c-total { background-color: #eff6ff; border-color: #bfdbfe; }
+.dash-card.c-cash { background-color: #f0fdf4; border-color: #bbf7d0; }
+.dash-card.c-upi { background-color: #f5f3ff; border-color: #ddd6fe; }
+.dash-card.c-dues { background-color: #fef2f2; border-color: #fecaca; }
+.dash-card.c-orders { background-color: #fff7ed; border-color: #fed7aa; }
+
+/* DESKTOP TABLE */
+.table-wrap { width:100%; overflow-x:auto; background:#fff; border-radius:10px; border:1px solid var(--border-color); display:block; }
+table { width:100%; border-collapse:collapse; min-width:900px; font-size:11.5px;}
+th { background:#f8fafc; color:var(--text-muted); font-weight:700; text-transform:uppercase; font-size:10px; padding:12px 10px; text-align:left; border-bottom:1px solid var(--border-color); position:sticky; top:0; z-index:10;}
+td { padding:12px 10px; border-bottom:1px solid #f1f5f9; vertical-align:middle; color:#334155;}
+tr:hover td { background:#f8fafc; }
+
+/* COLORFUL MOBILE CARDS */
+.mobile-cards-wrap { display:none; }
+.mob-card { background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 40px); border:1px solid #bae6fd; border-radius:10px; padding:15px; margin-bottom:12px; box-shadow:0 4px 10px rgba(2,132,199,0.06); position:relative;}
+.mob-card-head { display:flex; justify-content:space-between; border-bottom:1px dashed #bfdbfe; padding-bottom:10px; margin-bottom:10px; font-size:11.5px; font-weight:600; color:var(--text-muted);}
+.mob-card-head span.inv { color:var(--accent); font-weight:800; font-size:13px;}
+.mob-card-body { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;}
+.mob-card-name { font-size:15px; font-weight:800; color:var(--text-main);}
+.mob-card-phone { font-size:12px; color:var(--text-muted); margin-top:4px; display:flex; align-items:center; gap:5px;}
+.mob-card-fin { text-align:right; min-width: 80px;}
+.mob-card-total { font-size:14px; font-weight:800;}
+.status-badge { display:inline-flex; align-items:center; gap:4px; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700; text-transform:uppercase; margin-bottom:10px;}
+.bg-paid { background:#dcfce7; color:#166534; border:1px solid #bbf7d0;}
+.bg-due { background:#fee2e2; color:#b91c1c; border:1px solid #fecaca;}
+
+/* Action Buttons & Dropdown */
+.actions-cell { display:flex; gap:6px; align-items:center; width:100%;}
+.btn-act { padding:7px 12px; font-size:11px; font-weight:700; border-radius:6px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; color:#fff; transition:0.2s;}
+.btn-act:hover { filter:brightness(1.1); }
+.btn-act.pay { background:var(--danger); }
+.btn-act.bill { background:var(--accent); }
+.btn-act.presc { background:var(--primary); }
+
+.btn-delivery { background:#fff7ed; color:var(--accent); border:1px solid #fed7aa; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:0.2s; display:inline-flex; align-items:center; gap:4px; }
+.btn-delivery:hover { background:#ffedd5; }
+
+/* Dropdown ⋮ */
+.dropdown { position:relative; display:inline-block; }
+.btn-more { background:#f1f5f9; color:var(--text-main); border:1px solid var(--border-color); padding:7px 12px; border-radius:6px; font-size:12px; cursor:pointer; transition:0.2s;}
+.btn-more:hover { background:#e2e8f0; }
+.dropdown-content { display:none; position:absolute; right:0; top:100%; background:#fff; min-width:140px; box-shadow:0 10px 25px rgba(0,0,0,0.15); border:1px solid var(--border-color); border-radius:8px; z-index:20; overflow:hidden;}
+.dropdown-content.show { display:flex; flex-direction:column; }
+.dropdown-content button { background:none; border:none; border-bottom:1px solid #f1f5f9; padding:10px 15px; text-align:left; font-size:12px; font-family:'Inter',sans-serif; font-weight:600; color:var(--text-main); cursor:pointer; display:flex; align-items:center; gap:8px; transition:0.2s;}
+.dropdown-content button:hover { background:#f8fafc; color:var(--primary); padding-left:18px;}
+.dropdown-content button.del:hover { color:var(--danger); }
+
+/* Responsive adjustments for Mobile */
+@media(max-width:768px){
+  .nav-tabs {display:none;} .bottom-nav {display:flex;}
+  .table-wrap {display:none;} .mobile-cards-wrap {display:block;}
+  .eye-grid select { padding:8px 2px; font-size:11px;}
+  .btn-p { padding: 0 6px; font-size: 11px;}
+  
+  /* Filter Bar Shrink */
+  .filter-bar { gap: 6px; margin-bottom: 8px; }
+  .filter-bar select, .filter-bar input { padding: 8px 10px; font-size: 12px; min-width: 0; flex:1;}
+  .filter-bar-row { display: flex; justify-content: space-between; gap:6px; width:100%; margin-bottom:6px;}
+  .btn-secondary { padding: 8px 10px; font-size: 11px; flex:1; display:flex; justify-content:center;}
+  .btn-icon-only { flex: 0 0 40px; } 
+
+  /* ULTRA MINIATURE Mobile Dashboard */
+  #summaryDashboard { padding: 12px; border-radius: 10px; }
+  .dash-grid { gap: 6px; margin-bottom: 12px; }
+  .dash-card { padding: 6px 4px; border-radius: 6px; box-shadow:none; }
+  .dash-card i { font-size: 12px; margin-bottom: 4px; display:block;}
+  .dash-title { font-size: 8px; letter-spacing: 0; margin-bottom:2px;}
+  .dash-value { font-size: 12px; margin-top: 2px; }
+  .dash-section-title { font-size: 9px; margin: 4px 0 4px 2px; }
+
+  /* UPDATED SMART MOBILE CARDS */
+  .mob-card { padding: 10px 12px; margin-bottom: 12px; border-radius: 10px; }
+  .mob-card-head { font-size: 10.5px; padding-bottom: 6px; margin-bottom: 8px; border-bottom: 1px dashed #bfdbfe;}
+  .mob-card-head span.inv { font-size: 12px; }
+  .mob-card-name { font-size: 14.5px; font-weight:800; color:var(--text-main); }
+  .mob-card-phone { font-size: 11.5px; margin-top:3px; color:var(--text-muted);}
+  .mob-card-total { font-size: 14px; font-weight:800;}
+  
+  /* Slimmer Buttons */
+  .actions-cell { flex:1; display:flex; justify-content:space-between; width:100%; padding-top:4px;}
+  .btn-act { flex:1; justify-content:center; padding:7px 4px; font-size:11px;}
+  .dropdown { flex: 0 0 auto; }
+  .btn-more { padding:7px 12px; }
+}
+
+/* Modal Core Logic */
+.card-modal { display:none !important; }
+.card-modal.active { display:flex !important; position:fixed; inset:0; background:rgba(15,23,42,.7); backdrop-filter:blur(3px); justify-content:center; align-items:center; z-index:1000; padding:15px; }
+.modal-overlay { display:none !important; }
+.modal-overlay.active { display:flex !important; position:fixed; inset:0; background:rgba(15,23,42,.7); backdrop-filter:blur(3px); justify-content:center; align-items:center; z-index:1000; padding:15px; }
+
+.modal-box{background:#fff;padding:20px;border-radius:12px;width:380px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 15px 40px rgba(0,0,0,.2)}
+.modal-box h3{margin-top:0;font-size:16px;font-weight:800;border-bottom:1px solid var(--border-color);padding-bottom:10px}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.modal-actions button{flex:1;padding:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;}
+.btn-confirm{background:var(--success);color:#fff} .btn-cancel{background:var(--text-muted);color:#fff}
+
+/* Preview Modal Design */
+.preview-card{background:#fff;width:100%;max-width:500px;max-height:92vh;margin:auto;border-radius:10px;box-shadow:0 15px 40px rgba(0,0,0,.3);display:flex;flex-direction:column;overflow:hidden;}
+.card-scroll-body{padding:15px;overflow-y:auto;flex:1;} 
+.card-footer{display:flex;gap:8px;padding:15px;background:#f8fafc;border-top:1px solid #e2e8f0;flex-shrink:0; flex-wrap:wrap; justify-content:center;}
+.card-footer button{flex:1; min-width:100px; padding:12px 10px; font-family:'Inter',sans-serif; font-weight:600; border:none; border-radius:6px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; gap:6px; transition:0.2s;}
+.card-footer button:hover{filter:brightness(1.1);}
+
+/* Toast */
+.toast-notification { visibility:hidden; min-width:250px; background:var(--success); color:#fff; text-align:center; border-radius:8px; padding:12px 20px; position:fixed; z-index:9999; left:50%; transform:translateX(-50%); top:-50px; font-size:13px; font-weight:600; box-shadow:0 10px 30px rgba(0,0,0,0.2); opacity:0; transition:opacity 0.3s, top 0.4s ease-out; display:flex; align-items:center; gap:8px; justify-content:center; }
+.toast-notification.show { visibility:visible; opacity:1; top:20px; }
+.toast-notification.error { background:var(--danger); }
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast-notification"></div>
+
+<div class="container">
+<!-- COLORFUL BRAND HEADER -->
+<div class="app-header">
+  <h1>👓 MALTI VISION PLUS</h1>
+  <div class="subtitle">Optical • Eye Examination • Eyewear</div>
+  <div class="powered">powered by specsnshades</div>
+</div>
+
+<!-- Desktop Nav -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="switchPage('entry')"><i class="fa-solid fa-file-medical"></i> New Prescription</button>
+  <button class="nav-tab" onclick="switchPage('records')"><i class="fa-solid fa-folder-open"></i> Sales & Records</button>
+</div>
+
+<!-- Mobile Nav -->
+<div class="bottom-nav">
+  <div class="bottom-nav-item active" onclick="switchPage('entry')" id="mobNavEntry"><i class="fa-solid fa-file-medical"></i><span>New Presc.</span></div>
+  <div class="bottom-nav-item" onclick="switchPage('records')" id="mobNavRecords"><i class="fa-solid fa-folder-open"></i><span>Records</span></div>
+</div>
+
+<!-- ENTRY SECTION -->
+<div id="sectionEntry" class="page-section active">
+<form id="prescriptionForm" onsubmit="saveRecord(event)">
+
+  <!-- Card 1: CUSTOMER -->
+  <div class="form-card" id="card-customer">
+    <div class="card-header"><i class="fa-solid fa-user"></i> Customer Information</div>
+    <div class="row">
+      <div class="col"><label>Mobile Number *</label><input type="tel" id="phone" placeholder="10-digit number" inputmode="numeric" required maxlength="10"></div>
+      <div class="col"><label>Customer Name *</label><input type="text" id="customerName" placeholder="Full Name" required></div>
+    </div>
+    <div id="autoFillPrompt"><i class="fa-solid fa-clock-rotate-left"></i> Existing customer found. Click to load prescription!</div>
+    <div class="row" style="margin-top:12px;">
+      <div class="col"><label>Age</label><input type="number" id="customerAge" placeholder="Years" min="1" max="120"></div>
+      <div class="col"><label>Gender</label><select id="customerGender"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+    </div>
+    <!-- ADDRESS FIELD -->
+    <div class="row" style="margin-top:12px;">
+      <div class="col"><label>Address / Location</label><input type="text" id="customerAddress" placeholder="City / Area / Full Address"></div>
+    </div>
+  </div>
+
+  <!-- Card 2: REFRACTION -->
+  <div class="form-card" id="card-refraction">
+    <div class="card-header"><i class="fa-solid fa-eye"></i> Refraction (Power)</div>
+    
+    <!-- UNAIDED VISION ROW WITH PR GRIDS -->
+    <div style="background:#fff; padding:10px 12px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:15px; display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
+      <div style="font-size:11.5px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Unaided Vision</div>
+      <div style="display:flex; gap:10px; flex:1;">
+         
+         <div class="col" style="display:flex; flex-direction:column; gap:4px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+               <b style="color:var(--primary); font-size:12px;">RE</b>
+               <div style="display:flex; gap:4px; flex:1;">
+                  <select id="reUnaided" onchange="checkDisableP(this, 'btnReUnaidedP'); checkPR(this, 'reUnaidedPR')" style="padding:6px; font-size:12px; flex:1;">
+                     <option value="">-</option><option>6/60</option><option>6/36</option><option>6/24</option><option>6/18</option><option>6/12</option><option>6/9</option><option>6/6</option><option>6/5</option><option>FC 1/60</option><option>FC 2/60</option><option>FC 3/60</option><option>FC 4/60</option><option>FC 5/60</option><option>HM</option><option>PL/PR</option><option>HM + PL/PR</option>
+                  </select>
+                  <button type="button" id="btnReUnaidedP" class="btn-p" onclick="this.classList.toggle('active')">P</button>
+               </div>
+            </div>
+            <!-- PR GRID -->
+            <div id="reUnaidedPR" class="pr-grid" style="display:none; justify-content:space-between; margin-left:22px;">
+               <label><input type="checkbox" class="pr-chk" value="S"> S</label>
+               <label><input type="checkbox" class="pr-chk" value="I"> I</label>
+               <label><input type="checkbox" class="pr-chk" value="N"> N</label>
+               <label><input type="checkbox" class="pr-chk" value="T"> T</label>
+            </div>
+         </div>
+         
+         <div class="col" style="display:flex; flex-direction:column; gap:4px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+               <b style="color:var(--accent); font-size:12px;">LE</b>
+               <div style="display:flex; gap:4px; flex:1;">
+                  <select id="leUnaided" onchange="checkDisableP(this, 'btnLeUnaidedP'); checkPR(this, 'leUnaidedPR')" style="padding:6px; font-size:12px; flex:1;">
+                     <option value="">-</option><option>6/60</option><option>6/36</option><option>6/24</option><option>6/18</option><option>6/12</option><option>6/9</option><option>6/6</option><option>6/5</option><option>FC 1/60</option><option>FC 2/60</option><option>FC 3/60</option><option>FC 4/60</option><option>FC 5/60</option><option>HM</option><option>PL/PR</option><option>HM + PL/PR</option>
+                  </select>
+                  <button type="button" id="btnLeUnaidedP" class="btn-p" onclick="this.classList.toggle('active')">P</button>
+               </div>
+            </div>
+            <!-- PR GRID -->
+            <div id="leUnaidedPR" class="pr-grid" style="display:none; justify-content:space-between; margin-left:22px;">
+               <label><input type="checkbox" class="pr-chk" value="S"> S</label>
+               <label><input type="checkbox" class="pr-chk" value="I"> I</label>
+               <label><input type="checkbox" class="pr-chk" value="N"> N</label>
+               <label><input type="checkbox" class="pr-chk" value="T"> T</label>
+            </div>
+         </div>
+         
+      </div>
+    </div>
+
+    <!-- Right Eye Grid -->
+    <div class="eye-grid">
+      <div class="eye-title">Right Eye (RE)</div>
+      <div class="col"><label>SPH</label><select id="reSph"><option value="">Sph</option></select></div>
+      <div class="col"><label>CYL</label><select id="reCyl"><option value="">Cyl</option></select></div>
+      <div class="col" id="reAxisBox"><label>AXIS</label><select id="reAxis"><option value="">Axis</option></select></div>
+      <div class="col"><label>D.V.</label>
+         <div style="display:flex; gap:4px;">
+            <select id="reVision" onchange="checkDisableP(this, 'btnReVisionP'); checkPR(this, 'reVisionPR')"><option value="">VN</option><option>6/60</option><option>6/36</option><option>6/24</option><option>6/18</option><option>6/12</option><option>6/9</option><option>6/6</option><option>6/5</option><option>FC 1/60</option><option>FC 2/60</option><option>FC 3/60</option><option>FC 4/60</option><option>FC 5/60</option><option>HM</option><option>PL/PR</option><option>HM + PL/PR</option></select>
+            <button type="button" id="btnReVisionP" class="btn-p" onclick="this.classList.toggle('active')">P</button>
+         </div>
+         <div id="reVisionPR" class="pr-grid" style="display:none; justify-content:space-between;">
+            <label><input type="checkbox" class="pr-chk" value="S"> S</label>
+            <label><input type="checkbox" class="pr-chk" value="I"> I</label>
+            <label><input type="checkbox" class="pr-chk" value="N"> N</label>
+            <label><input type="checkbox" class="pr-chk" value="T"> T</label>
+         </div>
+      </div>
+      <div class="add-nv-row" id="reAddBox">
+        <div class="col"><label>ADD</label><select id="reAdd"><option value="">Add</option><option>+1.00</option><option>+1.25</option><option>+1.50</option><option>+1.75</option><option>+2.00</option><option>+2.25</option><option>+2.50</option><option>+2.75</option><option>+3.00</option></select></div>
+        <div class="col"><label>N.V.</label><select id="reNearVision"><option value="">NV</option><option>N36</option><option>N24</option><option>N18</option><option>N14</option><option>N12</option><option>N10</option><option>N8</option><option>N6</option></select></div>
+      </div>
+    </div>
+
+    <!-- Left Eye Grid -->
+    <div class="eye-grid">
+      <div class="eye-title le-title">Left Eye (LE)</div>
+      <div class="col"><label>SPH</label><select id="leSph"><option value="">Sph</option></select></div>
+      <div class="col"><label>CYL</label><select id="leCyl"><option value="">Cyl</option></select></div>
+      <div class="col" id="leAxisBox"><label>AXIS</label><select id="leAxis"><option value="">Axis</option></select></div>
+      <div class="col"><label>D.V.</label>
+         <div style="display:flex; gap:4px;">
+            <select id="leVision" onchange="checkDisableP(this, 'btnLeVisionP'); checkPR(this, 'leVisionPR')"><option value="">VN</option><option>6/60</option><option>6/36</option><option>6/24</option><option>6/18</option><option>6/12</option><option>6/9</option><option>6/6</option><option>6/5</option><option>FC 1/60</option><option>FC 2/60</option><option>FC 3/60</option><option>FC 4/60</option><option>FC 5/60</option><option>HM</option><option>PL/PR</option><option>HM + PL/PR</option></select>
+            <button type="button" id="btnLeVisionP" class="btn-p" onclick="this.classList.toggle('active')">P</button>
+         </div>
+         <div id="leVisionPR" class="pr-grid" style="display:none; justify-content:space-between;">
+            <label><input type="checkbox" class="pr-chk" value="S"> S</label>
+            <label><input type="checkbox" class="pr-chk" value="I"> I</label>
+            <label><input type="checkbox" class="pr-chk" value="N"> N</label>
+            <label><input type="checkbox" class="pr-chk" value="T"> T</label>
+         </div>
+      </div>
+      <div class="add-nv-row" id="leAddBox">
+        <div class="col"><label>ADD</label><select id="leAdd"><option value="">Add</option><option>+1.00</option><option>+1.25</option><option>+1.50</option><option>+1.75</option><option>+2.00</option><option>+2.25</option><option>+2.50</option><option>+2.75</option><option>+3.00</option></select></div>
+        <div class="col"><label>N.V.</label><select id="leNearVision"><option value="">NV</option><option>N36</option><option>N24</option><option>N18</option><option>N14</option><option>N12</option><option>N10</option><option>N8</option><option>N6</option></select></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3: ORDER DETAILS -->
+  <div class="form-card" id="card-order">
+    <div class="card-header"><i class="fa-solid fa-glasses"></i> Order Details</div>
+    
+    <div class="item-check-row"><label style="margin:0;"><input type="checkbox" id="chkFrame" checked onchange="toggleItemBox('frame')"> Include Frame</label></div>
+    <div class="row" id="frameWrap">
+      <div class="col"><input type="text" id="frameType" placeholder="Frame Model / Code" required></div>
+      <div class="col"><input type="number" id="frameAmount" placeholder="Frame Price (₹)" min="0" oninput="calculateTotal()" required></div>
+    </div>
+
+    <div class="item-check-row" style="margin-top:10px;"><label style="margin:0;"><input type="checkbox" id="chkLens" checked onchange="toggleItemBox('lens')"> Include Lens</label></div>
+    <div class="row" id="lensWrap">
+      <div class="col"><input type="text" id="lensType" placeholder="Lens Type / Brand" required></div>
+      <div class="col"><input type="number" id="lensAmount" placeholder="Lens Price (₹)" min="0" oninput="calculateTotal()" required></div>
+    </div>
+
+    <div id="extraItemsContainer"></div>
+    <button type="button" class="btn-secondary" style="width:auto; margin-top:5px; background:#fff;" onclick="addExtraItem('extraItemsContainer')"><i class="fa-solid fa-plus"></i> Add Extra Accessory</button>
+  </div>
+
+  <!-- Card 4: PAYMENT SUMMARY -->
+  <div class="form-card" id="card-payment">
+    <div class="card-header"><i class="fa-solid fa-receipt"></i> Payment Summary</div>
+    <div class="bill-summary">
+       <div class="bill-row"><span>Subtotal</span> <span id="lblSubtotal">₹0</span></div>
+       <div class="bill-row"><span>Discount (₹)</span> <input type="number" id="discountAmount" placeholder="0" min="0" oninput="calculateTotal()"></div>
+       <div class="bill-row strong"><span>Final Total</span> <span id="lblTotal">₹0</span></div>
+       <div class="bill-row" style="margin-top:10px;"><span>Advance Paid (₹)</span> <input type="number" id="advanceAmount" placeholder="0" min="0" oninput="calculateTotal()"></div>
+       <div class="bill-row balance"><span>Balance Due</span> <span id="lblBalance">₹0</span></div>
+    </div>
+    
+    <div class="row" style="margin-top:15px;">
+      <div class="col" id="paymentTypeWrap" style="display:none;"><label>Payment Mode</label><select id="paymentType"><option value="">Select Mode</option><option>Cash</option><option>UPI</option></select></div>
+      <div class="col"><label>Order Status</label><select id="orderStatus">
+          <option value="Booked / Pending">Booked / Pending</option>
+          <option value="Partial Paid / Pending">Partial Paid / Pending</option>
+          <option value="Full Paid / Pending">Full Paid / Pending</option>
+          <option value="Partial Paid / Delivered">Partial Paid / Delivered</option>
+          <option value="Full Paid / Delivered">Full Paid / Delivered</option>
+      </select></div>
+    </div>
+
+    <button id="mainSubmitBtn" type="submit" class="btn-main"><i class="fa-solid fa-floppy-disk"></i> Save Order & Generate Invoice</button>
+  </div>
+
+</form>
+</div>
+
+<!-- RECORDS SECTION -->
+<div id="sectionRecords" class="page-section">
+  
+  <div class="filter-bar">
+    <div class="filter-bar-row">
+        <select id="monthFilter" onchange="loadRecords()"></select>
+        <input type="text" id="searchInput" placeholder="Search Name/Ph..." oninput="loadRecords()">
+    </div>
+    <div class="filter-bar-row">
+        <!-- Permanent Add Sign Button -->
+        <button class="btn-secondary" style="background:#fef3c7; color:#d97706; border-color:#fcd34d;" onclick="document.getElementById('uploadSignFile').click()"><i class="fa-solid fa-signature"></i> Add Sign</button>
+        <input id="uploadSignFile" type="file" accept="image/*" style="display:none" onchange="uploadSignature(event)">
+        
+        <button class="btn-secondary" id="btnToggleSummary" onclick="toggleSummaryPanel()" style="background:var(--primary);color:#fff;border-color:var(--primary);flex:2;"><i class="fa-solid fa-chart-pie"></i> Summary</button>
+        <button class="btn-secondary btn-icon-only" onclick="exportBackup()"><i class="fa-solid fa-download"></i></button>
+        <button class="btn-secondary btn-icon-only" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-upload"></i></button>
+        <input id="importFile" type="file" accept=".json" style="display:none" onchange="importBackup(event)">
+    </div>
+  </div>
+
+  <!-- HIDDEN SUMMARY DASHBOARD -->
+  <div id="summaryDashboard" style="display:none; margin-bottom:15px; border:1px solid #93c5fd; padding:12px; border-radius:10px; background: linear-gradient(180deg, #eff6ff, #ffffff);">
+      <div class="dash-section-title">This Month</div>
+      <div class="dash-grid">
+        <div class="dash-card c-total"><i class="fa-solid fa-sack-dollar"></i><div class="dash-title">Total</div><div class="dash-value" id="monthlyTotal">₹0</div></div>
+        <div class="dash-card c-cash"><i class="fa-solid fa-wallet text-green"></i><div class="dash-title text-green">Cash</div><div class="dash-value text-green" id="monthlyCash">₹0</div></div>
+        <div class="dash-card c-upi"><i class="fa-solid fa-building-columns text-blue"></i><div class="dash-title text-blue">UPI</div><div class="dash-value text-blue" id="monthlyOnline">₹0</div></div>
+        <div class="dash-card c-dues"><i class="fa-solid fa-hand-holding-dollar text-red"></i><div class="dash-title text-red">Dues</div><div class="dash-value text-red" id="monthDue">₹0</div></div>
+      </div>
+      
+      <div class="dash-section-title">Today</div>
+      <div class="dash-grid" style="margin-bottom:0;">
+        <div class="dash-card green"><i class="fa-solid fa-calendar-day"></i><div class="dash-title">Total</div><div class="dash-value" id="dailyTotal">₹0</div></div>
+        <div class="dash-card c-cash"><i class="fa-solid fa-wallet text-green"></i><div class="dash-title text-green">Cash</div><div class="dash-value text-green" id="dailyCash">₹0</div></div>
+        <div class="dash-card c-upi"><i class="fa-solid fa-building-columns text-blue"></i><div class="dash-title text-blue">UPI</div><div class="dash-value text-blue" id="dailyOnline">₹0</div></div>
+        <div class="dash-card c-orders"><i class="fa-solid fa-cart-shopping" style="color:var(--accent);"></i><div class="dash-title" style="color:var(--accent);">Orders</div><div class="dash-value" id="todayOrders" style="color:var(--accent);">0</div></div>
+      </div>
+  </div>
+
+  <!-- Desktop Table -->
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Date</th><th>Customer Details</th><th>Prescription</th><th>Financials</th><th>Status</th><th>Actions</th>
+      </tr></thead>
+      <tbody id="dataTable"></tbody>
+    </table>
+  </div>
+
+  <!-- Mobile Cards -->
+  <div class="mobile-cards-wrap" id="mobileCardsContainer"></div>
+
+</div>
+
+<!-- Custom Confirm Delivery Modal -->
+<div id="confirmDeliveryModal" class="modal-overlay">
+  <div class="modal-box" style="width: 320px; text-align: center; padding-top:30px;">
+    <div style="font-size: 45px; color: var(--success); margin-bottom: 15px;">
+      <i class="fa-solid fa-box-open"></i>
+    </div>
+    <h3 style="border: none; padding-bottom: 0; font-size:18px;">Mark as Delivered?</h3>
+    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 25px;">Are you sure you want to mark this order as delivered?</p>
+    <div class="modal-actions" style="margin-top: 0;">
+      <button class="btn-cancel" onclick="closeConfirmDeliveryModal()">Cancel</button>
+      <button class="btn-confirm" onclick="executeMarkDelivered()">Yes, Delivered</button>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Delete Record Modal -->
+<div id="deleteModal" class="modal-overlay">
+  <div class="modal-box" style="width: 320px; text-align: center; padding-top:30px;">
+    <div style="font-size: 45px; color: var(--danger); margin-bottom: 15px;">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <h3 style="border: none; padding-bottom: 0; font-size:18px;">Delete Record?</h3>
+    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Please enter admin password to delete.</p>
+    <input type="password" id="deletePasswordInput" placeholder="Password" style="margin-bottom: 20px; text-align: center; font-size:16px;">
+    <div class="modal-actions" style="margin-top: 0;">
+      <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn-confirm" style="background: var(--danger);" onclick="executeDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Prescription Preview Modal -->
+<div id="printPrescriptionModal" class="card-modal">
+  <div class="preview-card">
+    <div class="card-scroll-body" id="prescriptionDetailsContent" style="font-family:'Segoe UI', Tahoma, sans-serif;"></div>
+    <div class="card-footer" id="prescriptionFooter">
+      <!-- Buttons dynamically injected here -->
+    </div>
+  </div>
+</div>
+
+<!-- Bill Preview Modal -->
+<div id="printBillModal" class="card-modal">
+  <div class="preview-card">
+    <div class="card-scroll-body" id="billDetailsContent" style="font-family:'Segoe UI', Tahoma, sans-serif; font-size:12px;"></div>
+    <div class="card-footer">
+      <button class="btn-cancel" onclick="closeBillModal()">Close</button>
+      <button class="btn-confirm" style="background:#ea580c" onclick="downloadPdf('bill')"><i class="fa-solid fa-download"></i> PDF</button>
+      <button style="background:#25d366;color:white" onclick="shareBillWhatsApp()"><i class="fa-brands fa-whatsapp"></i> Share</button>
+    </div>
+  </div>
+</div>
+
+<!-- Payment Modal -->
+<div id="paymentModal" class="modal-overlay"><div class="modal-box">
+<h3>Clear Due Balance</h3><p id="modalBalanceInfo" style="font-size:15px;font-weight:800;text-align:center;color:var(--danger)"></p>
+<label>Payment Mode:</label><select id="modalMode"><option>Cash</option><option>UPI</option></select>
+<label>Additional Discount (if any, ₹):</label><input type="number" id="modalDiscount" value="0" min="0">
+<div class="modal-actions"><button class="btn-cancel" onclick="closeModal()">Cancel</button><button class="btn-confirm" onclick="confirmMarkPaid()"><i class="fa-solid fa-check"></i> Pay</button></div>
+</div></div>
+
+<!-- Security Edit Modal -->
+<div id="editModal" class="modal-overlay"><div class="modal-box" style="width:450px;">
+<h3><i class="fa-solid fa-pen-to-square text-blue"></i> Edit Order</h3>
+
+<!-- Regular Basic Fields (Staff Access) -->
+<label>Customer Name:</label><input id="editName">
+<label>Phone:</label><input id="editPhone" inputmode="numeric">
+<label>Address:</label><input type="text" id="editAddress" placeholder="Address">
+<div class="row" style="margin-bottom:0;">
+    <div class="col"><label>Age:</label><input type="number" id="editAge"></div>
+    <div class="col"><label>Gender:</label><select id="editGender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+</div>
+<div class="row" style="margin-bottom:0;">
+    <div class="col"><label>Receiving Date:</label><input type="date" id="editReceivingDate"></div>
+    <div class="col"><label>Order Status:</label><select id="editOrderStatus">
+          <option value="Booked / Pending">Booked / Pending</option>
+          <option value="Partial Paid / Pending">Partial Paid / Pending</option>
+          <option value="Full Paid / Pending">Full Paid / Pending</option>
+          <option value="Partial Paid / Delivered">Partial Paid / Delivered</option>
+          <option value="Full Paid / Delivered">Full Paid / Delivered</option>
+    </select></div>
+</div>
+
+<!-- Unlock Master Area Button -->
+<div style="text-align:center; margin: 15px 0;">
+    <button type="button" id="btnUnlockMaster" onclick="unlockMasterEdit()" class="btn-secondary" style="color:var(--danger); border-color:var(--danger); font-weight:700;"><i class="fa-solid fa-lock"></i> Master Edit (Owner Only)</button>
+</div>
+
+<!-- Hidden Financial & Rx Edit Area (Admin Access) -->
+<div id="masterEditSection" style="display:none; border-top: 2px dashed #cbd5e1; padding-top:15px; margin-top:5px;">
+    <h4 style="color:var(--danger); margin-top:0; font-size:13px; text-transform:uppercase; margin-bottom:12px;"><i class="fa-solid fa-triangle-exclamation"></i> Financials & Prescription</h4>
+    
+    <div class="row" style="background:#f8fafc; padding:8px; border-radius:6px; border:1px solid #e2e8f0; margin-bottom:10px;">
+      <div class="col" style="display:flex; flex-direction:column; gap:4px;">
+        <label>RE Unaided</label>
+        <div style="display:flex; gap:4px;">
+           <select id="editReUnaided" onchange="checkDisableP(this, 'btnEditReUnaidedP'); checkPR(this, 'editReUnaidedPR')" style="padding:6px; font-size:12px; flex:1;"><option value="">-</option><option>6/60</option><option>6/36</option><option>6/24</option><option>6/18</option><option>6/12</option><option>6/9</option><option>6/6</option><option>6/5</option><option>FC 1/60</option><option>FC 2/60</option><option>FC 3/60</option><option>FC 4/60</option><option>FC 5/60</option><option>HM</option><option>PL/PR</option><option>HM + PL/PR</option></select>
+           <button type="button" id="btnEditReUnaidedP" class="btn-p" onclick="this.classList.toggle('active')">P</button>
+        </div>
+        <div id="editReUnaidedPR" class="pr-grid" style="display:none; justify-content:space-between;">
+           <label><input type="checkbox" class="pr-chk" value="S"> S</label>
+           <label><input type="checkbox" class="pr-chk" value="I"> I</label>
+           <label><input type="checkbox" class="pr-chk" value="N"> N</label>
+           <label><input type="checkbox" class="pr-chk" value="T"> T</label>
+        </div>
+      </div>
+      <div class="col" style="display:flex; flex-direction:column; gap:4px;">
+        <label>LE Unaided</label>
+        <div style="display:flex; gap:4px;">
+           <select id="editLeUnaided" onchange="checkDisableP(this, 'btnEditLeUnaidedP'); checkPR(this, 'editLeUnaidedPR')" style="padding:6px; font-size:12px; flex:1;"><option value="">-</option><option>6/60</option><option>6/36</option><option>6/24</option><option>6/18</option><option>6/12</option><option>6/9</option><option>6/6</option><option>6/5</option><option>FC 1/60</option><option>FC 2/60</option><option>FC 3/60</option><option>FC 4/60</option><option>FC 5/60</option><option>HM</option><option>PL/PR</option><option>HM + PL/PR</option></select>
+           <button type="button" id="btnEditLeUnaidedP" class="btn-p" onclick="this.classList.toggle('active')">P</button>
+        </div>
+        <div id="editLeUnaidedPR" class="pr-grid" style="display:none; justify-content:space-between;">
+           <label><input type="checkbox" class="pr-chk" value="S"> S</label>
+           <label><input type="checkbox" class="pr-chk" value="I"> I</label>
+           <label><input type="checkbox" class="pr-chk" value="N"> N</label>
+           <label><input type="checkbox" class="pr-chk" value="T"> T</label>
+        </div>
+      </div>
+    </div>
+    
+    <label style="margin-top:12px"><input type="checkbox" id="editChkFrame" onchange="toggleEditBoxModal('frame')"> Include Frame</label>
+    <div class="row" id="editFrameWrap" style="margin-bottom:5px">
+    <div class="col"><input id="editFrameType" placeholder="Frame Name"></div>
+    <div class="col"><input type="number" id="editFrameAmount" min="0" placeholder="Price"></div></div>
+
+    <label><input type="checkbox" id="editChkLens" onchange="toggleEditBoxModal('lens')"> Include Lens</label>
+    <div class="row" id="editLensWrap" style="margin-bottom:10px">
+    <div class="col"><input id="editLensType" placeholder="Lens Name"></div>
+    <div class="col"><input type="number" id="editLensAmount" min="0" placeholder="Price"></div></div>
+
+    <div id="editExtraItemsContainer"></div>
+    <button type="button" class="btn-secondary" style="width:100%;margin-bottom:15px;" onclick="addExtraItem('editExtraItemsContainer')"><i class="fa-solid fa-plus"></i> Add Accessory</button>
+
+    <label>Total Discount (₹):</label><input type="number" id="editDiscount" min="0" style="margin-bottom:15px;">
+
+    <!-- Edit Refraction Grid -->
+    <div class="eye-grid">
+      <div class="eye-title">Right Eye (RE)</div>
+      <div class="col"><label>SPH</label><select id="editReSph"><option value="">Sph</option></select></div>
+      <div class="col"><label>CYL</label><select id="editReCyl"><option value="">Cyl</option></select></div>
+      <div class="col"><label>AXIS</label><select id="editReAxis"><option value="">Axis</option></select></div>
+      <div class="col" style="display:flex; flex-direction:column; gap:4px;"><label>D.V.</label>
+         <div style="display:flex; gap:4px;">
+            <select id="editReVision" onchange="checkDisableP(this, 'btnEditReVisionP'); checkPR(this, 'editReVisionPR')" style="padding:6px 2px;"><option value="">VN</option><option>6/60</option><option>6/36</option><option>6/24</option><option>6/18</option><option>6/12</option><option>6/9</option><option>6/6</option><option>6/5</option><option>FC 1/60</option><option>FC 2/60</option><option>FC 3/60</option><option>FC 4/60</option><option>FC 5/60</option><option>HM</option><option>PL/PR</option><option>HM + PL/PR</option></select>
+            <button type="button" id="btnEditReVisionP" class="btn-p" onclick="this.classList.toggle('active')">P</button>
+         </div>
+         <div id="editReVisionPR" class="pr-grid" style="display:none; justify-content:space-between;">
+            <label><input type="checkbox" class="pr-chk" value="S"> S</label>
+            <label><input type="checkbox" class="pr-chk" value="I"> I</label>
+            <label><input type="checkbox" class="pr-chk" value="N"> N</label>
+            <label><input type="checkbox" class="pr-chk" value="T"> T</label>
+         </div>
+      </div>
+      <div class="add-nv-row" style="display:grid" id="editReAddBox">
+        <div class="col"><label>ADD</label><select id="editReAdd"><option value="">Add</option><option>+1.00</option><option>+1.25</option><option>+1.50</option><option>+1.75</option><option>+2.00</option><option>+2.25</option><option>+2.50</option><option>+2.75</option><option>+3.00</option></select></div>
+        <div class="col"><label>N.V.</label><select id="editReNearVision"><option value="">NV</option><option>N36</option><option>N24</option><option>N18</option><option>N14</option><option>N12</option><option>N10</option><option>N8</option><option>N6</option></select></div>
+      </div>
+    </div>
+
+    <div class="eye-grid">
+      <div class="eye-title le-title">Left Eye (LE)</div>
+      <div class="col"><label>SPH</label><select id="editLeSph"><option value="">Sph</option></select></div>
+      <div class="col"><label>CYL</label><select id="editLeCyl"><option value="">Cyl</option></select></div>
+      <div class="col"><label>AXIS</label><select id="editLeAxis"><option value="">Axis</option></select></div>
+      <div class="col" style="display:flex; flex-direction:column; gap:4px;"><label>D.V.</label>
+         <div style="display:flex; gap:4px;">
+            <select id="editLeVision" onchange="checkDisableP(this, 'btnEditLeVisionP'); checkPR(this, 'editLeVisionPR')" style="padding:6px 2px;"><option value="">VN</option><option>6/60</option><option>6/36</option><option>6/24</option><option>6/18</option><option>6/12</option><option>6/9</option><option>6/6</option><option>6/5</option><option>FC 1/60</option><option>FC 2/60</option><option>FC 3/60</option><option>FC 4/60</option><option>FC 5/60</option><option>HM</option><option>PL/PR</option><option>HM + PL/PR</option></select>
+            <button type="button" id="btnEditLeVisionP" class="btn-p" onclick="this.classList.toggle('active')">P</button>
+         </div>
+         <div id="editLeVisionPR" class="pr-grid" style="display:none; justify-content:space-between;">
+            <label><input type="checkbox" class="pr-chk" value="S"> S</label>
+            <label><input type="checkbox" class="pr-chk" value="I"> I</label>
+            <label><input type="checkbox" class="pr-chk" value="N"> N</label>
+            <label><input type="checkbox" class="pr-chk" value="T"> T</label>
+         </div>
+      </div>
+      <div class="add-nv-row" style="display:grid" id="editLeAddBox">
+        <div class="col"><label>ADD</label><select id="editLeAdd"><option value="">Add</option><option>+1.00</option><option>+1.25</option><option>+1.50</option><option>+1.75</option><option>+2.00</option><option>+2.25</option><option>+2.50</option><option>+2.75</option><option>+3.00</option></select></div>
+        <div class="col"><label>N.V.</label><select id="editLeNearVision"><option value="">NV</option><option>N36</option><option>N24</option><option>N18</option><option>N14</option><option>N12</option><option>N10</option><option>N8</option><option>N6</option></select></div>
+      </div>
+    </div>
+</div> <!-- End Master Section -->
+
+<div class="modal-actions"><button class="btn-cancel" onclick="closeEditModal()">Cancel</button><button class="btn-confirm" onclick="confirmEdit()"><i class="fa-solid fa-save"></i> Save</button></div>
+</div></div>
+
+<!-- History Modal -->
+<div id="historyModal" class="modal-overlay"><div class="modal-box">
+<h3>Payment History</h3><div id="historyContent" style="font-size:12px;"></div>
+<div class="modal-actions"><button class="btn-cancel" onclick="closeHistoryModal()">Close</button></div>
+</div></div>
+
+<script>
+const STORAGE_KEY='opticalRecords';
+const adminPassword='Shail';
+
+let currentPayingId=null, currentEditingId=null, activeItem=null;
+let isSummaryOpen = false;
+let currentDeliveryId = null;
+let currentDeleteId = null;
+let isMasterUnlocked = false;
+
+function showToast(msg, isError = false) {
+  const toast = document.getElementById("toast");
+  toast.innerHTML = isError ? `<i class="fa-solid fa-triangle-exclamation"></i> ${msg}` : `<i class="fa-solid fa-circle-check"></i> ${msg}`;
+  toast.className = isError ? "toast-notification error show" : "toast-notification show";
+  setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+}
+
+// SMART UPLOAD SIGNATURE FUNCTION
+function uploadSignature(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    localStorage.setItem('savedSignature', event.target.result);
+    showToast('✅ Signature/Stamp Saved for PDFs!');
+  };
+  reader.readAsDataURL(file);
+  e.target.value = ''; // reset input
+}
+
+function toggleSummaryPanel() {
+    isSummaryOpen = !isSummaryOpen;
+    document.getElementById('summaryDashboard').style.display = isSummaryOpen ? 'block' : 'none';
+    document.getElementById('btnToggleSummary').innerHTML = isSummaryOpen ? '<i class="fa-solid fa-eye-slash"></i> Hide Summary' : '<i class="fa-solid fa-chart-pie"></i> Show Summary';
+}
+
+function todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function formatDate(iso){ if(!iso || iso==='-') return '-'; const p=String(iso).split('-'); return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : iso; }
+function money(n){ return '₹'+(Number(n)||0).toLocaleString('en-IN'); }
+function esc(v){ return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+
+// SMART PR GRID LOGIC
+function checkPR(sel, prId) {
+    const grid = document.getElementById(prId);
+    if(!grid) return;
+    const v = sel.value;
+    if(v.includes('PL/PR')) {
+        grid.style.display = 'flex';
+    } else {
+        grid.style.display = 'none';
+        grid.querySelectorAll('.pr-chk').forEach(c => c.checked = false);
+    }
+}
+
+// DISABLE P BUTTON FOR FC, HM, PL/PR
+function checkDisableP(sel, btnId) {
+    const val = sel.value;
+    const btn = document.getElementById(btnId);
+    if(!btn) return;
+    const nonP = ['-', 'VN', 'FC 1/60', 'FC 2/60', 'FC 3/60', 'FC 4/60', 'FC 5/60', 'HM', 'PL/PR', 'HM + PL/PR'];
+    if(nonP.includes(val) || val === '') {
+        btn.classList.remove('active');
+        btn.disabled = true;
+    } else {
+        btn.disabled = false;
+    }
+}
+
+// SMART GET AND SET VALUES FOR P AND PR
+function getValP(selId, btnId, prId) {
+    let v = document.getElementById(selId).value;
+    if (v === 'VN' || v === '') return '';
+    
+    let out = v;
+    const btn = document.getElementById(btnId);
+    if (btn && btn.classList.contains('active') && !btn.disabled) {
+        out += ' P';
+    }
+    
+    if (v.includes('PL/PR')) {
+        const grid = document.getElementById(prId);
+        if(grid) {
+            let pr = [];
+            grid.querySelectorAll('.pr-chk:checked').forEach(c => pr.push(c.value));
+            if(pr.length > 0) out += ' (PR: ' + pr.join(',') + ')';
+        }
+    }
+    return out;
+}
+
+function setValP(selId, btnId, prId, val) {
+    let baseVal = val || '';
+    let isP = false;
+    let prMatches = [];
+    
+    if(baseVal.includes(' (PR: ')) {
+        let parts = baseVal.split(' (PR: ');
+        baseVal = parts[0];
+        let prStr = parts[1].replace(')', '');
+        prMatches = prStr.split(',');
+    }
+    
+    if (baseVal.endsWith(' P')) {
+        isP = true;
+        baseVal = baseVal.slice(0, -2);
+    }
+    
+    const sel = document.getElementById(selId);
+    if(baseVal === '' && selId.includes('Vision')) sel.value = ''; 
+    else sel.value = baseVal;
+    
+    const btn = document.getElementById(btnId);
+    if(btn) {
+        if (isP) btn.classList.add('active');
+        else btn.classList.remove('active');
+        checkDisableP(sel, btnId);
+    }
+    
+    checkPR(sel, prId);
+    const grid = document.getElementById(prId);
+    if(grid) {
+        grid.querySelectorAll('.pr-chk').forEach(c => {
+            c.checked = prMatches.includes(c.value);
+        });
+    }
+}
+
+function formatPower(v) { 
+  const val = String(v ?? '').trim(); 
+  if(['-', 'Sph', 'Cyl', 'Axis', 'VN', 'NV', 'Add', '0.00', '0°'].includes(val)) return ''; 
+  return val; 
+}
+
+const fePdf = (s,c,a,v, ad, nv) => {
+  let b = [s,c,a,v].filter(x=>x && x!=='-').join(' / ') || '-';
+  let x = [ad,nv].filter(x=>x && x!=='-').join(' ');
+  return x ? `${b} (Add: ${x})` : b;
+};
+
+const fe = (s,c,a,v, ad, nv) => {
+  let b = [s,c,a,v].filter(x=>x && x!=='-').join(' / ') || '-';
+  let x = [ad,nv].filter(x=>x && x!=='-').join(' ');
+  return x ? `${b} <span style="color:var(--accent);font-weight:700;">(Add: ${x})</span>` : b;
+};
+
+function getRecords(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||[]; }catch(e){ return[]; } }
+function setRecords(r){ localStorage.setItem(STORAGE_KEY,JSON.stringify(r)); }
+function finalTotal(item){ return Math.max(0,(Number(item.totalAmount)||0)-(Number(item.discountAmount)||0)); }
+function paidFromPayments(item){
+ if(Array.isArray(item.payments)) return item.payments.reduce((s,p)=>s+(Number(p.amount)||0),0);
+ const total=finalTotal(item), adv=Number(item.advanceAmount)||0;
+ return item.balanceAmount===0 ? total : Math.min(adv,total);
+}
+
+function ensurePayments(item){
+ if(!Array.isArray(item.payments)) item.payments=[];
+ if(item.payments.length===0){
+   const adv=Number(item.advanceAmount)||0;
+   if(adv>0) item.payments.push({id:Date.now()+Math.random(),amount:adv,mode:item.paymentType||'Cash',date:item.rawBookingDate||todayISO(),type:adv>=finalTotal(item)?'Full':'Advance'});
+ }
+ return item;
+}
+
+function checkAgeForAdd() {
+    const ageStr = document.getElementById('customerAge').value;
+    const gender = document.getElementById('customerGender').value;
+    const age = parseInt(ageStr, 10);
+    let showAdd = false;
+    if (!isNaN(age)) {
+        if (gender === 'Male' && age >= 38) showAdd = true;
+        if (gender === 'Female' && age >= 33) showAdd = true;
+        if (gender === 'Other' && age >= 35) showAdd = true;
+    }
+    const d = showAdd ? 'grid' : 'none';
+    document.getElementById('reAddBox').style.display = d;
+    document.getElementById('leAddBox').style.display = d;
+    if (!showAdd) {
+        document.getElementById('reAdd').value = ''; document.getElementById('reNearVision').value = '';
+        document.getElementById('leAdd').value = ''; document.getElementById('leNearVision').value = '';
+    }
+}
+
+// SMART NEXT VISIT CALCULATOR
+function updateNextVisitDate() {
+    if(!activeItem) return;
+    const wrap = document.getElementById('previewNextVisitWrap');
+    const dateEl = document.getElementById('previewNextVisitDate');
+    if(!wrap || !dateEl) return;
+    
+    let m = parseInt(document.getElementById('numNextVisitMonths').value);
+    if(isNaN(m) || m <= 0) {
+        wrap.style.display = 'none';
+    } else {
+        wrap.style.display = 'block';
+        let d = new Date(activeItem.rawBookingDate || todayISO());
+        d.setMonth(d.getMonth() + m);
+        dateEl.innerText = String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+    }
+}
+
+window.onload=function(){
+  populateDropdownOptions();
+  populateMonthFilter();
+  loadRecords();
+  
+  // INIT P-BUTTON CHECKS
+  ['reUnaided','leUnaided','reVision','leVision'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) { checkDisableP(el, 'btn' + id.charAt(0).toUpperCase() + id.slice(1) + 'P'); checkPR(el, id + 'PR'); }
+  });
+
+  document.getElementById('orderStatus').addEventListener('change', togglePaymentMode);
+  document.getElementById('customerAge').addEventListener('input', checkAgeForAdd);
+  document.getElementById('customerGender').addEventListener('change', checkAgeForAdd);
+
+  document.getElementById('phone').addEventListener('keyup', function() {
+    const p = this.value.trim();
+    const promptEl = document.getElementById('autoFillPrompt');
+    if(p.length >= 10) {
+      const records = getRecords();
+      const cust = records.find(x => x.phone === p);
+      if(cust) {
+        document.getElementById('customerName').value = cust.customerName || '';
+        document.getElementById('customerAddress').value = cust.address || '';
+        if(cust.age && cust.age !== '-') document.getElementById('customerAge').value = cust.age;
+        if(cust.gender && cust.gender !== '-') document.getElementById('customerGender').value = cust.gender;
+        checkAgeForAdd(); 
+        
+        promptEl.style.display = 'block';
+        promptEl.onclick = function() {
+           ['re','le'].forEach(side => {
+              if(cust[side+'Eye']) {
+                 if(cust[side+'Eye'].sph) document.getElementById(side+'Sph').value = cust[side+'Eye'].sph;
+                 if(cust[side+'Eye'].cyl) document.getElementById(side+'Cyl').value = cust[side+'Eye'].cyl;
+                 if(cust[side+'Eye'].axis) document.getElementById(side+'Axis').value = cust[side+'Eye'].axis;
+                 if(cust[side+'Eye'].add) document.getElementById(side+'Add').value = cust[side+'Eye'].add;
+                 if(cust[side+'Eye'].nearVision) document.getElementById(side+'NearVision').value = cust[side+'Eye'].nearVision;
+                 
+                 if(side === 're') {
+                     setValP('reUnaided', 'btnReUnaidedP', 'reUnaidedPR', cust.rightEye.unaided);
+                     setValP('reVision', 'btnReVisionP', 'reVisionPR', cust.rightEye.vision);
+                 } else {
+                     setValP('leUnaided', 'btnLeUnaidedP', 'leUnaidedPR', cust.leftEye.unaided);
+                     setValP('leVision', 'btnLeVisionP', 'leVisionPR', cust.leftEye.vision);
+                 }
+              }
+           });
+           updateAxisVisibility('re'); updateAxisVisibility('le');
+           if(document.getElementById('reAdd').value !== '' || document.getElementById('leAdd').value !== ''){
+               document.getElementById('reAddBox').style.display = 'grid'; document.getElementById('leAddBox').style.display = 'grid';
+           }
+           promptEl.innerHTML = '<i class="fa-solid fa-check"></i> Prescription Loaded!';
+           setTimeout(()=> { promptEl.style.display='none'; promptEl.innerHTML='<i class="fa-solid fa-clock-rotate-left"></i> Existing customer found. Click to load prescription!'; }, 2000);
+        };
+      } else { promptEl.style.display = 'none'; }
+    } else { promptEl.style.display = 'none'; }
+  });
+};
+
+function switchPage(page){
+ window.scrollTo(0, 0); 
+ document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',(page==='entry'?i===0:i===1)));
+ document.querySelectorAll('.bottom-nav-item').forEach((t,i)=>t.classList.toggle('active',(page==='entry'?i===0:i===1)));
+ document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+ document.getElementById(page==='entry'?'sectionEntry':'sectionRecords').classList.add('active');
+ if(page==='records')loadRecords();
+}
+
+function populateDropdownOptions(){
+ let sph='<option value="">Sph</option>', cyl='<option value="">Cyl</option>', axis='<option value="">Axis</option>';
+ for(let i=80;i>=1;i--){let v=(i*.25).toFixed(2);sph+=`<option value="+${v}">+${v}</option>`; cyl+=`<option value="+${v}">+${v}</option>`;}
+ sph+='<option value="0.00">0.00</option>'; cyl+='<option value="0.00">0.00</option>';
+ for(let i=1;i<=80;i++){let v=(i*.25).toFixed(2);sph+=`<option value="-${v}">-${v}</option>`; cyl+=`<option value="-${v}">-${v}</option>`;}
+ for(let i=0;i<=180;i+=5){let label=String(i).padStart(2,'0')+'°';axis+=`<option value="${i}°">${label}</option>`;}
+ ['reSph','leSph','editReSph','editLeSph'].forEach(id=>{document.getElementById(id).innerHTML=sph;document.getElementById(id).value='0.00';});
+ ['reCyl','leCyl','editReCyl','editLeCyl'].forEach(id=>{document.getElementById(id).innerHTML=cyl;document.getElementById(id).value='0.00';});
+ ['reAxis','leAxis','editReAxis','editLeAxis'].forEach(id=>document.getElementById(id).innerHTML=axis);
+ document.getElementById('reAxis').value='0°'; document.getElementById('leAxis').value='0°';
+ document.getElementById('editReAxis').value='0°'; document.getElementById('editLeAxis').value='0°';
+ updateAxisVisibility('re'); updateAxisVisibility('le');
+ document.getElementById('reCyl').addEventListener('change',()=>updateAxisVisibility('re'));
+ document.getElementById('leCyl').addEventListener('change',()=>updateAxisVisibility('le'));
+ togglePaymentMode(); calculateTotal();
+}
+
+function updateAxisVisibility(side){
+ const cyl = document.getElementById(side+'Cyl').value;
+ const box = document.getElementById(side+'AxisBox');
+ const show = cyl!=='' && cyl!=='0.00';
+ if(box) box.style.visibility = show ? 'visible' : 'hidden'; 
+ if(!show) document.getElementById(side+'Axis').value='0°';
+}
+
+function toggleItemBox(type){
+  const isChecked = document.getElementById('chk' + (type==='frame'?'Frame':'Lens')).checked;
+  document.getElementById(type+'Wrap').style.display = isChecked ? 'flex' : 'none';
+  document.getElementById(type+'Type').required = isChecked;
+  document.getElementById(type+'Amount').required = isChecked;
+  if(!isChecked) { document.getElementById(type+'Type').value=''; document.getElementById(type+'Amount').value=''; }
+  calculateTotal();
+}
+
+function addExtraItem(containerId){
+  const div = document.createElement('div'); div.className = 'row extra-item-row'; div.style.marginBottom='8px';
+  div.innerHTML = `<div class="col"><input type="text" class="extra-name" placeholder="Extra Item Name" required></div><div class="col" style="display:flex; gap:8px;"><input type="number" class="extra-price" placeholder="Price" min="0" oninput="calculateTotal()" required><button type="button" onclick="this.parentElement.parentElement.remove(); calculateTotal()" style="background:#fee2e2;color:#ef4444;border:none;border-radius:6px;padding:0 15px;cursor:pointer;"><i class="fa-solid fa-xmark"></i></button></div>`;
+  document.getElementById(containerId).appendChild(div);
+}
+
+function calculateTotal(){
+  const f = document.getElementById('chkFrame').checked ? (Number(document.getElementById('frameAmount').value)||0) : 0;
+  const l = document.getElementById('chkLens').checked ? (Number(document.getElementById('lensAmount').value)||0) : 0;
+  let ex = 0; document.querySelectorAll('#extraItemsContainer .extra-price').forEach(inp => ex += (Number(inp.value)||0));
+  
+  const subtotal = f + l + ex;
+  const discount = Math.max(0, Number(document.getElementById('discountAmount').value)||0);
+  const total = Math.max(0, subtotal - discount);
+  const advance = Math.max(0, Number(document.getElementById('advanceAmount').value)||0);
+  const balance = Math.max(0, total - advance);
+
+  document.getElementById('lblSubtotal').innerText = money(subtotal);
+  document.getElementById('lblTotal').innerText = money(total);
+  document.getElementById('lblBalance').innerText = money(balance);
+  togglePaymentMode(advance);
+}
+
+function togglePaymentMode(adv){
+  const status = document.getElementById('orderStatus').value;
+  const wrap = document.getElementById('paymentTypeWrap');
+  adv = adv !== undefined ? adv : (Number(document.getElementById('advanceAmount').value)||0);
+  wrap.style.display = (adv > 0 || status.includes('Paid')) ? 'block' : 'none';
+}
+
+function populateMonthFilter(){
+ const el=document.getElementById('monthFilter'), now=new Date(); el.innerHTML='';
+ for(let i=0; i<18; i++){
+  const d=new Date(now.getFullYear(), now.getMonth()-i, 1), v=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+  const o=document.createElement('option'); o.value=v; o.textContent=d.toLocaleString('default',{month:'long',year:'numeric'}); el.appendChild(o);
+ }
+}
+
+function saveRecord(e){
+ e.preventDefault();
+ const chkFrame = document.getElementById('chkFrame').checked, chkLens = document.getElementById('chkLens').checked;
+ const extraRows = document.querySelectorAll('#extraItemsContainer .extra-item-row');
+ if(!chkFrame && !chkLens && extraRows.length === 0){ return showToast('Add at least one item (Frame/Lens/Extra)!', true); }
+
+ const fAmt = chkFrame ? (Number(document.getElementById('frameAmount').value)||0) : 0;
+ const lAmt = chkLens ? (Number(document.getElementById('lensAmount').value)||0) : 0;
+ let extraItems = []; let extrasTotal = 0;
+ extraRows.forEach(row => { const n = row.querySelector('.extra-name').value.trim(), p = Number(row.querySelector('.extra-price').value)||0; if(n){ extraItems.push({name:n, price:p}); extrasTotal+=p; } });
+
+ const subtotal = fAmt + lAmt + extrasTotal;
+ const discount = Math.max(0,Number(document.getElementById('discountAmount').value)||0);
+ let advance = Math.max(0,Number(document.getElementById('advanceAmount').value)||0);
+ const total = subtotal - discount;
+ let statusWanted = document.getElementById('orderStatus').value;
+ const mode = document.getElementById('paymentType').value;
+
+ if(discount > subtotal) return showToast('Discount exceeds total!', true);
+ if(advance > total) return showToast('Advance exceeds payable total!', true);
+ 
+ if(statusWanted.includes('Full Paid')) advance = total;
+
+ if(advance === 0 && statusWanted.includes('Pending')) statusWanted = 'Booked / Pending';
+ else if(advance > 0 && advance < total && statusWanted.includes('Pending')) statusWanted = 'Partial Paid / Pending';
+ else if(advance > 0 && advance < total && statusWanted.includes('Delivered')) statusWanted = 'Partial Paid / Delivered';
+ else if(advance >= total && statusWanted.includes('Pending')) statusWanted = 'Full Paid / Pending';
+ else if(advance >= total && statusWanted.includes('Delivered')) statusWanted = 'Full Paid / Delivered';
+
+ if((advance > 0 || statusWanted.includes('Paid')) && !mode) return showToast('Please select Payment Mode!', true);
+
+ const balance = Math.max(0, total - advance);
+ const date = todayISO();
+ const currentYearMonth = date.slice(0, 7); 
+ const records = getRecords();
+ 
+ let maxSeq = 10; 
+ records.forEach(x => {
+   if(x.rawBookingDate && x.rawBookingDate.slice(0, 7) === currentYearMonth && x.invoiceNo){
+     const parts = x.invoiceNo.split('/');
+     const num = parseInt(parts[3], 10);
+     if(!isNaN(num) && num > maxSeq) maxSeq = num;
+   }
+ });
+ 
+ const dObj = new Date(); 
+ const yy = String(dObj.getFullYear()).slice(-2);
+ const mm = String(dObj.getMonth() + 1).padStart(2, '0');
+ const yearMonthCode = yy + mm; 
+ const seqStr = String(maxSeq + 1).padStart(3, '0'); 
+ const invoiceNo = `MVP/${yearMonthCode}/O/${seqStr}`;
+
+ const item={
+  id:Date.now(), invoiceNo: invoiceNo, bookingDateStr:formatDate(date), receivingDateStr:(statusWanted.includes('Delivered'))?formatDate(date):'-',
+  rawBookingDate:date, rawReceivingDate:(statusWanted.includes('Delivered'))?date:'',
+  yearMonth:currentYearMonth, customerName:document.getElementById('customerName').value.trim(),
+  phone:document.getElementById('phone').value.trim(), age:document.getElementById('customerAge').value||'-',
+  gender:document.getElementById('customerGender').value||'-', address:document.getElementById('customerAddress').value.trim(),
+  frameType:chkFrame ? document.getElementById('frameType').value.trim() : '-', frameAmount:fAmt, 
+  lensType:chkLens ? document.getElementById('lensType').value.trim() : '-', lensAmount:lAmt, extraItems,
+  paymentType:mode, status:statusWanted, discountAmount:discount, totalAmount:subtotal, advanceAmount:advance, payments:[],
+  rightEye:{unaided:getValP('reUnaided', 'btnReUnaidedP', 'reUnaidedPR'), sph:document.getElementById('reSph').value,cyl:document.getElementById('reCyl').value,axis:document.getElementById('reAxis').value,vision:getValP('reVision', 'btnReVisionP', 'reVisionPR'),add:document.getElementById('reAdd').value,nearVision:document.getElementById('reNearVision').value},
+  leftEye:{unaided:getValP('leUnaided', 'btnLeUnaidedP', 'leUnaidedPR'), sph:document.getElementById('leSph').value,cyl:document.getElementById('leCyl').value,axis:document.getElementById('leAxis').value,vision:getValP('leVision', 'btnLeVisionP', 'leVisionPR'),add:document.getElementById('leAdd').value,nearVision:document.getElementById('leNearVision').value}
+ };
+ if(advance>0) item.payments.push({id:Date.now()+1,amount:advance,mode,date,type:balance===0?'Full':'Advance'});
+ 
+ setRecords([item,...records]);
+ document.getElementById('prescriptionForm').reset();
+ 
+ // Reset P Buttons and PR Grids completely
+ document.querySelectorAll('.btn-p').forEach(btn => { btn.classList.remove('active'); btn.disabled = true; });
+ document.querySelectorAll('.pr-grid').forEach(grid => { grid.style.display = 'none'; grid.querySelectorAll('.pr-chk').forEach(c => c.checked = false); });
+
+ document.getElementById('chkFrame').checked=true; document.getElementById('chkLens').checked=true;
+ document.getElementById('frameWrap').style.display='flex'; document.getElementById('lensWrap').style.display='flex';
+ document.getElementById('frameType').required = true; document.getElementById('frameAmount').required = true;
+ document.getElementById('lensType').required = true; document.getElementById('lensAmount').required = true;
+ document.getElementById('extraItemsContainer').innerHTML='';
+ calculateTotal(); checkAgeForAdd();
+ 
+ showToast("Record Saved Successfully!");
+ populateMonthFilter(); document.getElementById('monthFilter').value=item.yearMonth;
+ switchPage('records');
+}
+
+function markDelivered(id) {
+   currentDeliveryId = id;
+   document.getElementById('confirmDeliveryModal').classList.add('active');
+}
+
+function closeConfirmDeliveryModal() {
+   document.getElementById('confirmDeliveryModal').classList.remove('active');
+   currentDeliveryId = null;
+}
+
+function executeMarkDelivered() {
+   if(!currentDeliveryId) return;
+   const r = getRecords();
+   const idx = r.findIndex(x => x.id === currentDeliveryId);
+   if(idx < 0) return closeConfirmDeliveryModal();
+   const item = r[idx];
+   
+   if(Math.max(0, finalTotal(item) - paidFromPayments(item)) > 0) {
+       closeConfirmDeliveryModal();
+       return showToast('❌ Please clear the due balance first!', true);
+   }
+   
+   item.status = 'Full Paid / Delivered';
+   item.rawReceivingDate = todayISO();
+   item.receivingDateStr = formatDate(todayISO());
+   
+   setRecords(r);
+   loadRecords();
+   closeConfirmDeliveryModal();
+   showToast('✅ Order Marked as Delivered!');
+}
+
+function loadRecords(){
+ const records=getRecords(), selected=document.getElementById('monthFilter').value||todayISO().slice(0,7), q=(document.getElementById('searchInput')?.value||'').toLowerCase().trim();
+ const filtered=records.filter(x=>(x.rawBookingDate||'').slice(0,7)===selected && (String(x.customerName).toLowerCase().includes(q)||String(x.phone).includes(q)||String(x.invoiceNo).toLowerCase().includes(q)));
+ 
+ let mCash=0, mOnline=0, dCash=0, dOnline=0;
+ records.forEach(item=>{
+     ensurePayments(item);
+     item.payments.forEach(p=>{
+       if((p.date||'').slice(0,7)===selected){ (p.mode==='Online'||p.mode==='UPI') ? mOnline+=Number(p.amount) : mCash+=Number(p.amount); }
+       if(p.date===todayISO()){ (p.mode==='Online'||p.mode==='UPI') ? dOnline+=Number(p.amount) : dCash+=Number(p.amount); }
+     });
+ });
+
+ if(document.getElementById('monthlyTotal')) document.getElementById('monthlyTotal').textContent=money(mCash+mOnline); 
+ if(document.getElementById('monthlyCash')) document.getElementById('monthlyCash').textContent=money(mCash); 
+ if(document.getElementById('monthlyOnline')) document.getElementById('monthlyOnline').textContent=money(mOnline);
+ if(document.getElementById('monthDue')) document.getElementById('monthDue').textContent=money(filtered.reduce((s,x)=>s+Math.max(0,finalTotal(x)-paidFromPayments(x)),0));
+ 
+ if(document.getElementById('dailyTotal')) document.getElementById('dailyTotal').textContent=money(dCash+dOnline);
+ if(document.getElementById('dailyCash')) document.getElementById('dailyCash').textContent=money(dCash);
+ if(document.getElementById('dailyOnline')) document.getElementById('dailyOnline').textContent=money(dOnline);
+ if(document.getElementById('todayOrders')) document.getElementById('todayOrders').textContent=records.filter(x=>x.rawBookingDate===todayISO()).length;
+ 
+ const tbody=document.getElementById('dataTable'), mobContainer=document.getElementById('mobileCardsContainer');
+ tbody.innerHTML=''; mobContainer.innerHTML='';
+ 
+ if(!filtered.length){
+    tbody.innerHTML=`<tr><td colspan="6" style="padding:40px;color:#94a3b8;font-size:14px;text-align:center;"><i class="fa-solid fa-folder-open" style="font-size:30px;display:block;margin-bottom:10px;"></i> No records found.</td></tr>`;
+    mobContainer.innerHTML=`<div style="text-align:center;padding:40px;color:#94a3b8;"><i class="fa-solid fa-folder-open" style="font-size:30px;"></i><br>No records found.</div>`;
+    return;
+ }
+
+ filtered.forEach((item,index)=>{
+  const paid = paidFromPayments(item), due = Math.max(0, finalTotal(item)-paid);
+  
+  let ageGen = [];
+  if(item.age && item.age !== '-') ageGen.push(item.age);
+  if(item.gender && item.gender !== '-') ageGen.push(item.gender.charAt(0)); 
+  let ageGenStr = ageGen.length ? ageGen.join('/') : '';
+  
+  let itemsArr = [];
+  if(item.frameType && item.frameType !== '-') itemsArr.push('Frame');
+  if(item.lensType && item.lensType !== '-') itemsArr.push('Lens');
+  if(item.extraItems && item.extraItems.length) itemsArr.push('Accessory');
+  let itemSummary = itemsArr.length ? itemsArr.join(' + ') : 'Only Rx';
+
+  let deliveryHtml = '';
+  if(item.status.includes('Delivered')) {
+     deliveryHtml = `<span style="color:var(--success); font-size:10.5px; font-weight:700;"><i class="fa-solid fa-box-open"></i> Delivered</span>`;
+  } else {
+     deliveryHtml = `<button class="btn-delivery" onclick="markDelivered(${item.id})"><i class="fa-solid fa-truck-fast"></i> Mark Delivered</button>`;
+  }
+
+  const actionBtnPay = due>0 ? `<button class="btn-act pay" onclick="openPaymentModal(${item.id})"><i class="fa-solid fa-coins"></i> Pay</button>` : '';
+  
+  const actionsHtml = `
+    <div class="actions-cell">
+       ${actionBtnPay}
+       <button class="btn-act presc" onclick="openPrescriptionModal(${item.id})"><i class="fa-solid fa-eye"></i> Presc.</button>
+       <button class="btn-act bill" onclick="openBillModal(${item.id})"><i class="fa-solid fa-file-invoice"></i> Bill</button>
+       <div class="dropdown">
+         <button class="btn-more" onclick="this.nextElementSibling.classList.toggle('show')"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+         <div class="dropdown-content">
+            <button onclick="openEditModal(${item.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+            <button onclick="shareDirectWhatsApp(${item.id}, 'prescription')"><i class="fa-brands fa-whatsapp" style="color:#25d366;font-size:14px;"></i> WA Presc.</button>
+            <button onclick="shareDirectWhatsApp(${item.id}, 'bill')"><i class="fa-brands fa-whatsapp" style="color:#25d366;font-size:14px;"></i> WA Bill</button>
+            <button onclick="openHistoryModal(${item.id})"><i class="fa-solid fa-clock-rotate-left"></i> History</button>
+            <button onclick="deleteRecord(${item.id})" class="del"><i class="fa-solid fa-trash"></i> Delete</button>
+         </div>
+       </div>
+    </div>
+  `;
+
+  const power = `<div style="font-size:10.5px;color:#475569;line-height:1.4;"><b>R:</b> ${fe(item.rightEye?.sph, item.rightEye?.cyl, item.rightEye?.axis, item.rightEye?.vision, item.rightEye?.add, item.rightEye?.nearVision)}<br><b>L:</b> ${fe(item.leftEye?.sph, item.leftEye?.cyl, item.leftEye?.axis, item.leftEye?.vision, item.leftEye?.add, item.leftEye?.nearVision)}</div>`;
+
+  tbody.innerHTML += `<tr>
+    <td><b>${filtered.length-index}</b></td>
+    <td><b style="color:var(--primary);font-size:11px;">${esc(item.invoiceNo)}</b><br><small>${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</small></td>
+    <td>
+       <b style="color:var(--text-main);font-size:13px;">${esc(item.customerName)}</b> ${ageGenStr ? `<small style="color:#64748b;">${esc(ageGenStr)}</small>` : ''}<br>
+       <small style="color:var(--text-muted);"><i class="fa-solid fa-phone"></i> ${esc(item.phone)}</small>
+    </td>
+    <td>${power}</td>
+    <td><b style="font-size:13px;">${money(finalTotal(item))}</b></td>
+    <td style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+       <div style="display:flex; gap:6px; align-items:center;">
+          ${due > 0 ? `<span style="color:var(--danger);font-weight:bold;font-size:11px;">Due: ${money(due)}</span>` : `<span style="color:var(--success);font-weight:bold;font-size:11px;">Paid</span>`} 
+          ${deliveryHtml}
+       </div>
+       ${actionsHtml}
+    </td>
+  </tr>`;
+
+  mobContainer.innerHTML += `
+  <div class="mob-card">
+     <div class="mob-card-head"><span class="inv">${esc(item.invoiceNo)}</span> <span>${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</span></div>
+     
+     <div class="mob-card-body" style="margin-bottom:8px; align-items:flex-start;">
+        <div style="flex:1; padding-right:10px;">
+           <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:4px;">
+              <span class="mob-card-name">${esc(item.customerName)}</span>
+              ${ageGenStr ? `<span style="font-size:11px; color:#64748b; font-weight:600;">${esc(ageGenStr)}</span>` : ''}
+           </div>
+           <div class="mob-card-phone" style="color:var(--primary); font-weight:600;"><i class="fa-solid fa-phone"></i> ${esc(item.phone)}</div>
+           ${item.address ? `<div class="mob-card-phone" style="margin-top:4px;"><i class="fa-solid fa-location-dot"></i> ${esc(item.address)}</div>` : ''}
+           <div style="font-size:10.5px; color:#64748b; margin-top:4px;"><i class="fa-solid fa-glasses"></i> ${itemSummary}</div>
+        </div>
+        
+        <div class="mob-card-fin" style="min-width:85px; text-align:right;">
+           <div class="mob-card-total">${money(finalTotal(item))}</div>
+           <div style="margin-top:4px;">
+               ${due > 0 ? `<span style="background:#fee2e2; color:var(--danger); padding:3px 6px; border-radius:4px; font-size:10px; font-weight:700; display:inline-block;">Due: ${money(due)}</span>` 
+                         : `<span style="background:#dcfce7; color:var(--success); padding:3px 6px; border-radius:4px; font-size:10px; font-weight:700; display:inline-block;"><i class="fa-solid fa-check"></i> Paid</span>`}
+           </div>
+        </div>
+     </div>
+
+     <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed #e2e8f0; padding-top:8px; margin-bottom:8px;">
+        ${deliveryHtml}
+        ${item.rightEye?.sph ? `<span style="background:#e0f2fe; color:var(--primary); padding:3px 6px; border-radius:4px; font-size:9.5px; font-weight:700;"><i class="fa-solid fa-eye"></i> Rx Saved</span>` : ''}
+     </div>
+
+     <div class="mob-actions">${actionsHtml}</div>
+  </div>`;
+ });
+
+ document.onclick = function(e) { if(!e.target.closest('.dropdown')) document.querySelectorAll('.dropdown-content').forEach(d => d.classList.remove('show')); };
+}
+
+function openPrescriptionModal(id){
+ const item=getRecords().find(x=>x.id===id); if(!item) return showToast('Record Error!', true);
+ activeItem=item; const re=item.rightEye||{}, le=item.leftEye||{};
+ const rSph = formatPower(re.sph), rCyl = formatPower(re.cyl), rAx = rCyl==='' ? '' : formatPower(re.axis), rVn = formatPower(re.vision), rAdd = formatPower(re.add), rNv = formatPower(re.nearVision);
+ const lSph = formatPower(le.sph), lCyl = formatPower(le.cyl), lAx = lCyl==='' ? '' : formatPower(le.axis), lVn = formatPower(le.vision), lAdd = formatPower(le.add), lNv = formatPower(le.nearVision);
+ const hasAdd = (rAdd !== '' || lAdd !== '' || rNv !== '' || lNv !== '');
+
+ let d = new Date(item.rawBookingDate || todayISO()); d.setMonth(d.getMonth() + 6);
+ let defaultNextVisit = String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+ 
+ let frameLensInfo = '';
+ if(item.frameType && item.frameType !== '-') frameLensInfo += `<span style="display:inline-block; background:#f1f5f9; padding:4px 8px; border-radius:4px; margin-right:5px; margin-bottom:5px; font-size:11px;"><b>Frame:</b> ${esc(item.frameType)}</span>`;
+ if(item.lensType && item.lensType !== '-') frameLensInfo += `<span style="display:inline-block; background:#f1f5f9; padding:4px 8px; border-radius:4px; margin-right:5px; margin-bottom:5px; font-size:11px;"><b>Lens:</b> ${esc(item.lensType)}</span>`;
+
+ const uRe = item.rightEye?.unaided;
+ const uLe = item.leftEye?.unaided;
+ const hasUnaided = (uRe && uRe !== '-') || (uLe && uLe !== '-');
+ 
+ let unaidedHtml = '';
+ if(hasUnaided) {
+    unaidedHtml = `<div id="previewUnaidedVision" style="font-size:11.5px; margin-bottom:10px; color:#475569; border-left:3px solid var(--primary); padding-left:8px;"><b>Unaided Vision:</b> &nbsp; RE: <span style="color:var(--primary); font-weight:700;">${(uRe && uRe !== '-') ? uRe : '-'}</span> &nbsp;|&nbsp; LE: <span style="color:var(--accent); font-weight:700;">${(uLe && uLe !== '-') ? uLe : '-'}</span></div>`;
+ }
+
+ document.getElementById('prescriptionDetailsContent').innerHTML=`
+ <div style="border:1px solid #cbd5e1; border-radius:8px; padding:15px; background:#fff; position:relative;">
+   <div style="text-align:center; border-bottom:2px dashed #cbd5e1; padding-bottom:12px; margin-bottom:15px;">
+     <h2 style="color:var(--primary); margin:0; font-size:22px; font-weight:800; letter-spacing:0.5px;">MALTI VISION PLUS</h2>
+     <p style="margin:2px 0; font-size:10px; color:var(--text-muted); font-weight:700;">OPTICAL • EYE EXAMINATION • EYEWEAR</p>
+     <p style="margin:4px 0 8px 0; font-size:10.5px; color:#475569;">Near Govt Hospital, Sankisa Road, Mohammadabad, Farrukhabad, UP - 209625</p>
+     
+     <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid #e2e8f0;">
+        <span style="color:#db2777; display:flex; align-items:center; gap:8px;"><i class="fa-brands fa-instagram" style="font-size:16px;"></i> <strong>@specsnshades.in</strong></span>
+        <span style="color:var(--primary); display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-mobile-screen" style="font-size:14px;"></i> <strong>+91-7309095557</strong></span>
+     </div>
+   </div>
+   
+   <div style="text-align:center; font-size:16px; font-weight:900; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px;">
+     Eye Examination & Prescription
+   </div>
+   <div style="text-align:center; font-size:11px; font-weight:700; color:var(--text-muted); margin-top:4px; margin-bottom:15px; border-bottom:2px solid #e2e8f0; padding-bottom:10px;">
+     Ref No: <span style="color:var(--primary); font-size:12px;">${esc(item.invoiceNo)}</span>
+   </div>
+   
+   <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; margin-bottom:15px; font-size:12px;">
+     <div style="font-size:12px; font-weight:900; color:var(--text-main); border-bottom:1px solid #cbd5e1; padding-bottom:4px; margin-bottom:8px;">PATIENT DETAILS:</div>
+     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+       <div><b>Name:</b> <span style="font-size:13px; font-weight:700; color:var(--text-main);">${esc(item.customerName)}</span></div>
+       <div style="text-align:right;"><b>Eye Test Date:</b> <span style="font-weight:600;">${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</span></div>
+       <div><b>Age / Gender:</b> ${esc(item.age)} / ${esc(item.gender)}</div>
+       <div style="text-align:right;"><b>Mobile:</b> ${esc(item.phone)}</div>
+       ${item.address ? `<div style="grid-column: span 2;"><b>Address:</b> ${esc(item.address)}</div>` : ''}
+     </div>
+   </div>
+   
+   <div style="font-size:12px; font-weight:800; margin-bottom:6px; color:var(--text-main);"><i class="fa-solid fa-eye text-blue"></i> REFRACTION (Rx)</div>
+   ${unaidedHtml}
+   <table style="width:100%; border-collapse:collapse; font-size:11.5px; margin-bottom:15px; border:1px solid var(--border-color);">
+     <thead style="background:var(--primary); color:#fff;">
+       <tr>
+         <th style="padding:6px; text-align:left; border-right:1px solid #38bdf8;">Eye</th>
+         <th style="padding:6px; border-right:1px solid #38bdf8;">SPH</th>
+         <th style="padding:6px; border-right:1px solid #38bdf8;">CYL</th>
+         <th style="padding:6px; border-right:1px solid #38bdf8;">AXIS</th>
+         <th style="padding:6px; border-right:1px solid #38bdf8;">VN</th>
+         ${hasAdd ? `<th style="padding:6px; border-right:1px solid #38bdf8;">ADD</th><th style="padding:6px;">NV</th>` : ''}
+       </tr>
+     </thead>
+     <tbody style="text-align:center; background:#fff;">
+       <tr style="border-bottom:1px solid #e2e8f0;">
+         <td style="padding:6px; font-weight:bold; text-align:left; border-right:1px solid #e2e8f0; background:#f8fafc;">RE</td>
+         <td style="padding:6px; border-right:1px solid #e2e8f0;">${rSph}</td>
+         <td style="padding:6px; border-right:1px solid #e2e8f0;">${rCyl}</td>
+         <td style="padding:6px; border-right:1px solid #e2e8f0;">${rAx}</td>
+         <td style="padding:6px; border-right:1px solid #e2e8f0;">${rVn}</td>
+         ${hasAdd ? `<td style="padding:6px; border-right:1px solid #e2e8f0;">${rAdd}</td><td style="padding:6px;">${rNv}</td>` : ''}
+       </tr>
+       <tr>
+         <td style="padding:6px; font-weight:bold; text-align:left; border-right:1px solid #e2e8f0; background:#f8fafc;">LE</td>
+         <td style="padding:6px; border-right:1px solid #e2e8f0;">${lSph}</td>
+         <td style="padding:6px; border-right:1px solid #e2e8f0;">${lCyl}</td>
+         <td style="padding:6px; border-right:1px solid #e2e8f0;">${lAx}</td>
+         <td style="padding:6px; border-right:1px solid #e2e8f0;">${lVn}</td>
+         ${hasAdd ? `<td style="padding:6px; border-right:1px solid #e2e8f0;">${lAdd}</td><td style="padding:6px;">${lNv}</td>` : ''}
+       </tr>
+     </tbody>
+   </table>
+
+   ${frameLensInfo ? `<div style="margin-bottom:15px; font-size:12px;"><b>Suggested:</b><br>${frameLensInfo}</div>` : ''}
+
+   <div id="previewNextVisitWrap" style="background:#fffbeb; border:1px solid #fde68a; padding:8px; border-radius:6px; font-size:11px; color:#d97706; font-weight:600; text-align:center; margin-bottom:15px;">
+     <i class="fa-regular fa-calendar-check"></i> Next Recommended Visit: <span id="previewNextVisitDate">${defaultNextVisit}</span>
+   </div>
+
+   <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:20px;">
+     <div style="font-size:9px; color:#94a3b8; font-style:italic;">*System Generated Report</div>
+     <div style="text-align:center; font-size:11px; font-weight:700; color:var(--text-main); border-top:1px solid var(--border-color); padding-top:4px; width:120px;">Optometrist</div>
+   </div>
+ </div>
+ `;
+ 
+ // Inject Smart Footer
+ let footerControls = `<div style="width:100%; margin-bottom:12px; border-bottom:1px solid #e2e8f0; padding-bottom:10px; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:15px;">`;
+
+ if(hasUnaided) {
+    footerControls += `<label style="font-size:12px; font-weight:800; cursor:pointer; color:var(--primary); display:flex; align-items:center; gap:6px;"><input type="checkbox" id="chkPrintUnaided" checked onchange="document.getElementById('previewUnaidedVision').style.display=this.checked?'block':'none'" style="width:16px;height:16px;margin:0;"> <i class="fa-solid fa-eye"></i> Show Unaided</label>
+    <div style="width:1px; height:15px; background:#cbd5e1;"></div>`;
+ }
+
+ footerControls += `<label style="font-size:12px; font-weight:800; color:#d97706; display:flex; align-items:center; gap:6px;"><i class="fa-regular fa-calendar-check"></i> Next Visit: <input type="number" id="numNextVisitMonths" value="6" min="0" oninput="updateNextVisitDate()" style="width:45px; padding:4px; font-size:12px; border:1px solid #fcd34d; border-radius:4px; text-align:center; font-weight:bold; color:#b45309;"> Months</label></div>`;
+
+ document.getElementById('prescriptionFooter').innerHTML = footerControls + `
+  <button class="btn-cancel" onclick="closePrescriptionModal()">Close</button>
+  <button class="btn-confirm" onclick="downloadPdf('prescription')"><i class="fa-solid fa-download"></i> PDF</button>
+  <button style="background:#25d366;color:white" onclick="sharePrescriptionWhatsApp()"><i class="fa-brands fa-whatsapp"></i> Share</button>
+ `;
+
+ document.getElementById('printPrescriptionModal').classList.add('active');
+}
+function closePrescriptionModal(){ document.getElementById('printPrescriptionModal').classList.remove('active'); activeItem=null; }
+
+function openBillModal(id){
+ const item=getRecords().find(x=>x.id===id); if(!item) return showToast('Record Error!', true);
+ activeItem=item; ensurePayments(item);
+ const total=Number(item.totalAmount)||0, disc=Number(item.discountAmount)||0, final=finalTotal(item);
+
+ let itemsHtml = '';
+ if(item.frameType && item.frameType !== '-') itemsHtml += `<tr><td style="border-bottom:1px solid #eee;padding:5px;">Frame: ${esc(item.frameType)}</td><td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(item.frameAmount)}</td></tr>`;
+ if(item.lensType && item.lensType !== '-') itemsHtml += `<tr><td style="border-bottom:1px solid #eee;padding:5px;">Lens: ${esc(item.lensType)}</td><td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(item.lensAmount)}</td></tr>`;
+ if(item.extraItems) item.extraItems.forEach(ex => itemsHtml += `<tr><td style="border-bottom:1px solid #eee;padding:5px;">${esc(ex.name)}</td><td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(ex.price)}</td></tr>`);
+
+ let addr = item.address ? `<div style="grid-column: span 2;"><b>Address:</b> ${esc(item.address)}</div>` : '';
+ let discHtml = disc > 0 ? `Discount: <b>- ${money(disc)}</b><br>` : '';
+
+ document.getElementById('billDetailsContent').innerHTML=`
+ <div style="text-align:center;border-bottom:2px dashed #cbd5e1;padding-bottom:12px;margin-bottom:15px;">
+   <h2 style="color:#ea580c;margin:0;font-size:20px;font-weight:800;">MALTI VISION PLUS</h2>
+   <p style="margin:2px 0;font-size:10px;color:var(--text-muted);font-weight:700;">POWERED BY SPECSNSHADES</p>
+   <p style="margin:4px 0 8px 0; font-size:10.5px; color:#475569;">Near Govt Hospital, Sankisa Road, Mohammadabad, Farrukhabad, UP - 209625</p>
+   
+   <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; background:#fff7ed; padding:8px 12px; border-radius:6px; border:1px solid #fed7aa;">
+      <span style="color:#db2777; display:flex; align-items:center; gap:8px;"><i class="fa-brands fa-instagram" style="font-size:16px;"></i> <strong>@specsnshades.in</strong></span>
+      <span style="color:#ea580c; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-phone" style="font-size:14px;"></i> <strong>+91-7309095557</strong></span>
+   </div>
+ </div>
+ 
+ <div style="text-align:center; font-size:18px; font-weight:900; color:#0f172a; text-transform:uppercase; letter-spacing:1px;">
+   INVOICE
+ </div>
+ <div style="text-align:center; font-size:11px; font-weight:700; color:var(--text-muted); margin-top:4px; margin-bottom:15px; border-bottom:2px solid #e2e8f0; padding-bottom:10px;">
+   Invoice No: <span style="color:var(--accent); font-size:12px;">${esc(item.invoiceNo)}</span>
+ </div>
+ 
+ <div style="font-size:13px; margin-bottom:15px; display:grid; grid-template-columns:1fr 1fr; gap:8px; background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+   <div style="grid-column: span 2; font-size:12px; font-weight:900; color:var(--text-main); border-bottom:1px solid #cbd5e1; padding-bottom:4px; margin-bottom:4px;">BILL TO:</div>
+   <div><b>Name:</b> <span style="font-size:13px; font-weight:700; color:var(--text-main);">${esc(item.customerName)}</span></div>
+   <div style="text-align:right;"><b>Invoice Date:</b> <span style="font-weight:600;">${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</span></div>
+   <div><b>Age / Gender:</b> ${esc(item.age)} / ${esc(item.gender)}</div>
+   <div style="text-align:right;"><b>Mobile:</b> ${esc(item.phone)}</div>
+   ${item.address ? `<div style="grid-column: span 2;"><b>Address:</b> ${esc(item.address)}</div>` : ''}
+ </div>
+ 
+ <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:15px;">
+   <thead style="background:#ea580c;color:#fff;"><tr><th style="text-align:left;padding:5px;">Item</th><th style="text-align:right;padding:5px;">Amount</th></tr></thead>
+   <tbody>${itemsHtml}</tbody>
+ </table>
+ <div style="border-top:1px solid #ccc;padding-top:10px;font-size:13px;text-align:right;">
+    Subtotal: <b>${money(total)}</b><br>
+    ${discHtml}
+    Final Amount: <b style="font-size:16px; color:var(--primary);">${money(final)}</b>
+ </div>
+ `;
+ document.getElementById('printBillModal').classList.add('active');
+}
+function closeBillModal(){ document.getElementById('printBillModal').classList.remove('active'); activeItem=null; }
+
+function downloadPdf(type){
+  let i = activeItem; 
+  if(!i) return showToast('Record Error!', true);
+
+  try {
+    const doc = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const isPrescription = (type === 'prescription');
+    const mainColor = isPrescription ? [2, 132, 199] : [234, 88, 12]; 
+    const pageWidth = doc.internal.pageSize.getWidth(), pageHeight = doc.internal.pageSize.getHeight(), marginX = 15;
+    const clean = (v) => (v == null || v === '') ? '-' : String(v).trim();
+    const pdfMoney = (n) => 'Rs. ' + (Number(n)||0).toLocaleString('en-IN'); 
+
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(60); doc.setTextColor(240, 243, 248); 
+    doc.text('SPECSNSHADES', pageWidth/2, (pageHeight/2) + 40, { align: 'center', baseline: 'middle', angle: 45 });
+
+    doc.setFillColor(mainColor[0], mainColor[1], mainColor[2]); doc.rect(10, 10, pageWidth - 20, 26, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(22);
+    doc.text('MALTI VISION PLUS', pageWidth / 2, 21, { align: 'center' });
+    doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('POWERED BY SPECSNSHADES', pageWidth / 2, 27, { align: 'center' });
+    doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+    doc.text('Near Govt Hospital, Sankisa Road, Mohammadabad, Farrukhabad, UP - 209625', pageWidth / 2, 32, { align: 'center' });
+
+    doc.setFillColor(248, 250, 252); doc.rect(10, 36, pageWidth - 20, 9, 'F');
+    doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.3); doc.rect(10, 36, pageWidth - 20, 9, 'S');
+    
+    const igY = 40.5;
+    doc.setDrawColor(219, 39, 119); doc.setLineWidth(0.4);
+    doc.roundedRect(15, igY - 2.5, 5, 5, 1, 1, 'S');
+    doc.circle(15 + 2.5, igY, 1, 'S');
+    doc.setFillColor(219, 39, 119); doc.circle(15 + 3.8, igY - 1.2, 0.3, 'F');
+    
+    doc.setFontSize(10.5); doc.setFont('helvetica', 'bold');
+    doc.setTextColor(219, 39, 119); 
+    doc.text('@specsnshades.in', 22, 42); 
+
+    const phIconX = pageWidth - 46; 
+    doc.setDrawColor(mainColor[0], mainColor[1], mainColor[2]); doc.setLineWidth(0.4);
+    doc.roundedRect(phIconX, igY - 2.5, 3.2, 5.2, 0.6, 0.6, 'S');
+    doc.setLineWidth(0.2);
+    doc.line(phIconX + 1.1, igY + 1.8, phIconX + 2.1, igY + 1.8);
+    
+    doc.setTextColor(mainColor[0], mainColor[1], mainColor[2]);
+    doc.text('+91-7309095557', pageWidth - 15, 42, { align: 'right' }); 
+
+    doc.setTextColor(15, 23, 42); 
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.text(isPrescription ? 'EYE EXAMINATION & PRESCRIPTION' : 'INVOICE', pageWidth / 2, 54, { align: 'center' });
+    
+    doc.setFontSize(10); 
+    doc.setTextColor(100, 116, 139); 
+    doc.text((isPrescription ? 'Ref No: ' : 'Invoice No: ') + clean(i.invoiceNo), pageWidth / 2, 60, { align: 'center' });
+
+    let currentY = 68;
+
+    doc.autoTable({
+      startY: currentY, margin: { left: marginX, right: marginX }, theme: 'grid',
+      styles: { fontSize: 9.5, cellPadding: 4, textColor: [15, 23, 42], lineColor: [203, 213, 225], lineWidth: 0.1 },
+      columnStyles: { 
+          0: { fontStyle: 'bold', fillColor: [248, 250, 252], cellWidth: 30 }, 
+          1: { cellWidth: 60 }, 
+          2: { fontStyle: 'bold', fillColor: [248, 250, 252], cellWidth: 30 }, 
+          3: { cellWidth: 60 } 
+      },
+      body: [ 
+          ['Patient Name', clean(i.customerName), isPrescription ? 'Eye Test Date' : 'Invoice Date', clean(i.bookingDateStr || formatDate(i.rawBookingDate))], 
+          ['Age / Gender', clean(i.age) + ' / ' + clean(i.gender), 'Mobile No', clean(i.phone)],
+          ['Address', clean(i.address), '', '']
+      ]
+    });
+    currentY = doc.lastAutoTable.finalY + 8;
+
+    if(isPrescription){
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(10.5); doc.setTextColor(15, 23, 42); doc.text('REFRACTION / VISION SPECIFICATION', marginX, currentY); currentY += 4;
+      
+      const uRe = i.rightEye?.unaided;
+      const uLe = i.leftEye?.unaided;
+      const chk = document.getElementById('chkPrintUnaided');
+      const printUnaided = chk ? chk.checked : false; 
+      
+      if(((uRe && uRe !== '-') || (uLe && uLe !== '-')) && printUnaided) {
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(71, 85, 105);
+          doc.text(`Unaided Vision:    RE: ${(uRe && uRe !== '-') ? uRe : '-'}    |    LE: ${(uLe && uLe !== '-') ? uLe : '-'}`, marginX, currentY); 
+          currentY += 5;
+      }
+
+      const rSph=formatPower(i.rightEye?.sph), rCyl=formatPower(i.rightEye?.cyl), rAx=rCyl&&rCyl!=='0.00'?formatPower(i.rightEye?.axis):'', rVn=formatPower(i.rightEye?.vision), rAdd=formatPower(i.rightEye?.add), rNv=formatPower(i.rightEye?.nearVision);
+      const lSph=formatPower(i.leftEye?.sph), lCyl=formatPower(i.leftEye?.cyl), lAx=lCyl&&lCyl!=='0.00'?formatPower(i.leftEye?.axis):'', lVn=formatPower(i.leftEye?.vision), lAdd=formatPower(i.leftEye?.add), lNv=formatPower(i.leftEye?.nearVision);
+      const hasAdd = (rAdd || lAdd || rNv || lNv);
+
+      let headRow = hasAdd ? [['Eye', 'SPH', 'CYL', 'AXIS', 'D.V.', 'ADD', 'N.V.']] : [['Eye', 'SPH', 'CYL', 'AXIS', 'D.V.']];
+      let bodyRows = [['Right Eye (RE)', clean(rSph), clean(rCyl), clean(rAx), clean(rVn)], ['Left Eye (LE)', clean(lSph), clean(lCyl), clean(lAx), clean(lVn)]];
+      if(hasAdd){ bodyRows[0].push(clean(rAdd), clean(rNv)); bodyRows[1].push(clean(lAdd), clean(lNv)); }
+
+      doc.autoTable({ startY: currentY, margin: { left: marginX, right: marginX }, theme: 'grid', headStyles: { fillColor: mainColor, textColor: 255, fontStyle: 'bold', halign: 'center' }, styles: { fontSize: 9.5, cellPadding: 4, halign: 'center', textColor: [15, 23, 42], lineColor: [226, 232, 240] }, columnStyles: { 0: { fontStyle: 'bold', halign:'left' } }, head: headRow, body: bodyRows });
+      currentY = doc.lastAutoTable.finalY + 8;
+    } else {
+      const total = Number(i.totalAmount)||0, disc = Number(i.discountAmount)||0, final = finalTotal(i);
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(10.5); doc.setTextColor(15, 23, 42); doc.text('ORDER SUMMARY', marginX, currentY); currentY += 4;
+
+      let items = []; let c = 1;
+      if(i.frameType && i.frameType !== '-') items.push([String(c++), 'Frame: ' + clean(i.frameType), pdfMoney(i.frameAmount)]);
+      if(i.lensType && i.lensType !== '-') items.push([String(c++), 'Lens: ' + clean(i.lensType), pdfMoney(i.lensAmount)]);
+      if(i.extraItems) i.extraItems.forEach(ex => items.push([String(c++), clean(ex.name), pdfMoney(ex.price)]));
+      if(!items.length) items.push(['-', 'No items added', '-']);
+
+      doc.autoTable({ startY: currentY, margin: { left: marginX, right: marginX }, theme: 'grid', headStyles: { fillColor: mainColor, textColor: 255, fontStyle: 'bold', halign: 'center' }, styles: { fontSize: 9.5, cellPadding: 4, lineColor: [226, 232, 240] }, columnStyles: { 0: { halign: 'center', cellWidth: 15 }, 1: { halign: 'left' }, 2: { halign: 'right', cellWidth: 40 } }, head: [['#', 'Item Description', 'Amount']], body: items });
+      currentY = doc.lastAutoTable.finalY + 4;
+
+      let tBody = [['Subtotal', pdfMoney(total)]];
+      if(disc > 0) tBody.push(['Discount', '- ' + pdfMoney(disc)]);
+      tBody.push(['Final Amount', pdfMoney(final)]);
+
+      doc.autoTable({ 
+        startY: currentY, margin: { left: pageWidth - marginX - 80, right: marginX }, theme: 'grid', 
+        styles: { fontSize: 9.5, cellPadding: 3.5, textColor: [15, 23, 42], lineColor: [226, 232, 240] }, 
+        columnStyles: { 0: { halign: 'left', fontStyle: 'bold' }, 1: { halign: 'right', fontStyle: 'bold' } }, 
+        body: tBody, 
+        didParseCell: function(data){ if(data.row.raw[0] === 'Final Amount') data.cell.styles.fillColor = [241, 245, 249]; } 
+      });
+      currentY = doc.lastAutoTable.finalY + 6;
+    }
+
+    let signY = doc.lastAutoTable.finalY + 20;
+    if(signY > 250){ doc.addPage(); signY = 20; doc.setDrawColor(mainColor[0], mainColor[1], mainColor[2]); doc.rect(10, 10, pageWidth - 20, pageHeight - 20); }
+    
+    if(isPrescription){
+      let visitMonthsInput = document.getElementById('numNextVisitMonths');
+      let m = visitMonthsInput ? parseInt(visitMonthsInput.value) : 6;
+      
+      if(!isNaN(m) && m > 0) {
+          let d = new Date(i.rawBookingDate || todayISO());
+          d.setMonth(d.getMonth() + m);
+          let nextVisitStr = String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(mainColor[0], mainColor[1], mainColor[2]);
+          doc.text('Next Recommended Visit: ' + nextVisitStr, marginX, signY);
+      }
+    } else {
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(15, 23, 42); doc.text('Terms & Conditions:', marginX, signY);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(100, 116, 139);
+      doc.text('1. Goods once sold will not be returned.\n2. Warranty as per company policy.\n3. Advance payment is non-refundable.', marginX, signY + 5);
+    }
+
+    doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.2); 
+    doc.line(pageWidth - marginX - 45, signY + 10, pageWidth - marginX - 5, signY + 10);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(71, 85, 105); doc.text('Authorized Signatory', pageWidth - marginX - 25, signY + 14, { align: 'center' });
+    
+    // SMART SIGNATURE RENDERING LOGIC
+    let mySignatureImage = localStorage.getItem('savedSignature') || '';
+    if(mySignatureImage && mySignatureImage.trim() !== '') {
+        try {
+           let format = mySignatureImage.includes('image/png') ? 'PNG' : 'JPEG';
+           doc.addImage(mySignatureImage, format, pageWidth - marginX - 40, signY - 6, 35, 15);
+        } catch(e) {
+           doc.setFont('times', 'italic'); doc.setFontSize(16); doc.setTextColor(15, 23, 42);
+           doc.text('Shailendra Yadav', pageWidth - marginX - 25, signY + 8, { align: 'center' });
+        }
+    } else {
+        doc.setFont('times', 'italic'); doc.setFontSize(16); doc.setTextColor(15, 23, 42);
+        doc.text('Shailendra Yadav', pageWidth - marginX - 25, signY + 8, { align: 'center' });
+    }
+
+    doc.setFont('helvetica', 'italic'); doc.setFontSize(8); doc.setTextColor(160, 160, 160); 
+    doc.text('* This is a system-generated document.', pageWidth / 2, pageHeight - 12, { align: 'center' });
+
+    const safeName = (i.customerName || 'Customer').replace(/[^a-zA-Z0-9_-]/g, '_');
+    doc.save(`${isPrescription?'Prescription':'Invoice'}_${safeName}.pdf`);
+    showToast("PDF Downloaded Successfully!");
+  } catch (err) { alert('PDF Error: ' + err.message); console.error(err); }
+}
+
+function shareDirectWhatsApp(id, type) {
+    const i = getRecords().find(x=>x.id===id); if(!i) return showToast('Record error', true);
+    const msg = type==='prescription' ? `Namaste *${i.customerName}* ji,\nAapki prescription yahan hai.\nThank you for choosing Specsnshades! 👓` : `Namaste *${i.customerName}* ji,\nAapka bill yahan hai.\nThank you for choosing Specsnshades! 👓`;
+    window.open('https://wa.me/'+normalizePhone(i.phone)+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+function sharePrescriptionWhatsApp(){ if(activeItem) shareDirectWhatsApp(activeItem.id, 'prescription'); }
+function shareBillWhatsApp(){ if(activeItem) shareDirectWhatsApp(activeItem.id, 'bill'); }
+function normalizePhone(p){ p=String(p||'').replace(/\D/g, ''); if(p.startsWith('91')&&p.length===12)p=p.slice(2); return p.length===10?'91'+p:p; }
+
+function openPaymentModal(id){
+ currentPayingId=id; const i=getRecords().find(x=>x.id===id); if(!i)return; ensurePayments(i); const due=Math.max(0,finalTotal(i)-paidFromPayments(i));
+ document.getElementById('modalBalanceInfo').innerText='Remaining Balance: '+money(due); document.getElementById('modalDiscount').value=0; document.getElementById('modalMode').value='Cash'; document.getElementById('paymentModal').classList.add('active');
+}
+function closeModal(){document.getElementById('paymentModal').classList.remove('active');currentPayingId=null}
+function confirmMarkPaid(){
+ if(!currentPayingId)return; const r=getRecords(), idx=r.findIndex(x=>x.id===currentPayingId); if(idx<0)return; const i=r[idx]; ensurePayments(i);
+ const due=Math.max(0,finalTotal(i)-paidFromPayments(i)), disc=Math.max(0,Number(document.getElementById('modalDiscount').value)||0), mode=document.getElementById('modalMode').value;
+ if(disc>due) return showToast('Discount cannot exceed remaining balance.', true);
+ const pAmt=due-disc; if(pAmt>0) i.payments.push({id:Date.now(),amount:pAmt,mode,date:todayISO(),type:'Balance'});
+ i.discountAmount=(Number(i.discountAmount)||0)+disc; i.advanceAmount=i.payments.filter(p=>p.type!=='Balance').reduce((s,p)=>s+Number(p.amount||0),0);
+ i.balanceAmount=Math.max(0,finalTotal(i)-paidFromPayments(i)); i.balancePaymentType=mode;
+ 
+ if(i.balanceAmount === 0) {
+     if(i.status.includes('Pending')) i.status = 'Full Paid / Pending';
+     if(i.status.includes('Delivered')) i.status = 'Full Paid / Delivered';
+ } else if(i.balanceAmount > 0) {
+     if(i.status.includes('Booked')) i.status = i.status.replace('Booked', 'Partial Paid');
+ }
+ 
+ setRecords(r); closeModal(); loadRecords(); showToast("Payment Updated!");
+}
+
+function toggleEditBoxModal(type){
+  const isChecked = document.getElementById('editChk' + (type==='frame'?'Frame':'Lens')).checked;
+  document.getElementById('edit' + (type==='frame'?'Frame':'Lens') + 'Wrap').style.display = isChecked ? 'flex' : 'none';
+  if(!isChecked) { document.getElementById('edit'+(type==='frame'?'Frame':'Lens')+'Amount').value=''; }
+}
+
+function unlockMasterEdit() {
+    if(prompt('Enter Master Password (Owner Only):') !== adminPassword) {
+        return showToast('❌ Incorrect Password!', true);
+    }
+    isMasterUnlocked = true;
+    document.getElementById('masterEditSection').style.display = 'block';
+    document.getElementById('btnUnlockMaster').style.display = 'none';
+    showToast('🔓 Master Edit Unlocked!');
+}
+
+function openEditModal(id){
+ currentEditingId=id; const i=getRecords().find(x=>x.id===id); if(!i)return;
+ 
+ isMasterUnlocked = false;
+ document.getElementById('masterEditSection').style.display = 'none';
+ document.getElementById('btnUnlockMaster').style.display = 'inline-block';
+
+ document.getElementById('editName').value=i.customerName||''; document.getElementById('editPhone').value=i.phone||''; document.getElementById('editAddress').value=i.address||''; document.getElementById('editAge').value=i.age==='-'?'':i.age; document.getElementById('editGender').value=i.gender==='-'?'Male':i.gender; document.getElementById('editReceivingDate').value=i.rawReceivingDate||'';
+ document.getElementById('editOrderStatus').value = i.status || 'Booked / Pending';
+ 
+ const hasF = i.frameType && i.frameType !== '-'; document.getElementById('editChkFrame').checked = hasF; toggleEditBoxModal('frame');
+ document.getElementById('editFrameType').value=hasF ? i.frameType : ''; document.getElementById('editFrameAmount').value=hasF ? i.frameAmount : '';
+
+ const hasL = i.lensType && i.lensType !== '-'; document.getElementById('editChkLens').checked = hasL; toggleEditBoxModal('lens');
+ document.getElementById('editLensType').value=hasL ? i.lensType : ''; document.getElementById('editLensAmount').value=hasL ? i.lensAmount : '';
+
+ document.getElementById('editExtraItemsContainer').innerHTML = '';
+ if(i.extraItems && i.extraItems.length){ i.extraItems.forEach(ex => { addExtraItem('editExtraItemsContainer'); const rows = document.querySelectorAll('#editExtraItemsContainer .extra-item-row'); const lastRow = rows[rows.length-1]; lastRow.querySelector('.extra-name').value = ex.name; lastRow.querySelector('.extra-price').value = ex.price; }); }
+ document.getElementById('editDiscount').value=i.discountAmount||0; 
+
+ if(i.rightEye){ setValP('editReUnaided', 'btnEditReUnaidedP', 'editReUnaidedPR', i.rightEye.unaided); document.getElementById('editReSph').value=i.rightEye.sph||''; document.getElementById('editReCyl').value=i.rightEye.cyl||''; document.getElementById('editReAxis').value=i.rightEye.axis||''; setValP('editReVision', 'btnEditReVisionP', 'editReVisionPR', i.rightEye.vision); document.getElementById('editReAdd').value=i.rightEye.add||''; document.getElementById('editReNearVision').value=i.rightEye.nearVision||''; }
+ if(i.leftEye){ setValP('editLeUnaided', 'btnEditLeUnaidedP', 'editLeUnaidedPR', i.leftEye.unaided); document.getElementById('editLeSph').value=i.leftEye.sph||''; document.getElementById('editLeCyl').value=i.leftEye.cyl||''; document.getElementById('editLeAxis').value=i.leftEye.axis||''; setValP('editLeVision', 'btnEditLeVisionP', 'editLeVisionPR', i.leftEye.vision); document.getElementById('editLeAdd').value=i.leftEye.add||''; document.getElementById('editLeNearVision').value=i.leftEye.nearVision||''; }
+
+ document.getElementById('editModal').classList.add('active');
+}
+function closeEditModal(){document.getElementById('editModal').classList.remove('active');currentEditingId=null; isMasterUnlocked = false;}
+
+function confirmEdit(){
+ if(!currentEditingId)return; const r=getRecords(), idx=r.findIndex(x=>x.id===currentEditingId); if(idx<0)return; const i=r[idx];
+ 
+ i.customerName=document.getElementById('editName').value.trim(); 
+ i.phone=document.getElementById('editPhone').value.trim(); 
+ i.address=document.getElementById('editAddress').value.trim(); 
+ i.age=document.getElementById('editAge').value||'-'; 
+ i.gender=document.getElementById('editGender').value||'-';
+ 
+ if(document.getElementById('editReceivingDate').value){
+     i.rawReceivingDate=document.getElementById('editReceivingDate').value; 
+     i.receivingDateStr=formatDate(document.getElementById('editReceivingDate').value);
+ }
+ 
+ const paid=paidFromPayments(i); 
+
+ if(isMasterUnlocked) {
+    const chkF = document.getElementById('editChkFrame').checked, chkL = document.getElementById('editChkLens').checked, exRows = document.querySelectorAll('#editExtraItemsContainer .extra-item-row');
+    if(!chkF && !chkL && exRows.length === 0) return showToast('Kam se kam Frame, Lens ya Accessory jaroor honi chahiye!', true);
+
+    const fAmt = chkF ? (Number(document.getElementById('editFrameAmount').value)||0) : 0;
+    const lAmt = chkL ? (Number(document.getElementById('editLensAmount').value)||0) : 0;
+    let exItems = [], exTotal = 0;
+    exRows.forEach(row => { const n = row.querySelector('.extra-name').value.trim(), p = Number(row.querySelector('.extra-price').value)||0; if(n) { exItems.push({name:n, price:p}); exTotal += p; } });
+
+    const newTotal = fAmt + lAmt + exTotal;
+    const newDisc = Math.max(0,Number(document.getElementById('editDiscount').value)||0);
+    
+    if(newDisc>newTotal)return showToast('Discount total se bada nahi ho sakta.', true);
+    if(paid>newTotal-newDisc)return showToast('Naya total balance paid amount se kam ho raha hai.', true);
+    
+    i.frameType = chkF ? document.getElementById('editFrameType').value.trim() : '-'; i.frameAmount = fAmt;
+    i.lensType = chkL ? document.getElementById('editLensType').value.trim() : '-'; i.lensAmount = lAmt;
+    i.extraItems = exItems; i.totalAmount=newTotal; i.discountAmount=newDisc;
+
+    i.rightEye={unaided:getValP('editReUnaided', 'btnEditReUnaidedP', 'editReUnaidedPR'),sph:document.getElementById('editReSph').value,cyl:document.getElementById('editReCyl').value,axis:document.getElementById('editReAxis').value,vision:getValP('editReVision', 'btnEditReVisionP', 'editReVisionPR'),add:document.getElementById('editReAdd').value,nearVision:document.getElementById('editReNearVision').value};
+    i.leftEye={unaided:getValP('editLeUnaided', 'btnEditLeUnaidedP', 'editLeUnaidedPR'),sph:document.getElementById('editLeSph').value,cyl:document.getElementById('editLeCyl').value,axis:document.getElementById('editLeAxis').value,vision:getValP('editLeVision', 'btnEditLeVisionP', 'editLeVisionPR'),add:document.getElementById('editLeAdd').value,nearVision:document.getElementById('editLeNearVision').value};
+ }
+ 
+ i.balanceAmount=Math.max(0,finalTotal(i)-paid); 
+ let wantedStatus = document.getElementById('editOrderStatus').value;
+ 
+ if(i.balanceAmount > 0 && paid === 0 && wantedStatus.includes('Pending')) wantedStatus = 'Booked / Pending';
+ else if(i.balanceAmount > 0 && paid > 0 && wantedStatus.includes('Pending')) wantedStatus = 'Partial Paid / Pending';
+ else if(i.balanceAmount > 0 && paid > 0 && wantedStatus.includes('Delivered')) wantedStatus = 'Partial Paid / Delivered';
+ else if(i.balanceAmount === 0 && wantedStatus.includes('Pending')) wantedStatus = 'Full Paid / Pending';
+ else if(i.balanceAmount === 0 && wantedStatus.includes('Delivered')) wantedStatus = 'Full Paid / Delivered';
+ 
+ i.status = wantedStatus;
+ 
+ setRecords(r); closeEditModal(); loadRecords(); showToast("Changes Saved Successfully!");
+}
+
+function openHistoryModal(id){
+ const i=getRecords().find(x=>x.id===id); if(!i) return showToast("Record error", true); ensurePayments(i); const paid=paidFromPayments(i), due=Math.max(0,finalTotal(i)-paid);
+ const pwr = `<div style="background:#f1f5f9;padding:8px;border-radius:6px;font-size:11.5px;color:#334155;margin-top:6px;border:1px solid #cbd5e1;line-height:1.5;"><b>RE:</b> ${fe(i.rightEye?.sph, i.rightEye?.cyl, i.rightEye?.axis, i.rightEye?.vision, i.rightEye?.add, i.rightEye?.nearVision)} <br> <b>LE:</b> ${fe(i.leftEye?.sph, i.leftEye?.cyl, i.leftEye?.axis, i.leftEye?.vision, i.leftEye?.add, i.leftEye?.nearVision)}</div>`;
+ let html=`<div style="margin-bottom:15px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;"><b>${esc(i.customerName)}</b> <span style="color:var(--text-muted);font-size:11px;margin-left:5px;"><i class="fa-solid fa-phone"></i> ${esc(i.phone)}</span><br><span style="color:var(--primary);font-weight:600;font-size:12px;">${esc(i.invoiceNo)}</span>${pwr}<div style="margin-top:8px;">Total: <b>${money(finalTotal(i))}</b> | Paid: <span style="color:var(--success);font-weight:bold;">${money(paid)}</span> | Due: <span style="color:var(--danger);font-weight:bold;">${money(due)}</span></div></div>`;
+ html+=i.payments.length ? i.payments.map(p=>`<div style="background:#f8fafc;padding:10px;border-radius:6px;margin-bottom:6px;border:1px solid #e2e8f0"><b>${esc(p.mode==='Online'?'UPI':p.mode)}</b><br><span style="color:var(--primary);font-weight:700;font-size:14px">${money(p.amount)}</span> via ${esc(p.type)}<br><small style="color:#64748b"><i class="fa-solid fa-calendar"></i> ${formatDate(p.date)}</small></div>`).join('') : 'No payments.';
+ document.getElementById('historyContent').innerHTML=html; document.getElementById('historyModal').classList.add('active');
+}
+function closeHistoryModal(){document.getElementById('historyModal').classList.remove('active');}
+
+function deleteRecord(id){
+    currentDeleteId = id;
+    document.getElementById('deletePasswordInput').value = '';
+    document.getElementById('deleteModal').classList.add('active');
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.remove('active');
+    currentDeleteId = null;
+}
+
+function executeDelete() {
+    if(document.getElementById('deletePasswordInput').value !== adminPassword) {
+        return showToast('❌ Incorrect Password!', true);
+    }
+    setRecords(getRecords().filter(x=>x.id!==currentDeleteId)); 
+    loadRecords(); 
+    closeDeleteModal();
+    showToast('Record deleted!');
+}
+
+function exportBackup(){
+ const data={app:'Malti Vision Plus',version:3,exportedAt:new Date().toISOString(),records:getRecords()};
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='malti-vision-backup-'+todayISO()+'.json'; a.click();
+ showToast("Backup Downloaded!");
+}
+function importBackup(e){
+ const file=e.target.files[0]; if(!file)return; const reader=new FileReader();
+ reader.onload=function(){try{const d=JSON.parse(reader.result),r=Array.isArray(d)?d:d.records; if(!Array.isArray(r))throw Error(); if(!confirm('Restore backup? Existing data will be replaced.'))return; setRecords(r); migrateRecords(); loadRecords(); showToast('Data Restored!');}catch(err){showToast('Invalid backup file.', true);}}; reader.readAsText(file); e.target.value='';
+}
+</script>
+</body>
+</html>
