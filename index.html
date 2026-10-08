@@ -1653,9 +1653,24 @@ function downloadPdf(type){
     doc.setFont('helvetica', 'italic'); doc.setFontSize(8); doc.setTextColor(160, 160, 160); 
     doc.text('* This is a system-generated document.', pageWidth / 2, pageHeight - 12, { align: 'center' });
 
-    const safeName = (i.customerName || 'Customer').replace(/[^a-zA-Z0-9_-]/g, '_');
-    doc.save(`${isPrescription?'Prescription':'Invoice'}_${safeName}.pdf`);
-    showToast("PDF Downloaded Successfully!");
+        const safeName = (i.customerName || 'Customer').replace(/[^a-zA-Z0-9_-]/g, '_');
+    
+    // Date ko DDMMYYYY format mein convert karna
+    let dParts = (i.rawBookingDate || '').split('-');
+    let dateStr = dParts.length === 3 ? `_${dParts[2]}${dParts[1]}${dParts[0]}` : ''; 
+    
+    // Naya Filename
+    const finalFileName = `${isPrescription ? 'Prescription' : 'Invoice'}_${safeName}${dateStr}.pdf`;
+    
+    // Check karega ki website App ke andar chal rahi hai ya PC par
+    if (window.AndroidDownloader && window.AndroidDownloader.saveDynamicPdf) {
+        window.AndroidDownloader.saveDynamicPdf(doc.output('datauristring'), finalFileName);
+        showToast("PDF Saved in Phone Downloads! 📁");
+    } else {
+        doc.save(finalFileName);
+        showToast("PDF Downloaded Successfully!");
+    }
+
   } catch (err) { alert('PDF Error: ' + err.message); console.error(err); }
 }
 
