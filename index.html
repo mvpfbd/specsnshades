@@ -32,10 +32,29 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0 10px 80px 10px;background
 .text-blue { color: var(--primary) !important; }
 .text-red { color: var(--danger) !important; }
 
+/* ======== LOGIN SCREEN CSS ======== */
+.login-wrapper {
+  position: fixed; inset: 0; background: var(--bg-color); z-index: 10000;
+  display: flex; justify-content: center; align-items: center; padding: 20px;
+}
+.login-box {
+  background: #fff; border-radius: 16px; padding: 30px; width: 100%; max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid var(--border-color); text-align: left;
+}
+.login-header { text-align: center; margin-bottom: 25px; }
+.login-header h2 { color: var(--primary); margin: 0 0 5px 0; font-size: 22px; font-weight: 900;}
+.login-header p { margin: 0; color: var(--text-muted); font-size: 13px; font-weight: 600;}
+.login-input { margin-bottom: 20px; text-align: center;}
+.login-input label { display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
+.login-input input { width: 100%; padding: 15px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 24px; font-weight: 900; letter-spacing: 8px; text-align: center; transition: 0.3s; font-family: 'Inter', sans-serif;}
+.login-input input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(2,132,199,0.15); outline: none; }
+.btn-login { width: 100%; background: linear-gradient(135deg, #0ea5e9, #4f46e5); color: #fff; padding: 15px; border: none; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 10px; font-family: 'Inter', sans-serif;}
+.btn-login:hover { filter: brightness(1.1); box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); }
+
 /* MODERN COLORFUL GRADIENT HEADER */
 .app-header {
     background: linear-gradient(135deg, #0ea5e9, #4f46e5); 
-    padding: 16px 15px;
+    padding: 16px 15px 12px;
     text-align: center;
     border-bottom: none;
     box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
@@ -53,14 +72,25 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0 10px 80px 10px;background
 }
 .app-header h1 { margin:0; color:#fff; font-size:20px; font-weight:800; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:2px; text-shadow:0 2px 4px rgba(0,0,0,0.15);}
 .app-header .subtitle { font-size:11px; font-weight:600; color:#e0f2fe; margin-top:4px; letter-spacing:0.5px;}
-.app-header .powered { font-size:8.5px; font-weight:700; color:#c7d2fe; margin-top:3px; text-transform:uppercase; letter-spacing: 0.5px;}
+
+/* Branch Indicator inside Header */
+.branch-indicator { display:inline-block; background:rgba(255,255,255,0.15); padding:3px 10px; border-radius:12px; font-size:10px; font-weight:700; color:#fff; margin-top:8px; border:1px solid rgba(255,255,255,0.3); }
+
+/* Icon-Only Logout Button */
+.logout-btn { 
+    position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.2); 
+    color: #fff; border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; 
+    width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; 
+    font-size: 14px; cursor: pointer; transition: 0.2s;
+}
+.logout-btn:hover { background: rgba(255,255,255,0.4); transform: scale(1.05); }
 
 @media(min-width:769px){
     body { padding-top:10px; }
     .app-header { margin: 0 0 20px 0; border-radius: 16px; top: 10px; }
     .app-header h1 { font-size: 24px; }
     .app-header .subtitle { font-size: 12px; }
-    .app-header .powered { font-size: 10px; }
+    .logout-btn { top: 16px; right: 16px; width: 36px; height: 36px; font-size: 15px;}
 }
 
 /* Navigation Desktop */
@@ -261,7 +291,7 @@ tr:hover td { background:#f8fafc; }
 .card-footer button:hover{filter:brightness(1.1);}
 
 /* Toast */
-.toast-notification { visibility:hidden; min-width:250px; background:var(--success); color:#fff; text-align:center; border-radius:8px; padding:12px 20px; position:fixed; z-index:9999; left:50%; transform:translateX(-50%); top:-50px; font-size:13px; font-weight:600; box-shadow:0 10px 30px rgba(0,0,0,0.2); opacity:0; transition:opacity 0.3s, top 0.4s ease-out; display:flex; align-items:center; gap:8px; justify-content:center; }
+.toast-notification { visibility:hidden; min-width:250px; background:var(--success); color:#fff; text-align:center; border-radius:8px; padding:12px 20px; position:fixed; z-index:10001; left:50%; transform:translateX(-50%); top:-50px; font-size:13px; font-weight:600; box-shadow:0 10px 30px rgba(0,0,0,0.2); opacity:0; transition:opacity 0.3s, top 0.4s ease-out; display:flex; align-items:center; gap:8px; justify-content:center; }
 .toast-notification.show { visibility:visible; opacity:1; top:20px; }
 .toast-notification.error { background:var(--danger); }
 </style>
@@ -270,12 +300,35 @@ tr:hover td { background:#f8fafc; }
 
 <div id="toast" class="toast-notification"></div>
 
+<!-- ================= LOGIN SCREEN (SINGLE PIN) ================= -->
+<div id="loginScreen" class="login-wrapper">
+  <div class="login-box">
+    <div class="login-header">
+      <div style="font-size:45px; color:var(--primary); margin-bottom:10px;"><i class="fa-solid fa-glasses"></i></div>
+      <h2>MALTI VISION PLUS</h2>
+      <p>Optical Management Software</p>
+    </div>
+    
+    <form onsubmit="handleLogin(event)">
+      <div class="login-input">
+        <label>Enter Auth PIN</label>
+        <input type="password" id="loginPassword" placeholder="••••" required autocomplete="off" inputmode="numeric">
+      </div>
+      <button type="submit" class="btn-login"><i class="fa-solid fa-right-to-bracket"></i> Unlock Dashboard</button>
+    </form>
+  </div>
+</div>
+
+<!-- ================= MAIN APP WRAPPER ================= -->
+<div id="mainApp" style="display:none;">
+
 <div class="container">
 <!-- COLORFUL BRAND HEADER -->
 <div class="app-header">
+  <button class="logout-btn" onclick="handleLogout()" title="Logout"><i class="fa-solid fa-power-off"></i></button>
   <h1>👓 MALTI VISION PLUS</h1>
   <div class="subtitle">Optical • Eye Examination • Eyewear</div>
-  <div class="powered">powered by specsnshades</div>
+  <div class="branch-indicator" id="branchIndicator">Branch: -</div>
 </div>
 
 <!-- Desktop Nav -->
@@ -544,6 +597,21 @@ tr:hover td { background:#f8fafc; }
   </div>
 </div>
 
+<!-- Custom Logout Confirmation Modal -->
+<div id="logoutModal" class="modal-overlay">
+  <div class="modal-box" style="width: 320px; text-align: center; padding-top:30px;">
+    <div style="font-size: 45px; color: var(--danger); margin-bottom: 15px;">
+      <i class="fa-solid fa-right-from-bracket"></i>
+    </div>
+    <h3 style="border: none; padding-bottom: 0; font-size:18px;">Logout?</h3>
+    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 25px;">Are you sure you want to logout from this branch?</p>
+    <div class="modal-actions" style="margin-top: 0;">
+      <button class="btn-cancel" onclick="closeLogoutModal()">Cancel</button>
+      <button class="btn-confirm" style="background: var(--danger);" onclick="executeLogout()">Yes, Logout</button>
+    </div>
+  </div>
+</div>
+
 <!-- Prescription Preview Modal -->
 <div id="printPrescriptionModal" class="card-modal">
   <div class="preview-card">
@@ -707,10 +775,77 @@ tr:hover td { background:#f8fafc; }
 <div class="modal-actions"><button class="btn-cancel" onclick="closeHistoryModal()">Close</button></div>
 </div></div>
 
+</div>
+</div> <!-- END MAIN APP WRAPPER -->
+
 <script>
-const STORAGE_KEY = 'opticalRecords';
-const adminPassword = 'Shail';
-const FIREBASE_URL = 'https://specsnshades11-default-rtdb.firebaseio.com/records.json';
+// ================= LOGIN & AUTHENTICATION SYSTEM =================
+const adminPassword = 'Shail'; // Used for Master Edit and Delete
+let currentBranch = null;
+
+function checkAuth() {
+    currentBranch = sessionStorage.getItem('activeBranch');
+    if(currentBranch) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+        
+        let branchName = currentBranch === 'MVP' ? 'Malti Vision Plus' : 'Specsnshades';
+        document.getElementById('branchIndicator').innerHTML = `<i class="fa-solid fa-store"></i> Branch: ${branchName}`;
+    } else {
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('mainApp').style.display = 'none';
+    }
+}
+
+function handleLogin(e) {
+    e.preventDefault();
+    const p = document.getElementById('loginPassword').value.trim();
+
+    // Secret PIN Logic
+    if(p === '1212') {
+        sessionStorage.setItem('activeBranch', 'MVP');
+    } else if (p === '8604') {
+        sessionStorage.setItem('activeBranch', 'SNS');
+    } else {
+        return showToast('❌ Incorrect PIN!', true);
+    }
+    
+    document.getElementById('loginPassword').value = '';
+    
+    checkAuth();
+    showToast(`✅ Logged into ${currentBranch} Branch`);
+    
+    // Switch to database and refresh
+    fetchFirebaseData();
+}
+
+function handleLogout() {
+    // Open the confirmation modal instead of logging out directly
+    document.getElementById('logoutModal').classList.add('active');
+}
+
+function closeLogoutModal() {
+    document.getElementById('logoutModal').classList.remove('active');
+}
+
+function executeLogout() {
+    closeLogoutModal();
+    sessionStorage.removeItem('activeBranch');
+    currentBranch = null;
+    globalRecords = []; // Clear memory
+    showToast('Logged out successfully.');
+    checkAuth();
+}
+
+// Ensure proper DB keys based on selected branch
+function getStorageKey() {
+    return 'opticalRecords_' + (currentBranch || 'TEMP');
+}
+
+function getFirebaseUrl() {
+    return `https://specsnshades11-default-rtdb.firebaseio.com/records_${currentBranch || 'TEMP'}.json`;
+}
+// =================================================================
 
 let globalRecords = [];
 let currentPayingId=null, currentEditingId=null, activeItem=null;
@@ -726,20 +861,21 @@ function showToast(msg, isError = false) {
   setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
 }
 
-// SMART CLOUD SYNC FUNCTIONS
+// SMART CLOUD SYNC FUNCTIONS (Now branch aware)
 async function fetchFirebaseData() {
+    if(!currentBranch) return; // safety
     try {
-        const response = await fetch(FIREBASE_URL);
+        const response = await fetch(getFirebaseUrl());
         const data = await response.json();
         if(data) {
             globalRecords = Array.isArray(data) ? data : Object.values(data);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(globalRecords));
+            localStorage.setItem(getStorageKey(), JSON.stringify(globalRecords));
         } else {
             globalRecords = [];
         }
     } catch(e) {
         console.error("Cloud Sync Failed", e);
-        globalRecords = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        globalRecords = JSON.parse(localStorage.getItem(getStorageKey())) || [];
     }
     loadRecords();
 }
@@ -749,15 +885,15 @@ function getRecords() {
 }
 
 function setRecords(r) { 
+    if(!currentBranch) return;
     globalRecords = r; 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(r)); 
-    fetch(FIREBASE_URL, { 
+    localStorage.setItem(getStorageKey(), JSON.stringify(r)); 
+    fetch(getFirebaseUrl(), { 
         method: 'PUT', 
         body: JSON.stringify(r), 
         headers:{'Content-Type':'application/json'} 
     }).catch(e => console.error("Firebase save error", e));
 }
-
 
 function uploadSignature(e) {
   const file = e.target.files[0];
@@ -923,8 +1059,12 @@ window.onload = async function() {
   populateDropdownOptions();
   populateMonthFilter();
   
-  showToast("Syncing Database...");
-  await fetchFirebaseData();
+  checkAuth();
+  
+  if(sessionStorage.getItem('activeBranch')){
+      showToast("Syncing Database...");
+      await fetchFirebaseData();
+  }
   
   ['reUnaided','leUnaided','reVision','leVision'].forEach(id => {
       const el = document.getElementById(id);
@@ -1110,7 +1250,10 @@ function saveRecord(e){
  const mm = String(dObj.getMonth() + 1).padStart(2, '0');
  const yearMonthCode = yy + mm; 
  const seqStr = String(maxSeq + 1).padStart(3, '0'); 
- const invoiceNo = `MVP/${yearMonthCode}/O/${seqStr}`;
+ 
+ // Automatic Branch Prefix for Invoice
+ const invoicePrefix = currentBranch === 'MVP' ? 'MVP' : 'SNS';
+ const invoiceNo = `${invoicePrefix}/${yearMonthCode}/O/${seqStr}`;
 
  const item={
   id:Date.now(), invoiceNo: invoiceNo, bookingDateStr:formatDate(date), receivingDateStr:(statusWanted.includes('Delivered'))?formatDate(date):'-',
@@ -1834,8 +1977,8 @@ function executeDelete() {
 }
 
 function exportBackup(){
- const data={app:'Malti Vision Plus',version:3,exportedAt:new Date().toISOString(),records:getRecords()};
- const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='malti-vision-backup-'+todayISO()+'.json'; a.click();
+ const data={app:`Malti Vision Plus (${currentBranch})`,version:3,exportedAt:new Date().toISOString(),records:getRecords()};
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`malti-vision-${currentBranch.toLowerCase()}-backup-${todayISO()}.json`; a.click();
  showToast("Backup Downloaded!");
 }
 function importBackup(e){
