@@ -24,7 +24,7 @@
   --bg-color: #f1f5f9; --card-bg: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --border-color: #cbd5e1;
 }
 *{box-sizing:border-box}
-body{font-family:'Inter',sans-serif;margin:0;padding:0 10px 80px 10px;background:var(--bg-color);color:var(--text-main);font-size:13px; -webkit-tap-highlight-color: transparent;}
+body{font-family:'Inter',sans-serif;margin:0;padding:0 10px 80px 10px;background:var(--bg-color);color:var(--text-main);font-size:13px; -webkit-tap-highlight-color: transparent; transition: background 0.3s;}
 .container{max-width:1100px;margin:auto;}
 
 /* Color Utility Classes */
@@ -38,7 +38,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0 10px 80px 10px;background
   display: flex; justify-content: center; align-items: center; padding: 20px;
 }
 .login-box {
-  background: #fff; border-radius: 16px; padding: 30px; width: 100%; max-width: 400px;
+  background: var(--card-bg); border-radius: 16px; padding: 30px; width: 100%; max-width: 400px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid var(--border-color); text-align: left;
 }
 .login-header { text-align: center; margin-bottom: 25px; }
@@ -47,9 +47,9 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0 10px 80px 10px;background
 .login-input { margin-bottom: 20px; text-align: center;}
 .login-input label { display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
 .login-input input { width: 100%; padding: 15px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 24px; font-weight: 900; letter-spacing: 8px; text-align: center; transition: 0.3s; font-family: 'Inter', sans-serif;}
-.login-input input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(2,132,199,0.15); outline: none; }
-.btn-login { width: 100%; background: linear-gradient(135deg, #0ea5e9, #4f46e5); color: #fff; padding: 15px; border: none; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 10px; font-family: 'Inter', sans-serif;}
-.btn-login:hover { filter: brightness(1.1); box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); }
+.login-input input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(var(--primary),0.15); outline: none; }
+.btn-login { width: 100%; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; padding: 15px; border: none; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 10px; font-family: 'Inter', sans-serif;}
+.btn-login:hover { filter: brightness(1.1); box-shadow: 0 4px 15px rgba(0,0,0, 0.3); }
 
 /* MODERN COLORFUL GRADIENT HEADER */
 .app-header {
@@ -57,13 +57,14 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0 10px 80px 10px;background
     padding: 16px 15px 12px;
     text-align: center;
     border-bottom: none;
-    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 6px 20px rgba(0,0,0, 0.2);
     position: sticky;
     top: 0;
     z-index: 1000;
     margin: 0 -10px 15px -10px; 
     border-radius: 0 0 16px 16px;
     color: #fff;
+    transition: background 0.3s;
 }
 .app-header::before{
     content:''; position:absolute; top:0; left:0; right:0; height:4px;
@@ -71,37 +72,61 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0 10px 80px 10px;background
     border-radius: 16px 16px 0 0;
 }
 .app-header h1 { margin:0; color:#fff; font-size:20px; font-weight:800; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:2px; text-shadow:0 2px 4px rgba(0,0,0,0.15);}
-.app-header .subtitle { font-size:11px; font-weight:600; color:#e0f2fe; margin-top:4px; letter-spacing:0.5px;}
+.app-header .subtitle { font-size:11px; font-weight:600; color:rgba(255,255,255,0.9); margin-top:4px; letter-spacing:0.5px;}
 
 /* Branch Indicator inside Header */
 .branch-indicator { display:inline-block; background:rgba(255,255,255,0.15); padding:3px 10px; border-radius:12px; font-size:10px; font-weight:700; color:#fff; margin-top:8px; border:1px solid rgba(255,255,255,0.3); }
 
-/* Icon-Only Logout Button */
-.logout-btn { 
-    position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.2); 
+/* Header Buttons (Theme & Logout) */
+.header-btn { 
+    position: absolute; top: 12px; background: rgba(255,255,255,0.2); 
     color: #fff; border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; 
     width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; 
     font-size: 14px; cursor: pointer; transition: 0.2s;
 }
-.logout-btn:hover { background: rgba(255,255,255,0.4); transform: scale(1.05); }
+.header-btn:hover { background: rgba(255,255,255,0.4); transform: scale(1.05); }
+.btn-left { left: 12px; }
+.btn-right { right: 12px; }
 
 @media(min-width:769px){
     body { padding-top:10px; }
     .app-header { margin: 0 0 20px 0; border-radius: 16px; top: 10px; }
     .app-header h1 { font-size: 24px; }
     .app-header .subtitle { font-size: 12px; }
-    .logout-btn { top: 16px; right: 16px; width: 36px; height: 36px; font-size: 15px;}
+    .header-btn { top: 16px; width: 36px; height: 36px; font-size: 15px;}
+    .btn-left { left: 16px; }
+    .btn-right { right: 16px; }
 }
+
+/* SKELETON LOADING ANIMATION */
+@keyframes shimmer {
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+}
+.skeleton-box {
+  background: #e2e8f0;
+  background-image: linear-gradient(to right, #e2e8f0 0%, #cbd5e1 20%, #e2e8f0 40%, #e2e8f0 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite linear forwards;
+  border-radius: 4px;
+}
+
+/* Theme Selector Bubbles */
+.theme-options { display:flex; gap:12px; justify-content:center; margin:20px 0; flex-wrap:wrap;}
+.theme-circle { width:40px; height:40px; border-radius:50%; cursor:pointer; border:2px solid rgba(255,255,255,0.8); transition:0.2s; box-shadow:0 4px 6px rgba(0,0,0,0.15);}
+.theme-circle:hover { transform:scale(1.1); box-shadow:0 6px 12px rgba(0,0,0,0.25); }
+.theme-circle.active { border-color:var(--text-main); transform:scale(1.15); box-shadow:0 0 12px rgba(0,0,0,0.2); }
 
 /* Navigation Desktop */
 .nav-tabs { display:flex; gap:10px; margin-bottom:20px; }
-.nav-tab { flex:1; padding:12px; font-size:13px; font-weight:600; border:1px solid var(--border-color); border-radius:8px; cursor:pointer; background:#f8fafc; color:var(--text-muted); transition:0.2s; display:flex; justify-content:center; align-items:center; gap:6px;}
-.nav-tab:hover { background:#e2e8f0; }
-.nav-tab.active { background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 4px 10px rgba(2,132,199,0.3); }
+.nav-tab { flex:1; padding:12px; font-size:13px; font-weight:600; border:1px solid var(--border-color); border-radius:8px; cursor:pointer; background:var(--card-bg); color:var(--text-muted); transition:0.2s; display:flex; justify-content:center; align-items:center; gap:6px;}
+.nav-tab:hover { background:var(--bg-color); }
+.nav-tab.active { background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 4px 10px rgba(0,0,0,0.2); }
 
 /* Mobile Bottom Nav */
-.bottom-nav{display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; box-shadow:0 -4px 15px rgba(0,0,0,.06); z-index:99; padding:10px 0 12px; justify-content:space-around; border-top-left-radius:16px; border-top-right-radius:16px;}
-.bottom-nav-item{text-align:center; flex:1; color:#94a3b8; font-size:11px; font-weight:600; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; transition:all 0.2s;}
+.bottom-nav{display:none; position:fixed; bottom:0; left:0; right:0; background:var(--card-bg); box-shadow:0 -4px 15px rgba(0,0,0,.06); z-index:99; padding:10px 0 12px; justify-content:space-around; border-top-left-radius:16px; border-top-right-radius:16px;}
+.bottom-nav-item{text-align:center; flex:1; color:var(--text-muted); font-size:11px; font-weight:600; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; transition:all 0.2s;}
 .bottom-nav-item i{font-size:20px}
 .bottom-nav-item.active{color:var(--primary)}
 .bottom-nav-item.active i{transform:scale(1.1)}
@@ -111,44 +136,39 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0 10px 80px 10px;background
 @keyframes fadeIn { from{opacity:0;transform:translateY(5px);} to{opacity:1;transform:translateY(0);} }
 
 /* Forms & Cards */
-.form-card { background:#fff; border:1px solid var(--border-color); border-radius:10px; padding:15px; margin-bottom:15px; box-shadow:0 2px 4px rgba(0,0,0,0.02);}
+.form-card { background:var(--card-bg); border:1px solid var(--border-color); border-radius:10px; padding:15px; margin-bottom:15px; box-shadow:0 2px 4px rgba(0,0,0,0.02);}
 
 /* COLORFUL ENTRY CARD BACKGROUNDS */
-#card-customer { background-color: #eff6ff; border-color: #bfdbfe; }
-#card-refraction { background-color: #f5f3ff; border-color: #ddd6fe; }
-#card-order { background-color: #fff7ed; border-color: #fed7aa; }
-#card-payment { background-color: #f0fdf4; border-color: #bbf7d0; }
+#card-customer { background-color: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.3); }
+#card-refraction { background-color: rgba(167, 139, 250, 0.05); border-color: rgba(167, 139, 250, 0.3); }
+#card-order { background-color: rgba(251, 146, 60, 0.05); border-color: rgba(251, 146, 60, 0.3); }
+#card-payment { background-color: rgba(74, 222, 128, 0.05); border-color: rgba(74, 222, 128, 0.3); }
 
-#card-customer .card-header { border-bottom-color: #bfdbfe; }
-#card-refraction .card-header { border-bottom-color: #ddd6fe; }
-#card-order .card-header { border-bottom-color: #fed7aa; }
-#card-payment .card-header { border-bottom-color: #bbf7d0; }
-
-.card-header { font-size:13px; font-weight:800; color:var(--text-main); margin-bottom:12px; text-transform:uppercase; display:flex; align-items:center; gap:6px; border-bottom:2px solid #e2e8f0; padding-bottom:8px;}
+.card-header { font-size:13px; font-weight:800; color:var(--text-main); margin-bottom:12px; text-transform:uppercase; display:flex; align-items:center; gap:6px; border-bottom:2px solid var(--border-color); padding-bottom:8px;}
 .card-header i { color:var(--primary); font-size:15px;}
 
 .row { display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap;}
 .col { flex:1; min-width:140px; position:relative; }
 label { font-size:10.5px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;}
-input, select { width:100%; padding:10px; font-family:'Inter',sans-serif; font-size:13px; border:1px solid var(--border-color); border-radius:6px; background:#fff; color:var(--text-main); outline:none; transition:0.2s;}
-input:focus, select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(2,132,199,0.15);}
+input, select { width:100%; padding:10px; font-family:'Inter',sans-serif; font-size:13px; border:1px solid var(--border-color); border-radius:6px; background:var(--card-bg); color:var(--text-main); outline:none; transition:0.2s;}
+input:focus, select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(0,0,0,0.05);}
 
 /* P Button Style */
-.btn-p { background: #f1f5f9; border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 6px; font-size: 13px; font-family:'Inter',sans-serif; font-weight: 800; padding: 0 10px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; height:100%;}
-.btn-p:hover:not(:disabled) { background: #e2e8f0; }
-.btn-p.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 2px 6px rgba(2,132,199,0.3); }
+.btn-p { background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 6px; font-size: 13px; font-family:'Inter',sans-serif; font-weight: 800; padding: 0 10px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; height:100%;}
+.btn-p:hover:not(:disabled) { filter:brightness(0.95); }
+.btn-p.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
 .btn-p:disabled { opacity: 0.3; cursor: not-allowed; }
 
 /* PR Grid Checkboxes */
-.pr-grid label { font-size: 11px; display: flex; align-items: center; gap: 4px; cursor: pointer; text-transform: none; font-weight: 700; color: var(--primary); margin:0; padding: 2px 6px; background: #e0f2fe; border-radius: 4px; border: 1px solid #bae6fd;}
+.pr-grid label { font-size: 11px; display: flex; align-items: center; gap: 4px; cursor: pointer; text-transform: none; font-weight: 700; color: var(--primary); margin:0; padding: 2px 6px; background: rgba(56, 189, 248, 0.1); border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.3);}
 .pr-grid input[type="checkbox"] { width: 13px; height: 13px; margin:0; accent-color: var(--primary);}
 
 /* Smart Auto-Fill Prompt */
-#autoFillPrompt { display:none; background:#dcfce7; color:#166534; font-size:11.5px; font-weight:600; padding:8px 12px; border-radius:6px; margin-top:8px; border:1px solid #86efac; cursor:pointer; text-align:center; transition:0.2s;}
+#autoFillPrompt { display:none; background:rgba(74, 222, 128, 0.15); color:var(--success); font-size:11.5px; font-weight:600; padding:8px 12px; border-radius:6px; margin-top:8px; border:1px solid rgba(74, 222, 128, 0.5); cursor:pointer; text-align:center; transition:0.2s;}
 #autoFillPrompt:active { transform:scale(0.98); }
 
 /* Refraction Grid styling */
-.eye-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; margin-bottom:15px; background:#ffffff; padding:10px; border-radius:8px; border:1px solid #e2e8f0;}
+.eye-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; margin-bottom:15px; background:var(--card-bg); padding:10px; border-radius:8px; border:1px solid var(--border-color);}
 .eye-title { grid-column: span 4; font-size:12px; font-weight:700; color:var(--primary); margin-bottom:4px;}
 .le-title { color:var(--accent); }
 .eye-grid .col { min-width:0; }
@@ -156,14 +176,14 @@ input:focus, select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rg
 .add-nv-row { grid-column: span 4; display:grid; grid-template-columns: repeat(2, 1fr); gap:8px; margin-top:2px; display:none; }
 
 /* Item Checkboxes */
-.item-check-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; font-weight:700; font-size:12px;}
+.item-check-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; font-weight:700; font-size:12px; color:var(--text-main);}
 .item-check-row input[type="checkbox"] { width:16px; height:16px; accent-color:var(--primary); }
 
 /* Bill Summary Box */
-.bill-summary { background:#ffffff; padding:15px; border-radius:8px; border:1px dashed #cbd5e1; }
+.bill-summary { background:var(--card-bg); padding:15px; border-radius:8px; border:1px dashed var(--border-color); }
 .bill-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12.5px; font-weight:500; color:var(--text-muted);}
 .bill-row input { width:100px; padding:6px; text-align:right; font-weight:600; font-size:13px;}
-.bill-row.strong { font-weight:800; color:var(--text-main); font-size:14px; border-top:1px solid #cbd5e1; padding-top:8px; margin-top:4px;}
+.bill-row.strong { font-weight:800; color:var(--text-main); font-size:14px; border-top:1px solid var(--border-color); padding-top:8px; margin-top:4px;}
 .bill-row.balance { color:var(--danger); font-size:15px; }
 
 .btn-main { width:100%; background:var(--primary); color:#fff; border:none; padding:14px; font-family:'Inter',sans-serif; font-size:14px; font-weight:700; border-radius:8px; cursor:pointer; margin-top:10px; transition:0.2s; display:flex; align-items:center; justify-content:center; gap:8px;}
@@ -173,8 +193,8 @@ input:focus, select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rg
 /* Records Area Filter */
 .filter-bar { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;}
 .filter-bar select, .filter-bar input { width:auto; flex:1; min-width:150px; }
-.btn-secondary { background:#f8fafc; color:var(--text-main); border:1px solid var(--border-color); padding:10px 15px; font-weight:600; border-radius:6px; cursor:pointer; font-size:12px; transition:0.2s; display:flex; align-items:center; justify-content:center; gap:5px;}
-.btn-secondary:hover { background:#e2e8f0; }
+.btn-secondary { background:var(--card-bg); color:var(--text-main); border:1px solid var(--border-color); padding:10px 15px; font-weight:600; border-radius:6px; cursor:pointer; font-size:12px; transition:0.2s; display:flex; align-items:center; justify-content:center; gap:5px;}
+.btn-secondary:hover { filter:brightness(0.95); }
 
 /* COMPACT DASHBOARD DESKTOP */
 .dash-section-title { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 15px 0 8px 4px; letter-spacing: 0.5px; }
@@ -184,33 +204,30 @@ input:focus, select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rg
 .dash-title { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0; line-height: 1.2; }
 .dash-value { font-size: 14px; font-weight: 800; color: var(--text-main); margin-top: 4px; }
 
-/* Dashboard Pastel Colors */
-.dash-card.c-total { background-color: #eff6ff; border-color: #bfdbfe; }
-.dash-card.c-cash { background-color: #f0fdf4; border-color: #bbf7d0; }
-.dash-card.c-upi { background-color: #f5f3ff; border-color: #ddd6fe; }
-.dash-card.c-dues { background-color: #fef2f2; border-color: #fecaca; }
-.dash-card.c-orders { background-color: #fff7ed; border-color: #fed7aa; }
+.dash-card.c-total { background-color: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); }
+.dash-card.c-cash { background-color: rgba(74, 222, 128, 0.1); border-color: rgba(74, 222, 128, 0.3); }
+.dash-card.c-upi { background-color: rgba(167, 139, 250, 0.1); border-color: rgba(167, 139, 250, 0.3); }
+.dash-card.c-dues { background-color: rgba(248, 113, 113, 0.1); border-color: rgba(248, 113, 113, 0.3); }
+.dash-card.c-orders { background-color: rgba(251, 146, 60, 0.1); border-color: rgba(251, 146, 60, 0.3); }
 
 /* DESKTOP TABLE */
-.table-wrap { width:100%; overflow-x:auto; background:#fff; border-radius:10px; border:1px solid var(--border-color); display:block; }
+.table-wrap { width:100%; overflow-x:auto; background:var(--card-bg); border-radius:10px; border:1px solid var(--border-color); display:block; }
 table { width:100%; border-collapse:collapse; min-width:900px; font-size:11.5px;}
-th { background:#f8fafc; color:var(--text-muted); font-weight:700; text-transform:uppercase; font-size:10px; padding:12px 10px; text-align:left; border-bottom:1px solid var(--border-color); position:sticky; top:0; z-index:10;}
-td { padding:12px 10px; border-bottom:1px solid #f1f5f9; vertical-align:middle; color:#334155;}
-tr:hover td { background:#f8fafc; }
+th { background:rgba(0,0,0,0.03); color:var(--text-muted); font-weight:700; text-transform:uppercase; font-size:10px; padding:12px 10px; text-align:left; border-bottom:1px solid var(--border-color); position:sticky; top:0; z-index:10;}
+td { padding:12px 10px; border-bottom:1px solid var(--bg-color); vertical-align:middle; color:var(--text-main);}
+tr:hover td { background:rgba(0,0,0,0.02); }
 
 /* COLORFUL MOBILE CARDS */
 .mobile-cards-wrap { display:none; }
-.mob-card { background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 40px); border:1px solid #bae6fd; border-radius:10px; padding:15px; margin-bottom:12px; box-shadow:0 4px 10px rgba(2,132,199,0.06); position:relative;}
-.mob-card-head { display:flex; justify-content:space-between; border-bottom:1px dashed #bfdbfe; padding-bottom:10px; margin-bottom:10px; font-size:11.5px; font-weight:600; color:var(--text-muted);}
+.mob-card { background: linear-gradient(180deg, rgba(56, 189, 248, 0.1) 0%, var(--card-bg) 40px); border:1px solid var(--border-color); border-radius:10px; padding:15px; margin-bottom:12px; box-shadow:0 4px 10px rgba(0,0,0,0.04); position:relative;}
+.mob-card-head { display:flex; justify-content:space-between; border-bottom:1px dashed var(--border-color); padding-bottom:10px; margin-bottom:10px; font-size:11.5px; font-weight:600; color:var(--text-muted);}
 .mob-card-head span.inv { color:var(--accent); font-weight:800; font-size:13px;}
 .mob-card-body { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;}
 .mob-card-name { font-size:15px; font-weight:800; color:var(--text-main);}
 .mob-card-phone { font-size:12px; color:var(--text-muted); margin-top:4px; display:flex; align-items:center; gap:5px;}
 .mob-card-fin { text-align:right; min-width: 80px;}
-.mob-card-total { font-size:14px; font-weight:800;}
+.mob-card-total { font-size:14px; font-weight:800; color:var(--text-main);}
 .status-badge { display:inline-flex; align-items:center; gap:4px; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700; text-transform:uppercase; margin-bottom:10px;}
-.bg-paid { background:#dcfce7; color:#166534; border:1px solid #bbf7d0;}
-.bg-due { background:#fee2e2; color:#b91c1c; border:1px solid #fecaca;}
 
 /* Action Buttons & Dropdown */
 .actions-cell { display:flex; gap:6px; align-items:center; width:100%;}
@@ -220,17 +237,17 @@ tr:hover td { background:#f8fafc; }
 .btn-act.bill { background:var(--accent); }
 .btn-act.presc { background:var(--primary); }
 
-.btn-delivery { background:#fff7ed; color:var(--accent); border:1px solid #fed7aa; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:0.2s; display:inline-flex; align-items:center; gap:4px; }
-.btn-delivery:hover { background:#ffedd5; }
+.btn-delivery { background:rgba(251, 146, 60, 0.1); color:var(--accent); border:1px solid rgba(251, 146, 60, 0.4); padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:0.2s; display:inline-flex; align-items:center; gap:4px; }
+.btn-delivery:hover { filter:brightness(0.9); }
 
 /* Dropdown ⋮ */
 .dropdown { position:relative; display:inline-block; }
-.btn-more { background:#f1f5f9; color:var(--text-main); border:1px solid var(--border-color); padding:7px 12px; border-radius:6px; font-size:12px; cursor:pointer; transition:0.2s;}
-.btn-more:hover { background:#e2e8f0; }
-.dropdown-content { display:none; position:absolute; right:0; top:100%; background:#fff; min-width:140px; box-shadow:0 10px 25px rgba(0,0,0,0.15); border:1px solid var(--border-color); border-radius:8px; z-index:20; overflow:hidden;}
+.btn-more { background:var(--bg-color); color:var(--text-main); border:1px solid var(--border-color); padding:7px 12px; border-radius:6px; font-size:12px; cursor:pointer; transition:0.2s;}
+.btn-more:hover { filter:brightness(0.9); }
+.dropdown-content { display:none; position:absolute; right:0; top:100%; background:var(--card-bg); min-width:140px; box-shadow:0 10px 25px rgba(0,0,0,0.15); border:1px solid var(--border-color); border-radius:8px; z-index:20; overflow:hidden;}
 .dropdown-content.show { display:flex; flex-direction:column; }
-.dropdown-content button { background:none; border:none; border-bottom:1px solid #f1f5f9; padding:10px 15px; text-align:left; font-size:12px; font-family:'Inter',sans-serif; font-weight:600; color:var(--text-main); cursor:pointer; display:flex; align-items:center; gap:8px; transition:0.2s;}
-.dropdown-content button:hover { background:#f8fafc; color:var(--primary); padding-left:18px;}
+.dropdown-content button { background:none; border:none; border-bottom:1px solid var(--bg-color); padding:10px 15px; text-align:left; font-size:12px; font-family:'Inter',sans-serif; font-weight:600; color:var(--text-main); cursor:pointer; display:flex; align-items:center; gap:8px; transition:0.2s;}
+.dropdown-content button:hover { background:rgba(0,0,0,0.03); color:var(--primary); padding-left:18px;}
 .dropdown-content button.del:hover { color:var(--danger); }
 
 /* Responsive adjustments for Mobile */
@@ -257,7 +274,7 @@ tr:hover td { background:#f8fafc; }
 
   /* UPDATED SMART MOBILE CARDS */
   .mob-card { padding: 10px 12px; margin-bottom: 12px; border-radius: 10px; }
-  .mob-card-head { font-size: 10.5px; padding-bottom: 6px; margin-bottom: 8px; border-bottom: 1px dashed #bfdbfe;}
+  .mob-card-head { font-size: 10.5px; padding-bottom: 6px; margin-bottom: 8px; border-bottom: 1px dashed var(--border-color);}
   .mob-card-head span.inv { font-size: 12px; }
   .mob-card-name { font-size: 14.5px; font-weight:800; color:var(--text-main); }
   .mob-card-phone { font-size: 11.5px; margin-top:3px; color:var(--text-muted);}
@@ -272,19 +289,19 @@ tr:hover td { background:#f8fafc; }
 
 /* Modal Core Logic */
 .card-modal { display:none !important; }
-.card-modal.active { display:flex !important; position:fixed; inset:0; background:rgba(15,23,42,.7); backdrop-filter:blur(3px); justify-content:center; align-items:center; z-index:1000; padding:15px; }
+.card-modal.active { display:flex !important; position:fixed; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(4px); justify-content:center; align-items:center; z-index:1000; padding:15px; }
 .modal-overlay { display:none !important; }
-.modal-overlay.active { display:flex !important; position:fixed; inset:0; background:rgba(15,23,42,.7); backdrop-filter:blur(3px); justify-content:center; align-items:center; z-index:1000; padding:15px; }
+.modal-overlay.active { display:flex !important; position:fixed; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(4px); justify-content:center; align-items:center; z-index:1000; padding:15px; }
 
-.modal-box{background:#fff;padding:20px;border-radius:12px;width:380px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 15px 40px rgba(0,0,0,.2)}
+.modal-box{background:var(--card-bg); color:var(--text-main); padding:20px;border-radius:12px;width:380px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 15px 40px rgba(0,0,0,.3)}
 .modal-box h3{margin-top:0;font-size:16px;font-weight:800;border-bottom:1px solid var(--border-color);padding-bottom:10px}
 .modal-actions{display:flex;gap:10px;margin-top:20px}
 .modal-actions button{flex:1;padding:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;}
 .btn-confirm{background:var(--success);color:#fff} .btn-cancel{background:var(--text-muted);color:#fff}
 
 /* Preview Modal Design */
-.preview-card{background:#fff;width:100%;max-width:500px;max-height:92vh;margin:auto;border-radius:10px;box-shadow:0 15px 40px rgba(0,0,0,.3);display:flex;flex-direction:column;overflow:hidden;}
-.card-scroll-body{padding:15px;overflow-y:auto;flex:1;} 
+.preview-card{background:#fff;width:100%;max-width:500px;max-height:92vh;margin:auto;border-radius:10px;box-shadow:0 15px 40px rgba(0,0,0,.4);display:flex;flex-direction:column;overflow:hidden;}
+.card-scroll-body{padding:15px;overflow-y:auto;flex:1; color:#0f172a;} 
 .card-footer{display:flex;gap:8px;padding:15px;background:#f8fafc;border-top:1px solid #e2e8f0;flex-shrink:0; flex-wrap:wrap; justify-content:center;}
 .card-footer button{flex:1; min-width:100px; padding:12px 10px; font-family:'Inter',sans-serif; font-weight:600; border:none; border-radius:6px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; gap:6px; transition:0.2s;}
 .card-footer button:hover{filter:brightness(1.1);}
@@ -299,7 +316,7 @@ tr:hover td { background:#f8fafc; }
 
 <div id="toast" class="toast-notification"></div>
 
-<!-- ================= LOGIN SCREEN (SINGLE PIN) ================= -->
+<!-- ================= LOGIN SCREEN ================= -->
 <div id="loginScreen" class="login-wrapper">
   <div class="login-box">
     <div class="login-header">
@@ -322,9 +339,11 @@ tr:hover td { background:#f8fafc; }
 <div id="mainApp" style="display:none;">
 
 <div class="container">
-<!-- COLORFUL BRAND HEADER -->
-<div class="app-header">
-  <button class="logout-btn" onclick="handleLogout()" title="Logout"><i class="fa-solid fa-power-off"></i></button>
+<!-- COLORFUL BRAND HEADER WITH THEME BTN -->
+<div class="app-header" id="appHeaderBg">
+  <button class="header-btn btn-left" onclick="document.getElementById('themeModal').classList.add('active')" title="Change Theme"><i class="fa-solid fa-palette"></i></button>
+  <button class="header-btn btn-right" onclick="handleLogout()" title="Logout"><i class="fa-solid fa-power-off"></i></button>
+  
   <h1>👓 MALTI VISION PLUS</h1>
   <div class="subtitle">Optical • Eye Examination • Eyewear</div>
   <div class="branch-indicator" id="branchIndicator">Branch: -</div>
@@ -352,18 +371,16 @@ tr:hover td { background:#f8fafc; }
   <div class="form-card" id="card-customer">
     <div class="card-header"><i class="fa-solid fa-user-plus"></i> New Entry</div>
     
-    <!-- 1st Line: Mobile Number & Date for backdating -->
     <div class="row">
       <div class="col"><label>Mobile Number *</label><input type="tel" id="phone" placeholder="10-digit number" inputmode="numeric" required maxlength="10"></div>
       <div class="col" style="flex: 0 0 110px; min-width: 110px;" title="Click to change date for back-entry">
         <label>Date</label>
-        <input type="date" id="entryDate" required style="background: #f1f5f9; border: 1px dashed #cbd5e1; color: #64748b; font-weight: 700; padding: 10px 5px; font-size: 11px; cursor: pointer;">
+        <input type="date" id="entryDate" required style="background: rgba(0,0,0,0.03); border: 1px dashed var(--border-color); color: var(--text-muted); font-weight: 700; padding: 10px 5px; font-size: 11px; cursor: pointer;">
       </div>
     </div>
     
     <div id="autoFillPrompt"><i class="fa-solid fa-clock-rotate-left"></i> Existing customer found. Click to load prescription!</div>
     
-    <!-- 2nd Line: Prefix and Customer Name -->
     <div class="row" style="margin-top:12px;">
       <div class="col" style="flex: 0 0 55px; min-width: 55px;">
         <label>Title</label>
@@ -377,11 +394,10 @@ tr:hover td { background:#f8fafc; }
       <div class="col"><label>Customer Name *</label><input type="text" id="customerName" placeholder="Full Name" required></div>
     </div>
     
-    <!-- 3rd Line: Age and Gender -->
     <div class="row" style="margin-top:12px;">
       <div class="col"><label>Age</label><input type="number" id="customerAge" placeholder="Years" min="1" max="120"></div>
       <div class="col"><label>Gender</label>
-        <select id="customerGender" onchange="checkAgeForAdd(); updateGenderColor();" style="background-color: #f0fdf4; border-color: #bbf7d0; color: #166534; font-weight: 700;">
+        <select id="customerGender" onchange="checkAgeForAdd(); updateGenderColor();" style="background-color: rgba(22, 163, 74, 0.1); border-color: rgba(22, 163, 74, 0.3); color: #166534; font-weight: 700;">
           <option value="Male">Male</option>
           <option value="Female">Female</option>
           <option value="Other">Other</option>
@@ -389,7 +405,6 @@ tr:hover td { background:#f8fafc; }
       </div>
     </div>
     
-    <!-- 4th Line: Address -->
     <div class="row" style="margin-top:12px;">
       <div class="col"><label>Address / Location</label><input type="text" id="customerAddress" placeholder="City / Area / Full Address"></div>
     </div>
@@ -399,8 +414,7 @@ tr:hover td { background:#f8fafc; }
   <div class="form-card" id="card-refraction">
     <div class="card-header"><i class="fa-solid fa-eye"></i> Refraction (Power)</div>
     
-    <!-- UNAIDED VISION ROW WITH PR GRIDS -->
-    <div style="background:#fff; padding:10px 12px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:15px; display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
+    <div style="background:var(--card-bg); padding:10px 12px; border-radius:8px; border:1px solid var(--border-color); margin-bottom:15px; display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
       <div style="font-size:11.5px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Unaided Vision</div>
       <div style="display:flex; gap:10px; flex:1;">
          
@@ -513,7 +527,7 @@ tr:hover td { background:#f8fafc; }
     </div>
 
     <div id="extraItemsContainer"></div>
-    <button type="button" class="btn-secondary" style="width:auto; margin-top:5px; background:#fff;" onclick="addExtraItem('extraItemsContainer')"><i class="fa-solid fa-plus"></i> Add Extra Accessory</button>
+    <button type="button" class="btn-secondary" style="width:auto; margin-top:5px; background:var(--card-bg);" onclick="addExtraItem('extraItemsContainer')"><i class="fa-solid fa-plus"></i> Add Extra Accessory</button>
   </div>
 
   <!-- Card 4: PAYMENT SUMMARY -->
@@ -547,7 +561,7 @@ tr:hover td { background:#f8fafc; }
 <!-- NEW SUMMARY SECTION -->
 <div id="sectionSummary" class="page-section">
     <!-- Auth Box for Summary -->
-    <div id="summaryAuthBox" style="max-width:400px; margin:40px auto; background:#fff; padding:30px; border-radius:16px; border:1px solid var(--border-color); box-shadow:0 10px 40px rgba(0,0,0,0.05); text-align:center;">
+    <div id="summaryAuthBox" style="max-width:400px; margin:40px auto; background:var(--card-bg); padding:30px; border-radius:16px; border:1px solid var(--border-color); box-shadow:0 10px 40px rgba(0,0,0,0.05); text-align:center;">
        <i class="fa-solid fa-lock" style="font-size:40px; color:var(--text-muted); margin-bottom:15px;"></i>
        <h3 style="margin-top:0; color:var(--text-main); font-size:18px;">Unlock Sales Summary</h3>
        <p style="color:var(--text-muted); font-size:12px; margin-bottom:20px;">Please enter your branch PIN to view financials.</p>
@@ -564,45 +578,41 @@ tr:hover td { background:#f8fafc; }
            <select id="summaryMonthFilter" onchange="syncFilters('summaryMonthFilter')" style="width:auto; min-width:150px; font-weight:700;"></select>
         </div>
 
-        <div style="border:1px solid var(--border-color); padding:15px; border-radius:10px; background: #fff;">
+        <div style="border:1px solid var(--border-color); padding:15px; border-radius:10px; background: var(--card-bg);">
             <div class="dash-section-title" style="margin-top:0;">This Month</div>
             <div class="dash-grid">
               <div class="dash-card c-total"><i class="fa-solid fa-sack-dollar"></i><div class="dash-title">Total</div><div class="dash-value" id="monthlyTotal">₹0</div></div>
               <div class="dash-card c-cash"><i class="fa-solid fa-wallet text-green"></i><div class="dash-title text-green">Cash</div><div class="dash-value text-green" id="monthlyCash">₹0</div></div>
               <div class="dash-card c-upi"><i class="fa-solid fa-building-columns text-blue"></i><div class="dash-title text-blue">UPI</div><div class="dash-value text-blue" id="monthlyOnline">₹0</div></div>
               <div class="dash-card c-dues"><i class="fa-solid fa-hand-holding-dollar text-red"></i><div class="dash-title text-red">Dues</div><div class="dash-value text-red" id="monthDue">₹0</div></div>
-              <div class="dash-card c-dues" style="background:#fef2f2; border-color:#fca5a5;"><i class="fa-solid fa-arrow-trend-down text-red"></i><div class="dash-title text-red">Expenses</div><div class="dash-value text-red" id="monthlyExpense">₹0</div></div>
+              <div class="dash-card c-dues" style="background:rgba(248, 113, 113, 0.1); border-color:rgba(248, 113, 113, 0.3);"><i class="fa-solid fa-arrow-trend-down text-red"></i><div class="dash-title text-red">Expenses</div><div class="dash-value text-red" id="monthlyExpense">₹0</div></div>
             </div>
             
             <div class="dash-section-title">Today</div>
             <div class="dash-grid" style="margin-bottom:0;">
-              <div class="dash-card green"><i class="fa-solid fa-calendar-day"></i><div class="dash-title">Total</div><div class="dash-value" id="dailyTotal">₹0</div></div>
+              <div class="dash-card green" style="background:rgba(56, 189, 248, 0.1); border-color:rgba(56, 189, 248, 0.3);"><i class="fa-solid fa-calendar-day"></i><div class="dash-title">Total</div><div class="dash-value" id="dailyTotal">₹0</div></div>
               <div class="dash-card c-cash"><i class="fa-solid fa-wallet text-green"></i><div class="dash-title text-green">Cash</div><div class="dash-value text-green" id="dailyCash">₹0</div></div>
               <div class="dash-card c-upi"><i class="fa-solid fa-building-columns text-blue"></i><div class="dash-title text-blue">UPI</div><div class="dash-value text-blue" id="dailyOnline">₹0</div></div>
               <div class="dash-card c-orders"><i class="fa-solid fa-cart-shopping" style="color:var(--accent);"></i><div class="dash-title" style="color:var(--accent);">Orders</div><div class="dash-value" id="todayOrders" style="color:var(--accent);">0</div></div>
-              <div class="dash-card c-dues" style="background:#fef2f2; border-color:#fca5a5;"><i class="fa-solid fa-arrow-trend-down text-red"></i><div class="dash-title text-red">Expenses</div><div class="dash-value text-red" id="dailyExpense">₹0</div></div>
+              <div class="dash-card c-dues" style="background:rgba(248, 113, 113, 0.1); border-color:rgba(248, 113, 113, 0.3);"><i class="fa-solid fa-arrow-trend-down text-red"></i><div class="dash-title text-red">Expenses</div><div class="dash-value text-red" id="dailyExpense">₹0</div></div>
             </div>
         </div>
 
-        <!-- Recent Orders Order Costing List -->
-        <div style="margin-top: 20px; border:1px solid var(--border-color); border-radius:10px; background:#fff; overflow:hidden;">
-            <div style="padding:10px 15px; border-bottom:1px solid var(--border-color); background:#f8fafc; font-weight:700; font-size:13px; color:var(--text-main);">
+        <div style="margin-top: 20px; border:1px solid var(--border-color); border-radius:10px; background:var(--card-bg); overflow:hidden;">
+            <div style="padding:10px 15px; border-bottom:1px solid var(--border-color); background:var(--bg-color); font-weight:700; font-size:13px; color:var(--text-main);">
                 <i class="fa-solid fa-cart-arrow-down" style="color:var(--accent);"></i> Recent Orders (Add Purchase Cost)
             </div>
-            <div style="max-height: 250px; overflow-y: auto;" id="quickExpenseList">
-                <!-- Orders Load Here by JS -->
-            </div>
+            <div style="max-height: 250px; overflow-y: auto;" id="quickExpenseList"></div>
         </div>
 
-        <!-- Expense Table List -->
-        <div style="margin-top: 20px; border:1px solid var(--border-color); border-radius:10px; background:#fff; overflow:hidden;">
-            <div style="padding:15px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; background:#f8fafc;">
+        <div style="margin-top: 20px; border:1px solid var(--border-color); border-radius:10px; background:var(--card-bg); overflow:hidden;">
+            <div style="padding:15px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; background:var(--bg-color);">
                 <h3 style="margin:0; font-size:14px; color:var(--text-main);"><i class="fa-solid fa-list text-muted"></i> Expense Log</h3>
                 <button class="btn-act pay" onclick="openExpenseModal()" style="font-size:12px; padding:8px 15px;"><i class="fa-solid fa-plus"></i> Manual Expense</button>
             </div>
             <div style="width:100%; overflow-x:auto;">
                 <table style="width:100%; min-width:300px; border-collapse:collapse;">
-                    <thead style="background:#f1f5f9;">
+                    <thead style="background:var(--bg-color);">
                       <tr>
                         <th style="padding:12px; text-align:left; color:var(--text-muted); font-size:10px; text-transform:uppercase;">Date</th>
                         <th style="padding:12px; text-align:left; color:var(--text-muted); font-size:10px; text-transform:uppercase;">Expense Details</th>
@@ -610,9 +620,7 @@ tr:hover td { background:#f8fafc; }
                         <th style="padding:12px; text-align:center; color:var(--text-muted); font-size:10px; text-transform:uppercase;">Action</th>
                       </tr>
                     </thead>
-                    <tbody id="expenseTableBody">
-                        <!-- Expenses load here -->
-                    </tbody>
+                    <tbody id="expenseTableBody"></tbody>
                 </table>
             </div>
         </div>
@@ -627,12 +635,8 @@ tr:hover td { background:#f8fafc; }
         <input type="text" id="searchInput" placeholder="Search Name/Ph..." oninput="loadRecords()">
     </div>
     <div class="filter-bar-row" style="gap:8px; width:100%; display:flex;">
-        <!-- Permanent Add Sign Button -->
-        <button class="btn-secondary" style="background:#fef3c7; color:#d97706; border-color:#fcd34d; flex:1; padding:8px 5px; font-size:11px;" onclick="document.getElementById('uploadSignFile').click()"><i class="fa-solid fa-signature"></i> Sign</button>
-        
-        <!-- MERGE BILL BUTTON -->
-        <button class="btn-secondary" style="background:#e0e7ff; color:#4f46e5; border-color:#c7d2fe; flex:1.5; padding:8px 5px; font-size:11px;" onclick="openMergeModal()"><i class="fa-solid fa-object-group"></i> Merge Bills</button>
-        
+        <button class="btn-secondary" style="background:rgba(245, 158, 11, 0.1); color:#d97706; border-color:rgba(245, 158, 11, 0.3); flex:1; padding:8px 5px; font-size:11px;" onclick="document.getElementById('uploadSignFile').click()"><i class="fa-solid fa-signature"></i> Sign</button>
+        <button class="btn-secondary" style="background:rgba(79, 70, 229, 0.1); color:#4f46e5; border-color:rgba(79, 70, 229, 0.3); flex:1.5; padding:8px 5px; font-size:11px;" onclick="openMergeModal()"><i class="fa-solid fa-object-group"></i> Merge Bills</button>
         <button class="btn-secondary btn-icon-only" style="flex:0 0 35px;" onclick="exportBackup()"><i class="fa-solid fa-download"></i></button>
         <button class="btn-secondary btn-icon-only" style="flex:0 0 35px;" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-upload"></i></button>
         <input id="importFile" type="file" accept=".json" style="display:none" onchange="importBackup(event)">
@@ -652,17 +656,40 @@ tr:hover td { background:#f8fafc; }
   <div class="mobile-cards-wrap" id="mobileCardsContainer"></div>
 </div>
 
+<!-- Theme Modal -->
+<div id="themeModal" class="modal-overlay">
+  <div class="modal-box" style="width: 320px; text-align:center;">
+    <h3><i class="fa-solid fa-palette text-blue"></i> Custom Theme</h3>
+    <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Select a color scheme for your software.</p>
+    <div class="theme-options">
+      <!-- 10 Modern Gradients -->
+      <div class="theme-circle" style="background:linear-gradient(135deg, #0ea5e9, #4f46e5);" onclick="setTheme('blue', '#0284c7', '#0369a1', '#ea580c', 'linear-gradient(135deg, #0ea5e9, #4f46e5)')" title="Royal Blue"></div>
+      <div class="theme-circle" style="background:linear-gradient(135deg, #10b981, #047857);" onclick="setTheme('green', '#059669', '#047857', '#f59e0b', 'linear-gradient(135deg, #10b981, #047857)')" title="Emerald Green"></div>
+      <div class="theme-circle" style="background:linear-gradient(135deg, #f97316, #ea580c);" onclick="setTheme('orange', '#ea580c', '#c2410c', '#4f46e5', 'linear-gradient(135deg, #f97316, #ea580c)')" title="Sunset Orange"></div>
+      <div class="theme-circle" style="background:linear-gradient(135deg, #a855f7, #6d28d9);" onclick="setTheme('purple', '#7c3aed', '#6d28d9', '#db2777', 'linear-gradient(135deg, #a855f7, #6d28d9)')" title="Amethyst Purple"></div>
+      <div class="theme-circle" style="background:linear-gradient(135deg, #fb7185, #e11d48);" onclick="setTheme('pink', '#e11d48', '#be123c', '#f59e0b', 'linear-gradient(135deg, #fb7185, #e11d48)')" title="Rose Pink"></div>
+      
+      <div class="theme-circle" style="background:linear-gradient(135deg, #2dd4bf, #0d9488);" onclick="setTheme('teal', '#0d9488', '#0f766e', '#f97316', 'linear-gradient(135deg, #2dd4bf, #0d9488)')" title="Ocean Teal"></div>
+      <div class="theme-circle" style="background:linear-gradient(135deg, #f43f5e, #8b5cf6);" onclick="setTheme('cyber', '#8b5cf6', '#7c3aed', '#f43f5e', 'linear-gradient(135deg, #f43f5e, #8b5cf6)')" title="Cyberpunk"></div>
+      <div class="theme-circle" style="background:linear-gradient(135deg, #facc15, #ea580c);" onclick="setTheme('gold', '#d97706', '#b45309', '#0284c7', 'linear-gradient(135deg, #facc15, #ea580c)')" title="Sunrise Gold"></div>
+      <div class="theme-circle" style="background:linear-gradient(135deg, #22d3ee, #0891b2);" onclick="setTheme('cyan', '#0891b2', '#0e7490', '#84cc16', 'linear-gradient(135deg, #22d3ee, #0891b2)')" title="Aqua Sky"></div>
+      <div class="theme-circle" style="background:linear-gradient(135deg, #334155, #0f172a);" onclick="setTheme('dark', '#1e293b', '#0f172a', '#38bdf8', 'linear-gradient(135deg, #334155, #0f172a)')" title="Midnight Dark"></div>
+    </div>
+    <div class="modal-actions" style="margin-top:25px;">
+      <button class="btn-cancel" onclick="document.getElementById('themeModal').classList.remove('active')">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- Merge Bills Modal -->
 <div id="mergeModal" class="modal-overlay">
   <div class="modal-box" style="width:400px; max-height: 80vh; display:flex; flex-direction:column;">
     <h3><i class="fa-solid fa-object-group text-blue"></i> Merge Bills</h3>
     <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px; margin-top:0;">Select 2 or more orders to generate a single combined invoice.</p>
     
-    <input type="text" id="mergeSearch" placeholder="Search Name..." oninput="renderMergeList()" style="margin-bottom:10px; width:100%; padding:10px; border-radius:6px; border:1px solid var(--border-color);">
+    <input type="text" id="mergeSearch" placeholder="Search Name..." oninput="renderMergeList()" style="margin-bottom:10px; width:100%; padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-main);">
     
-    <div id="mergeList" style="flex:1; overflow-y:auto; border:1px solid #e2e8f0; border-radius:8px; padding:5px; background:#f8fafc; min-height: 200px;">
-        <!-- Checkboxes populated by JS -->
-    </div>
+    <div id="mergeList" style="flex:1; overflow-y:auto; border:1px solid var(--border-color); border-radius:8px; padding:5px; background:var(--bg-color); min-height: 200px;"></div>
     
     <div class="modal-actions" style="margin-top:15px;">
       <button class="btn-cancel" onclick="closeMergeModal()">Cancel</button>
@@ -737,9 +764,7 @@ tr:hover td { background:#f8fafc; }
 <div id="printPrescriptionModal" class="card-modal">
   <div class="preview-card">
     <div class="card-scroll-body" id="prescriptionDetailsContent" style="font-family:'Segoe UI', Tahoma, sans-serif;"></div>
-    <div class="card-footer" id="prescriptionFooter">
-      <!-- Buttons dynamically injected here -->
-    </div>
+    <div class="card-footer" id="prescriptionFooter"></div>
   </div>
 </div>
 
@@ -749,7 +774,7 @@ tr:hover td { background:#f8fafc; }
     <div class="card-scroll-body" id="billDetailsContent" style="font-family:'Segoe UI', Tahoma, sans-serif; font-size:12px;"></div>
     <div class="card-footer">
       <button class="btn-cancel" onclick="closeBillModal()">Close</button>
-      <button class="btn-confirm" style="background:#ea580c" onclick="downloadPdf('bill')"><i class="fa-solid fa-download"></i> PDF</button>
+      <button class="btn-confirm" style="background:var(--primary)" onclick="downloadPdf('bill')"><i class="fa-solid fa-download"></i> PDF</button>
       <button style="background:#25d366;color:white" onclick="shareBillWhatsApp()"><i class="fa-brands fa-whatsapp"></i> Share</button>
     </div>
   </div>
@@ -792,10 +817,10 @@ tr:hover td { background:#f8fafc; }
 </div>
 
 <!-- Hidden Financial & Rx Edit Area (Admin Access) -->
-<div id="masterEditSection" style="display:none; border-top: 2px dashed #cbd5e1; padding-top:15px; margin-top:5px;">
+<div id="masterEditSection" style="display:none; border-top: 2px dashed var(--border-color); padding-top:15px; margin-top:5px;">
     <h4 style="color:var(--danger); margin-top:0; font-size:13px; text-transform:uppercase; margin-bottom:12px;"><i class="fa-solid fa-triangle-exclamation"></i> Financials & Prescription</h4>
     
-    <div class="row" style="background:#f8fafc; padding:8px; border-radius:6px; border:1px solid #e2e8f0; margin-bottom:10px;">
+    <div class="row" style="background:var(--bg-color); padding:8px; border-radius:6px; border:1px solid var(--border-color); margin-bottom:10px;">
       <div class="col" style="display:flex; flex-direction:column; gap:4px;">
         <label>RE Unaided</label>
         <div style="display:flex; gap:4px;">
@@ -834,7 +859,7 @@ tr:hover td { background:#f8fafc; }
     <label><input type="checkbox" id="editChkLens" onchange="toggleEditBoxModal('lens')"> Include Lens</label>
     <div class="row" id="editLensWrap" style="margin-bottom:10px">
       <div class="col" style="flex:2.5;"><input id="editLensType" placeholder="Lens Name"></div>
-      <div class="col" style="flex:1.5;"><input type="number" id="editLensAmount" min="0" placeholder="MRP"></div>
+      <div class="col" style="flex:1.5;"><input type="number" id="editLensAmount" min="0" placeholder="Price"></div>
       <div class="col" style="flex:1;"><input type="number" id="editLensDiscount" min="0" placeholder="Disc"></div>
     </div>
 
@@ -904,8 +929,63 @@ tr:hover td { background:#f8fafc; }
 </div> <!-- END MAIN APP WRAPPER -->
 
 <script>
+// ================= THEME SELECTOR =================
+function setTheme(name, primary, hover, accent, gradient) {
+    document.documentElement.style.setProperty('--primary', primary);
+    document.documentElement.style.setProperty('--primary-hover', hover);
+    document.documentElement.style.setProperty('--accent', accent);
+    
+    // Check if it's dark mode
+    if(name === 'dark') {
+        document.documentElement.style.setProperty('--bg-color', '#0f172a');
+        document.documentElement.style.setProperty('--card-bg', '#1e293b');
+        document.documentElement.style.setProperty('--text-main', '#f8fafc');
+        document.documentElement.style.setProperty('--text-muted', '#94a3b8');
+        document.documentElement.style.setProperty('--border-color', '#334155');
+    } else {
+        document.documentElement.style.setProperty('--bg-color', '#f1f5f9');
+        document.documentElement.style.setProperty('--card-bg', '#ffffff');
+        document.documentElement.style.setProperty('--text-main', '#0f172a');
+        document.documentElement.style.setProperty('--text-muted', '#64748b');
+        document.documentElement.style.setProperty('--border-color', '#cbd5e1');
+    }
+
+    const header = document.getElementById('appHeaderBg');
+    if(header) header.style.background = gradient;
+    
+    localStorage.setItem('appTheme', JSON.stringify({name, primary, hover, accent, gradient}));
+    document.getElementById('themeModal').classList.remove('active');
+    showToast('Theme Updated!');
+}
+
+function loadTheme() {
+    const saved = JSON.parse(localStorage.getItem('appTheme'));
+    if(saved) {
+        setTheme(saved.name, saved.primary, saved.hover, saved.accent, saved.gradient);
+    }
+}
+
+// Function to update the background color based on Gender dropdown
+function updateGenderColor() {
+    const el = document.getElementById('customerGender');
+    if(!el) return;
+    if(el.value === 'Male') {
+        el.style.backgroundColor = '#f0fdf4'; // Light Green
+        el.style.borderColor = '#bbf7d0';
+        el.style.color = '#166534';
+    } else if(el.value === 'Female') {
+        el.style.backgroundColor = '#fdf4ff'; // Light Pink/Purple
+        el.style.borderColor = '#f0abfc';
+        el.style.color = '#a21caf';
+    } else {
+        el.style.backgroundColor = '#fffbeb'; // Light Yellow/Orange for Other
+        el.style.borderColor = '#fde68a';
+        el.style.color = '#b45309';
+    }
+}
+
 // ================= LOGIN & AUTHENTICATION SYSTEM =================
-const adminPassword = 'Shail'; // Used for Master Edit and Delete
+const adminPassword = 'Shail'; 
 let currentBranch = null;
 
 function checkAuth() {
@@ -926,7 +1006,6 @@ function handleLogin(e) {
     e.preventDefault();
     const p = document.getElementById('loginPassword').value.trim();
 
-    // Secret PIN Logic
     if(p === '1212') {
         sessionStorage.setItem('activeBranch', 'MVP');
     } else if (p === '8604') {
@@ -939,13 +1018,10 @@ function handleLogin(e) {
     
     checkAuth();
     showToast(`✅ Logged into ${currentBranch} Branch`);
-    
-    // Switch to database and refresh
     fetchFirebaseData();
 }
 
 function handleLogout() {
-    // Open the confirmation modal instead of logging out directly
     document.getElementById('logoutModal').classList.add('active');
 }
 
@@ -957,15 +1033,14 @@ function executeLogout() {
     closeLogoutModal();
     sessionStorage.removeItem('activeBranch');
     currentBranch = null;
-    globalRecords = []; // Clear memory
-    isSummaryUnlocked = false; // Relock summary
+    globalRecords = []; 
+    isSummaryUnlocked = false; 
     document.getElementById('summaryAuthBox').style.display = 'block';
     document.getElementById('summaryDashboardContent').style.display = 'none';
     showToast('Logged out successfully.');
     checkAuth();
 }
 
-// Ensure proper DB keys based on selected branch
 function getStorageKey() {
     return 'opticalRecords_' + (currentBranch || 'TEMP');
 }
@@ -973,8 +1048,8 @@ function getStorageKey() {
 function getFirebaseUrl() {
     return `https://specsnshades11-default-rtdb.firebaseio.com/records_${currentBranch || 'TEMP'}.json`;
 }
-// =================================================================
 
+// ================= APP LOGIC =================
 let globalRecords = [];
 let currentPayingId=null, currentEditingId=null, activeItem=null;
 let isSummaryOpen = false;
@@ -990,9 +1065,36 @@ function showToast(msg, isError = false) {
   setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
 }
 
-// SMART CLOUD SYNC FUNCTIONS
+function showSkeleton() {
+    const tbody = document.getElementById('dataTable');
+    const mobContainer = document.getElementById('mobileCardsContainer');
+    let deskSkeleton = '';
+    let mobSkeleton = '';
+    for(let i=0; i<6; i++) {
+        deskSkeleton += `<tr>
+            <td><div class="skeleton-box" style="height:15px; width:40px; margin-bottom:5px;"></div><div class="skeleton-box" style="height:12px; width:60px;"></div></td>
+            <td><div class="skeleton-box" style="height:15px; width:120px; margin-bottom:5px;"></div><div class="skeleton-box" style="height:12px; width:80px;"></div></td>
+            <td><div class="skeleton-box" style="height:25px; width:150px;"></div></td>
+            <td><div class="skeleton-box" style="height:15px; width:60px;"></div></td>
+            <td><div class="skeleton-box" style="height:25px; width:100px;"></div></td>
+        </tr>`;
+        
+        mobSkeleton += `<div class="mob-card" style="min-height:120px; margin-bottom:12px; border:1px solid var(--border-color); border-radius:10px; padding:15px; background:var(--card-bg);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><div class="skeleton-box" style="height:15px; width:80px;"></div><div class="skeleton-box" style="height:15px; width:60px;"></div></div>
+            <div style="display:flex; justify-content:space-between;">
+                <div style="flex:1;"><div class="skeleton-box" style="height:18px; width:120px; margin-bottom:8px;"></div><div class="skeleton-box" style="height:12px; width:90px;"></div></div>
+                <div class="skeleton-box" style="height:20px; width:60px;"></div>
+            </div>
+            <div class="skeleton-box" style="height:30px; width:100%; margin-top:10px;"></div>
+        </div>`;
+    }
+    if(tbody) tbody.innerHTML = deskSkeleton;
+    if(mobContainer) mobContainer.innerHTML = mobSkeleton;
+}
+
 async function fetchFirebaseData() {
-    if(!currentBranch) return; // safety
+    if(!currentBranch) return; 
+    showSkeleton(); 
     try {
         const response = await fetch(getFirebaseUrl());
         const data = await response.json();
@@ -1178,26 +1280,8 @@ function updateNextVisitDate() {
     }
 }
 
-// Function to update the background color based on Gender dropdown
-function updateGenderColor() {
-    const el = document.getElementById('customerGender');
-    if(!el) return;
-    if(el.value === 'Male') {
-        el.style.backgroundColor = '#f0fdf4'; // Light Green
-        el.style.borderColor = '#bbf7d0';
-        el.style.color = '#166534';
-    } else if(el.value === 'Female') {
-        el.style.backgroundColor = '#fdf4ff'; // Light Pink/Purple
-        el.style.borderColor = '#f0abfc';
-        el.style.color = '#a21caf';
-    } else {
-        el.style.backgroundColor = '#fffbeb'; // Light Yellow/Orange for Other
-        el.style.borderColor = '#fde68a';
-        el.style.color = '#b45309';
-    }
-}
-
 window.onload = async function() {
+  loadTheme(); 
   document.getElementById('entryDate').value = todayISO(); 
   populateDropdownOptions();
   populateMonthFilter();
@@ -1206,7 +1290,6 @@ window.onload = async function() {
   checkAuth();
   
   if(sessionStorage.getItem('activeBranch')){
-      showToast("Syncing Database...");
       await fetchFirebaseData();
   }
   
@@ -1285,7 +1368,6 @@ function switchPage(page){
  if(page==='records') loadRecords();
 }
 
-// Sync the two month dropdowns (Records vs Summary)
 function syncFilters(changedId) {
     const val = document.getElementById(changedId).value;
     document.getElementById('monthFilter').value = val;
@@ -1325,7 +1407,7 @@ function renderMergeList() {
     let html = '';
     records.slice(0, 40).forEach(r => { 
         html += `
-        <label style="display:flex; align-items:center; gap:10px; padding:12px; border-bottom:1px solid #e2e8f0; cursor:pointer; background:#fff; border-radius:6px; margin-bottom:5px;">
+        <label style="display:flex; align-items:center; gap:10px; padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer; background:var(--card-bg); border-radius:6px; margin-bottom:5px;">
             <input type="checkbox" class="merge-chk" value="${r.id}" style="width:18px; height:18px; accent-color:var(--primary);">
             <div style="flex:1;">
                 <b style="color:var(--text-main); font-size:14px;">${esc(r.customerName)}</b> <span style="font-size:11px; color:var(--primary); font-weight:700;">(${esc(r.invoiceNo)})</span><br>
@@ -1662,12 +1744,12 @@ function loadRecords(){
     
     if(itemsStr !== '') {
         quickExpHtml += `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 15px; border-bottom:1px solid #f1f5f9;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 15px; border-bottom:1px solid var(--border-color);">
             <div>
                 <div style="font-weight:700; font-size:12px; color:var(--text-main);">${esc(sale.customerName)} <span style="font-size:10px; color:var(--primary);">(${esc(sale.invoiceNo)})</span></div>
                 <div style="font-size:10.5px; color:var(--text-muted); margin-top:2px;">${esc(itemsStr)}</div>
             </div>
-            <button onclick="openQuickExpense('${esc(sale.customerName)}', '${esc(itemsStr)}')" style="background:#fee2e2; border:1px solid #fca5a5; color:var(--danger); border-radius:4px; padding:4px 8px; font-size:11px; font-weight:700; cursor:pointer;"><i class="fa-solid fa-plus"></i> Cost</button>
+            <button onclick="openQuickExpense('${esc(sale.customerName)}', '${esc(itemsStr)}')" style="background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.4); color:var(--danger); border-radius:4px; padding:4px 8px; font-size:11px; font-weight:700; cursor:pointer;"><i class="fa-solid fa-plus"></i> Cost</button>
         </div>`;
     }
  });
@@ -1682,11 +1764,11 @@ function loadRecords(){
         expTbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">No expenses logged for this month.</td></tr>`;
     } else {
         filteredExpenses.forEach(ex => {
-            expTbody.innerHTML += `<tr style="border-bottom:1px solid #f1f5f9;">
+            expTbody.innerHTML += `<tr style="border-bottom:1px solid var(--border-color);">
                 <td style="padding:12px; font-weight:600; color:var(--text-muted);">${esc(ex.bookingDateStr)}</td>
                 <td style="padding:12px; font-weight:700; color:var(--text-main);">${esc(ex.expenseName)}</td>
                 <td style="text-align:right; padding:12px; color:var(--danger); font-weight:800;">${money(ex.expenseAmount)}</td>
-                <td style="text-align:center; padding:12px;"><button onclick="deleteRecord(${ex.id})" style="background:#fee2e2; border:1px solid #fca5a5; color:var(--danger); border-radius:4px; cursor:pointer; padding:4px 8px;"><i class="fa-solid fa-trash"></i></button></td>
+                <td style="text-align:center; padding:12px;"><button onclick="deleteRecord(${ex.id})" style="background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.4); color:var(--danger); border-radius:4px; cursor:pointer; padding:4px 8px;"><i class="fa-solid fa-trash"></i></button></td>
             </tr>`;
         });
     }
@@ -1697,8 +1779,8 @@ function loadRecords(){
  tbody.innerHTML=''; mobContainer.innerHTML='';
  
  if(!filteredSales.length){
-    tbody.innerHTML=`<tr><td colspan="6" style="padding:40px;color:#94a3b8;font-size:14px;text-align:center;"><i class="fa-solid fa-folder-open" style="font-size:30px;display:block;margin-bottom:10px;"></i> No records found.</td></tr>`;
-    mobContainer.innerHTML=`<div style="text-align:center;padding:40px;color:#94a3b8;"><i class="fa-solid fa-folder-open" style="font-size:30px;"></i><br>No records found.</div>`;
+    tbody.innerHTML=`<tr><td colspan="6" style="padding:40px;color:var(--text-muted);font-size:14px;text-align:center;"><i class="fa-solid fa-folder-open" style="font-size:30px;display:block;margin-bottom:10px;"></i> No records found.</td></tr>`;
+    mobContainer.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text-muted);"><i class="fa-solid fa-folder-open" style="font-size:30px;"></i><br>No records found.</div>`;
     return;
  }
 
@@ -1734,8 +1816,8 @@ function loadRecords(){
          <button class="btn-more" onclick="this.nextElementSibling.classList.toggle('show')"><i class="fa-solid fa-ellipsis-vertical"></i></button>
          <div class="dropdown-content">
             <button onclick="openEditModal(${item.id})"><i class="fa-solid fa-pen"></i> Edit</button>
-            <button onclick="shareDirectWhatsApp(${item.id}, 'prescription')"><i class="fa-brands fa-whatsapp" style="color:#25d366;font-size:14px;"></i> WA Presc.</button>
-            <button onclick="shareDirectWhatsApp(${item.id}, 'bill')"><i class="fa-brands fa-whatsapp" style="color:#25d366;font-size:14px;"></i> WA Bill</button>
+            <button onclick="shareDirectWhatsApp(${item.id}, 'prescription')"><i class="fa-brands fa-whatsapp" style="color:var(--success);font-size:14px;"></i> WA Presc.</button>
+            <button onclick="shareDirectWhatsApp(${item.id}, 'bill')"><i class="fa-brands fa-whatsapp" style="color:var(--success);font-size:14px;"></i> WA Bill</button>
             <button onclick="openHistoryModal(${item.id})"><i class="fa-solid fa-clock-rotate-left"></i> History</button>
             <button onclick="deleteRecord(${item.id})" class="del"><i class="fa-solid fa-trash"></i> Delete</button>
          </div>
@@ -1743,13 +1825,13 @@ function loadRecords(){
     </div>
   `;
 
-  const power = `<div style="font-size:10.5px;color:#475569;line-height:1.4;"><b>R:</b> ${fe(item.rightEye?.sph, item.rightEye?.cyl, item.rightEye?.axis, item.rightEye?.vision, item.rightEye?.add, item.rightEye?.nearVision)}<br><b>L:</b> ${fe(item.leftEye?.sph, item.leftEye?.cyl, item.leftEye?.axis, item.leftEye?.vision, item.leftEye?.add, item.leftEye?.nearVision)}</div>`;
+  const power = `<div style="font-size:10.5px;color:var(--text-muted);line-height:1.4;"><b>R:</b> ${fe(item.rightEye?.sph, item.rightEye?.cyl, item.rightEye?.axis, item.rightEye?.vision, item.rightEye?.add, item.rightEye?.nearVision)}<br><b>L:</b> ${fe(item.leftEye?.sph, item.leftEye?.cyl, item.leftEye?.axis, item.leftEye?.vision, item.leftEye?.add, item.leftEye?.nearVision)}</div>`;
 
   tbody.innerHTML += `<tr>
     <td><b>${filteredSales.length-index}</b></td>
     <td><b style="color:var(--primary);font-size:11px;">${esc(item.invoiceNo)}</b><br><small>${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</small></td>
     <td>
-       <b style="color:var(--text-main);font-size:13px;">${esc(item.customerName)}</b> ${ageGenStr ? `<small style="color:#64748b;">${esc(ageGenStr)}</small>` : ''}<br>
+       <b style="color:var(--text-main);font-size:13px;">${esc(item.customerName)}</b> ${ageGenStr ? `<small style="color:var(--text-muted);">${esc(ageGenStr)}</small>` : ''}<br>
        <small style="color:var(--text-muted);"><i class="fa-solid fa-phone"></i> ${esc(item.phone)}</small>
     </td>
     <td>${power}</td>
@@ -1771,25 +1853,25 @@ function loadRecords(){
         <div style="flex:1; padding-right:10px;">
            <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:4px;">
               <span class="mob-card-name">${esc(item.customerName)}</span>
-              ${ageGenStr ? `<span style="font-size:11px; color:#64748b; font-weight:600;">${esc(ageGenStr)}</span>` : ''}
+              ${ageGenStr ? `<span style="font-size:11px; color:var(--text-muted); font-weight:600;">${esc(ageGenStr)}</span>` : ''}
            </div>
            <div class="mob-card-phone" style="color:var(--primary); font-weight:600;"><i class="fa-solid fa-phone"></i> ${esc(item.phone)}</div>
            ${item.address ? `<div class="mob-card-phone" style="margin-top:4px;"><i class="fa-solid fa-location-dot"></i> ${esc(item.address)}</div>` : ''}
-           <div style="font-size:10.5px; color:#64748b; margin-top:4px;"><i class="fa-solid fa-glasses"></i> ${itemSummary}</div>
+           <div style="font-size:10.5px; color:var(--text-muted); margin-top:4px;"><i class="fa-solid fa-glasses"></i> ${itemSummary}</div>
         </div>
         
         <div class="mob-card-fin" style="min-width:85px; text-align:right;">
            <div class="mob-card-total">${money(finalTotal(item))}</div>
            <div style="margin-top:4px;">
-               ${due > 0 ? `<span style="background:#fee2e2; color:var(--danger); padding:3px 6px; border-radius:4px; font-size:10px; font-weight:700; display:inline-block;">Due: ${money(due)}</span>` 
-                         : `<span style="background:#dcfce7; color:var(--success); padding:3px 6px; border-radius:4px; font-size:10px; font-weight:700; display:inline-block;"><i class="fa-solid fa-check"></i> Paid</span>`}
+               ${due > 0 ? `<span style="background:rgba(239, 68, 68, 0.1); color:var(--danger); padding:3px 6px; border-radius:4px; font-size:10px; font-weight:700; display:inline-block;">Due: ${money(due)}</span>` 
+                         : `<span style="background:rgba(22, 163, 74, 0.1); color:var(--success); padding:3px 6px; border-radius:4px; font-size:10px; font-weight:700; display:inline-block;"><i class="fa-solid fa-check"></i> Paid</span>`}
            </div>
         </div>
      </div>
 
-     <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed #e2e8f0; padding-top:8px; margin-bottom:8px;">
+     <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed var(--border-color); padding-top:8px; margin-bottom:8px;">
         ${deliveryHtml}
-        ${item.rightEye?.sph ? `<span style="background:#e0f2fe; color:var(--primary); padding:3px 6px; border-radius:4px; font-size:9.5px; font-weight:700;"><i class="fa-solid fa-eye"></i> Rx Saved</span>` : ''}
+        ${item.rightEye?.sph ? `<span style="background:rgba(2, 132, 199, 0.1); color:var(--primary); padding:3px 6px; border-radius:4px; font-size:9.5px; font-weight:700;"><i class="fa-solid fa-eye"></i> Rx Saved</span>` : ''}
      </div>
 
      <div class="mob-actions">${actionsHtml}</div>
@@ -1810,8 +1892,8 @@ function openPrescriptionModal(id){
  let defaultNextVisit = String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
  
  let frameLensInfo = '';
- if(item.frameType && item.frameType !== '-') frameLensInfo += `<span style="display:inline-block; background:#f1f5f9; padding:4px 8px; border-radius:4px; margin-right:5px; margin-bottom:5px; font-size:11px;"><b>Frame:</b> ${esc(item.frameType)}</span>`;
- if(item.lensType && item.lensType !== '-') frameLensInfo += `<span style="display:inline-block; background:#f1f5f9; padding:4px 8px; border-radius:4px; margin-right:5px; margin-bottom:5px; font-size:11px;"><b>Lens:</b> ${esc(item.lensType)}</span>`;
+ if(item.frameType && item.frameType !== '-') frameLensInfo += `<span style="display:inline-block; background:var(--bg-color); padding:4px 8px; border-radius:4px; margin-right:5px; margin-bottom:5px; font-size:11px; color:var(--text-main);"><b>Frame:</b> ${esc(item.frameType)}</span>`;
+ if(item.lensType && item.lensType !== '-') frameLensInfo += `<span style="display:inline-block; background:var(--bg-color); padding:4px 8px; border-radius:4px; margin-right:5px; margin-bottom:5px; font-size:11px; color:var(--text-main);"><b>Lens:</b> ${esc(item.lensType)}</span>`;
 
  const uRe = item.rightEye?.unaided;
  const uLe = item.leftEye?.unaided;
@@ -1819,31 +1901,31 @@ function openPrescriptionModal(id){
  
  let unaidedHtml = '';
  if(hasUnaided) {
-    unaidedHtml = `<div id="previewUnaidedVision" style="font-size:11.5px; margin-bottom:10px; color:#475569; border-left:3px solid var(--primary); padding-left:8px;"><b>Unaided Vision:</b> &nbsp; RE: <span style="color:var(--primary); font-weight:700;">${(uRe && uRe !== '-') ? uRe : '-'}</span> &nbsp;|&nbsp; LE: <span style="color:var(--accent); font-weight:700;">${(uLe && uLe !== '-') ? uLe : '-'}</span></div>`;
+    unaidedHtml = `<div id="previewUnaidedVision" style="font-size:11.5px; margin-bottom:10px; color:var(--text-muted); border-left:3px solid var(--primary); padding-left:8px;"><b>Unaided Vision:</b> &nbsp; RE: <span style="color:var(--primary); font-weight:700;">${(uRe && uRe !== '-') ? uRe : '-'}</span> &nbsp;|&nbsp; LE: <span style="color:var(--accent); font-weight:700;">${(uLe && uLe !== '-') ? uLe : '-'}</span></div>`;
  }
 
  document.getElementById('prescriptionDetailsContent').innerHTML=`
- <div style="border:1px solid #cbd5e1; border-radius:8px; padding:15px; background:#fff; position:relative;">
-   <div style="text-align:center; border-bottom:2px dashed #cbd5e1; padding-bottom:12px; margin-bottom:15px;">
+ <div style="border:1px solid var(--border-color); border-radius:8px; padding:15px; background:var(--card-bg); position:relative;">
+   <div style="text-align:center; border-bottom:2px dashed var(--border-color); padding-bottom:12px; margin-bottom:15px;">
      <h2 style="color:var(--primary); margin:0; font-size:22px; font-weight:800; letter-spacing:0.5px;">MALTI VISION PLUS</h2>
      <p style="margin:2px 0; font-size:10px; color:var(--text-muted); font-weight:700;">OPTICAL • EYE EXAMINATION • EYEWEAR</p>
-     <p style="margin:4px 0 8px 0; font-size:10.5px; color:#475569;">Near Govt Hospital, Sankisa Road, Mohammadabad, Farrukhabad, UP - 209625</p>
+     <p style="margin:4px 0 8px 0; font-size:10.5px; color:var(--text-muted);">Near Govt Hospital, Sankisa Road, Mohammadabad, Farrukhabad, UP - 209625</p>
      
-     <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid #e2e8f0;">
-        <span style="color:#db2777; display:flex; align-items:center; gap:8px;"><i class="fa-brands fa-instagram" style="font-size:16px;"></i> <strong>@specsnshades.in</strong></span>
+     <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; background:var(--bg-color); padding:8px 12px; border-radius:6px; border:1px solid var(--border-color);">
+        <span style="color:var(--accent); display:flex; align-items:center; gap:8px;"><i class="fa-brands fa-instagram" style="font-size:16px;"></i> <strong>@specsnshades.in</strong></span>
         <span style="color:var(--primary); display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-mobile-screen" style="font-size:14px;"></i> <strong>+91-7309095557</strong></span>
      </div>
    </div>
    
-   <div style="text-align:center; font-size:16px; font-weight:900; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px;">
+   <div style="text-align:center; font-size:16px; font-weight:900; color:var(--text-main); text-transform:uppercase; letter-spacing:0.5px;">
      Eye Examination & Prescription
    </div>
-   <div style="text-align:center; font-size:11px; font-weight:700; color:var(--text-muted); margin-top:4px; margin-bottom:15px; border-bottom:2px solid #e2e8f0; padding-bottom:10px;">
+   <div style="text-align:center; font-size:11px; font-weight:700; color:var(--text-muted); margin-top:4px; margin-bottom:15px; border-bottom:2px solid var(--border-color); padding-bottom:10px;">
      Ref No: <span style="color:var(--primary); font-size:12px;">${esc(item.invoiceNo)}</span>
    </div>
    
-   <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; margin-bottom:15px; font-size:12px;">
-     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #cbd5e1; padding-bottom:4px; margin-bottom:8px;">
+   <div style="background:var(--bg-color); border:1px solid var(--border-color); border-radius:8px; padding:12px; margin-bottom:15px; font-size:12px; color:var(--text-main);">
+     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:4px; margin-bottom:8px;">
        <span style="font-size:12px; font-weight:900; color:var(--text-main);">PATIENT DETAILS:</span>
        <span style="font-size:12px; font-weight:900; color:var(--primary);">Eye Test Date: ${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</span>
      </div>
@@ -1856,65 +1938,64 @@ function openPrescriptionModal(id){
      </div>
    </div>
    
-   <div style="font-size:12px; font-weight:800; margin-bottom:6px; color:var(--text-main);"><i class="fa-solid fa-eye text-blue"></i> REFRACTION (Rx)</div>
+   <div style="font-size:12px; font-weight:800; margin-bottom:6px; color:var(--text-main);"><i class="fa-solid fa-eye" style="color:var(--primary);"></i> REFRACTION (Rx)</div>
    ${unaidedHtml}
    <table style="width:100%; border-collapse:collapse; font-size:11.5px; margin-bottom:15px; border:1px solid var(--border-color);">
      <thead style="background:var(--primary); color:#fff;">
        <tr>
-         <th style="padding:6px; text-align:left; border-right:1px solid #38bdf8;">Eye</th>
-         <th style="padding:6px; border-right:1px solid #38bdf8;">SPH</th>
-         <th style="padding:6px; border-right:1px solid #38bdf8;">CYL</th>
-         <th style="padding:6px; border-right:1px solid #38bdf8;">AXIS</th>
-         <th style="padding:6px; border-right:1px solid #38bdf8;">VN</th>
-         ${hasAdd ? `<th style="padding:6px; border-right:1px solid #38bdf8;">ADD</th><th style="padding:6px;">NV</th>` : ''}
+         <th style="padding:6px; text-align:left; border-right:1px solid rgba(255,255,255,0.2);">Eye</th>
+         <th style="padding:6px; border-right:1px solid rgba(255,255,255,0.2);">SPH</th>
+         <th style="padding:6px; border-right:1px solid rgba(255,255,255,0.2);">CYL</th>
+         <th style="padding:6px; border-right:1px solid rgba(255,255,255,0.2);">AXIS</th>
+         <th style="padding:6px; border-right:1px solid rgba(255,255,255,0.2);">VN</th>
+         ${hasAdd ? `<th style="padding:6px; border-right:1px solid rgba(255,255,255,0.2);">ADD</th><th style="padding:6px;">NV</th>` : ''}
        </tr>
      </thead>
-     <tbody style="text-align:center; background:#fff;">
-       <tr style="border-bottom:1px solid #e2e8f0;">
-         <td style="padding:6px; font-weight:bold; text-align:left; border-right:1px solid #e2e8f0; background:#f8fafc;">RE</td>
-         <td style="padding:6px; border-right:1px solid #e2e8f0;">${rSph}</td>
-         <td style="padding:6px; border-right:1px solid #e2e8f0;">${rCyl}</td>
-         <td style="padding:6px; border-right:1px solid #e2e8f0;">${rAx}</td>
-         <td style="padding:6px; border-right:1px solid #e2e8f0;">${rVn}</td>
-         ${hasAdd ? `<td style="padding:6px; border-right:1px solid #e2e8f0;">${rAdd}</td><td style="padding:6px;">${rNv}</td>` : ''}
+     <tbody style="text-align:center; background:var(--card-bg); color:var(--text-main);">
+       <tr style="border-bottom:1px solid var(--border-color);">
+         <td style="padding:6px; font-weight:bold; text-align:left; border-right:1px solid var(--border-color); background:var(--bg-color);">RE</td>
+         <td style="padding:6px; border-right:1px solid var(--border-color);">${rSph}</td>
+         <td style="padding:6px; border-right:1px solid var(--border-color);">${rCyl}</td>
+         <td style="padding:6px; border-right:1px solid var(--border-color);">${rAx}</td>
+         <td style="padding:6px; border-right:1px solid var(--border-color);">${rVn}</td>
+         ${hasAdd ? `<td style="padding:6px; border-right:1px solid var(--border-color);">${rAdd}</td><td style="padding:6px;">${rNv}</td>` : ''}
        </tr>
        <tr>
-         <td style="padding:6px; font-weight:bold; text-align:left; border-right:1px solid #e2e8f0; background:#f8fafc;">LE</td>
-         <td style="padding:6px; border-right:1px solid #e2e8f0;">${lSph}</td>
-         <td style="padding:6px; border-right:1px solid #e2e8f0;">${lCyl}</td>
-         <td style="padding:6px; border-right:1px solid #e2e8f0;">${lAx}</td>
-         <td style="padding:6px; border-right:1px solid #e2e8f0;">${lVn}</td>
-         ${hasAdd ? `<td style="padding:6px; border-right:1px solid #e2e8f0;">${lAdd}</td><td style="padding:6px;">${lNv}</td>` : ''}
+         <td style="padding:6px; font-weight:bold; text-align:left; border-right:1px solid var(--border-color); background:var(--bg-color);">LE</td>
+         <td style="padding:6px; border-right:1px solid var(--border-color);">${lSph}</td>
+         <td style="padding:6px; border-right:1px solid var(--border-color);">${lCyl}</td>
+         <td style="padding:6px; border-right:1px solid var(--border-color);">${lAx}</td>
+         <td style="padding:6px; border-right:1px solid var(--border-color);">${lVn}</td>
+         ${hasAdd ? `<td style="padding:6px; border-right:1px solid var(--border-color);">${lAdd}</td><td style="padding:6px;">${lNv}</td>` : ''}
        </tr>
      </tbody>
    </table>
 
-   ${frameLensInfo ? `<div style="margin-bottom:15px; font-size:12px;"><b>Suggested:</b><br>${frameLensInfo}</div>` : ''}
+   ${frameLensInfo ? `<div style="margin-bottom:15px; font-size:12px; color:var(--text-main);"><b>Suggested:</b><br>${frameLensInfo}</div>` : ''}
 
-   <div id="previewNextVisitWrap" style="background:#fffbeb; border:1px solid #fde68a; padding:8px; border-radius:6px; font-size:11px; color:#d97706; font-weight:600; text-align:center; margin-bottom:15px;">
+   <div id="previewNextVisitWrap" style="background:rgba(245, 158, 11, 0.1); border:1px solid rgba(245, 158, 11, 0.3); padding:8px; border-radius:6px; font-size:11px; color:var(--accent); font-weight:600; text-align:center; margin-bottom:15px;">
      <i class="fa-regular fa-calendar-check"></i> Next Recommended Visit: <span id="previewNextVisitDate">${defaultNextVisit}</span>
    </div>
 
    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:20px;">
-     <div style="font-size:9px; color:#94a3b8; font-style:italic;">*System Generated Report</div>
+     <div style="font-size:9px; color:var(--text-muted); font-style:italic;">*System Generated Report</div>
      <div style="text-align:center; font-size:11px; font-weight:700; color:var(--text-main); border-top:1px solid var(--border-color); padding-top:4px; width:120px;">Optometrist</div>
    </div>
  </div>
  `;
  
- // Inject Smart Footer
- let footerControls = `<div style="width:100%; margin-bottom:12px; border-bottom:1px solid #e2e8f0; padding-bottom:10px; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:15px;">`;
+ let footerControls = `<div style="width:100%; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:10px; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:15px;">`;
 
  if(hasUnaided) {
     footerControls += `<label style="font-size:12px; font-weight:800; cursor:pointer; color:var(--primary); display:flex; align-items:center; gap:6px;"><input type="checkbox" id="chkPrintUnaided" checked onchange="document.getElementById('previewUnaidedVision').style.display=this.checked?'block':'none'" style="width:16px;height:16px;margin:0;"> <i class="fa-solid fa-eye"></i> Show Unaided</label>
-    <div style="width:1px; height:15px; background:#cbd5e1;"></div>`;
+    <div style="width:1px; height:15px; background:var(--border-color);"></div>`;
  }
 
- footerControls += `<label style="font-size:12px; font-weight:800; color:#d97706; display:flex; align-items:center; gap:6px;"><i class="fa-regular fa-calendar-check"></i> Next Visit: <input type="number" id="numNextVisitMonths" value="6" min="0" oninput="updateNextVisitDate()" style="width:45px; padding:4px; font-size:12px; border:1px solid #fcd34d; border-radius:4px; text-align:center; font-weight:bold; color:#b45309;"> Months</label></div>`;
+ footerControls += `<label style="font-size:12px; font-weight:800; color:var(--accent); display:flex; align-items:center; gap:6px;"><i class="fa-regular fa-calendar-check"></i> Next Visit: <input type="number" id="numNextVisitMonths" value="6" min="0" oninput="updateNextVisitDate()" style="width:45px; padding:4px; font-size:12px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); border-radius:4px; text-align:center; font-weight:bold;"> Months</label></div>`;
 
  document.getElementById('prescriptionFooter').innerHTML = footerControls + `
   <button class="btn-cancel" onclick="closePrescriptionModal()">Close</button>
-  <button class="btn-confirm" onclick="downloadPdf('prescription')"><i class="fa-solid fa-download"></i> PDF</button>
+  <button class="btn-confirm" style="background:var(--primary);" onclick="downloadPdf('prescription')"><i class="fa-solid fa-download"></i> PDF</button>
   <button style="background:#25d366;color:white" onclick="sharePrescriptionWhatsApp()"><i class="fa-brands fa-whatsapp"></i> Share</button>
  `;
 
@@ -1936,10 +2017,10 @@ function openBillModal(id){
      let fD = Number(item.frameDiscount)||0;
      let fNet = fP - fD;
      itemsHtml += `<tr>
-        <td style="border-bottom:1px solid #eee;padding:5px;">Frame: ${esc(item.frameType)}</td>
-        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(fP)}</td>
-        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;color:var(--danger);">${fD > 0 ? '-'+money(fD) : '-'}</td>
-        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;font-weight:bold;">${money(fNet)}</td>
+        <td style="border-bottom:1px solid var(--border-color);padding:5px; color:var(--text-main);">Frame: ${esc(item.frameType)}</td>
+        <td style="text-align:right;border-bottom:1px solid var(--border-color);padding:5px; color:var(--text-main);">${money(fP)}</td>
+        <td style="text-align:right;border-bottom:1px solid var(--border-color);padding:5px;color:var(--danger);">${fD > 0 ? '-'+money(fD) : '-'}</td>
+        <td style="text-align:right;border-bottom:1px solid var(--border-color);padding:5px;font-weight:bold; color:var(--text-main);">${money(fNet)}</td>
      </tr>`;
  }
  if(item.lensType && item.lensType !== '-') {
@@ -1947,19 +2028,19 @@ function openBillModal(id){
      let lD = Number(item.lensDiscount)||0;
      let lNet = lP - lD;
      itemsHtml += `<tr>
-        <td style="border-bottom:1px solid #eee;padding:5px;">Lens: ${esc(item.lensType)}</td>
-        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(lP)}</td>
-        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;color:var(--danger);">${lD > 0 ? '-'+money(lD) : '-'}</td>
-        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;font-weight:bold;">${money(lNet)}</td>
+        <td style="border-bottom:1px solid var(--border-color);padding:5px; color:var(--text-main);">Lens: ${esc(item.lensType)}</td>
+        <td style="text-align:right;border-bottom:1px solid var(--border-color);padding:5px; color:var(--text-main);">${money(lP)}</td>
+        <td style="text-align:right;border-bottom:1px solid var(--border-color);padding:5px;color:var(--danger);">${lD > 0 ? '-'+money(lD) : '-'}</td>
+        <td style="text-align:right;border-bottom:1px solid var(--border-color);padding:5px;font-weight:bold; color:var(--text-main);">${money(lNet)}</td>
      </tr>`;
  }
  if(item.extraItems) {
     item.extraItems.forEach(ex => {
         itemsHtml += `<tr>
-            <td style="border-bottom:1px solid #eee;padding:5px;">${esc(ex.name)}</td>
-            <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(ex.price)}</td>
-            <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;color:var(--danger);">-</td>
-            <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;font-weight:bold;">${money(ex.price)}</td>
+            <td style="border-bottom:1px solid var(--border-color);padding:5px; color:var(--text-main);">${esc(ex.name)}</td>
+            <td style="text-align:right;border-bottom:1px solid var(--border-color);padding:5px; color:var(--text-main);">${money(ex.price)}</td>
+            <td style="text-align:right;border-bottom:1px solid var(--border-color);padding:5px;color:var(--danger);">-</td>
+            <td style="text-align:right;border-bottom:1px solid var(--border-color);padding:5px;font-weight:bold; color:var(--text-main);">${money(ex.price)}</td>
         </tr>`;
     });
  }
@@ -1975,30 +2056,30 @@ function openBillModal(id){
  let discHtml = totalDisc > 0 ? `Total Discount: <b style="color:var(--danger);">- ${money(totalDisc)}${discPercentStr}</b><br>` : '';
 
  document.getElementById('billDetailsContent').innerHTML=`
- <div style="text-align:center;border-bottom:2px dashed #cbd5e1;padding-bottom:12px;margin-bottom:15px;">
-   <h2 style="color:#ea580c;margin:0;font-size:20px;font-weight:800;">MALTI VISION PLUS</h2>
+ <div style="text-align:center;border-bottom:2px dashed var(--border-color);padding-bottom:12px;margin-bottom:15px;">
+   <h2 style="color:var(--accent);margin:0;font-size:20px;font-weight:800;">MALTI VISION PLUS</h2>
    <p style="margin:2px 0;font-size:10px;color:var(--text-muted);font-weight:700;">POWERED BY SPECSNSHADES</p>
-   <p style="margin:4px 0 8px 0; font-size:10.5px; color:#475569;">Near Govt Hospital, Sankisa Road, Mohammadabad, Farrukhabad, UP - 209625</p>
+   <p style="margin:4px 0 8px 0; font-size:10.5px; color:var(--text-muted);">Near Govt Hospital, Sankisa Road, Mohammadabad, Farrukhabad, UP - 209625</p>
    
-   <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; background:#fff7ed; padding:8px 12px; border-radius:6px; border:1px solid #fed7aa;">
-      <span style="color:#db2777; display:flex; align-items:center; gap:8px;"><i class="fa-brands fa-instagram" style="font-size:16px;"></i> <strong>@specsnshades.in</strong></span>
-      <span style="color:#ea580c; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-phone" style="font-size:14px;"></i> <strong>+91-7309095557</strong></span>
+   <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; background:var(--bg-color); padding:8px 12px; border-radius:6px; border:1px solid var(--border-color);">
+      <span style="color:var(--accent); display:flex; align-items:center; gap:8px;"><i class="fa-brands fa-instagram" style="font-size:16px;"></i> <strong>@specsnshades.in</strong></span>
+      <span style="color:var(--primary); display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-phone" style="font-size:14px;"></i> <strong>+91-7309095557</strong></span>
    </div>
  </div>
  
- <div style="text-align:center; font-size:18px; font-weight:900; color:#0f172a; text-transform:uppercase; letter-spacing:1px;">
+ <div style="text-align:center; font-size:18px; font-weight:900; color:var(--text-main); text-transform:uppercase; letter-spacing:1px;">
    INVOICE
  </div>
- <div style="text-align:center; font-size:11px; font-weight:700; color:var(--text-muted); margin-top:4px; margin-bottom:15px; border-bottom:2px solid #e2e8f0; padding-bottom:10px;">
+ <div style="text-align:center; font-size:11px; font-weight:700; color:var(--text-muted); margin-top:4px; margin-bottom:15px; border-bottom:2px solid var(--border-color); padding-bottom:10px;">
    Invoice No: <span style="color:var(--accent); font-size:12px;">${esc(item.invoiceNo)}</span>
  </div>
  
- <div style="font-size:13px; margin-bottom:15px; display:grid; grid-template-columns:1fr 1fr; gap:8px; background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
-   <div style="display:flex; justify-content:space-between; align-items:center; grid-column: span 2; border-bottom:1px solid #cbd5e1; padding-bottom:4px; margin-bottom:4px;">
-     <span style="font-size:12px; font-weight:900; color:var(--text-main);">BILL TO:</span>
+ <div style="font-size:13px; margin-bottom:15px; display:grid; grid-template-columns:1fr 1fr; gap:8px; background:var(--bg-color); padding:12px; border-radius:8px; border:1px solid var(--border-color); color:var(--text-main);">
+   <div style="display:flex; justify-content:space-between; align-items:center; grid-column: span 2; border-bottom:1px solid var(--border-color); padding-bottom:4px; margin-bottom:4px;">
+     <span style="font-size:12px; font-weight:900;">BILL TO:</span>
      <span style="font-size:12px; font-weight:900; color:var(--accent);">Invoice Date: ${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</span>
    </div>
-   <div><b>Name:</b> <span style="font-size:13px; font-weight:700; color:var(--text-main);">${esc(item.customerName)}</span></div>
+   <div><b>Name:</b> <span style="font-size:13px; font-weight:700;">${esc(item.customerName)}</span></div>
    <div style="text-align:right;"><b>Phone:</b> ${esc(item.phone)}</div>
    <div><b>Age / Gender:</b> ${esc(item.age)} / ${esc(item.gender)}</div>
    <div></div>
@@ -2006,7 +2087,7 @@ function openBillModal(id){
  </div>
  
  <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:15px;">
-   <thead style="background:#ea580c;color:#fff;"><tr>
+   <thead style="background:var(--accent);color:#fff;"><tr>
      <th style="text-align:left;padding:5px;">Item</th>
      <th style="text-align:right;padding:5px;">MRP</th>
      <th style="text-align:right;padding:5px;">DISCOUNT</th>
@@ -2014,7 +2095,7 @@ function openBillModal(id){
    </tr></thead>
    <tbody>${itemsHtml}</tbody>
  </table>
- <div style="border-top:1px solid #ccc;padding-top:10px;font-size:13px;text-align:right;">
+ <div style="border-top:1px solid var(--border-color);padding-top:10px;font-size:13px;text-align:right; color:var(--text-main);">
     Total MRP: <b>${money(grossTotal)}</b><br>
     ${discHtml}
     Final Amount: <b style="font-size:16px; color:var(--primary);">${money(final)}</b>
@@ -2592,22 +2673,6 @@ function importBackup(e){
  reader.onload=function(){try{const d=JSON.parse(reader.result),r=Array.isArray(d)?d:d.records; if(!Array.isArray(r))throw Error(); if(!confirm('Restore backup? Existing data will be replaced.'))return; setRecords(r); loadRecords(); showToast('Data Restored!');}catch(err){showToast('Invalid backup file.', true);}}; reader.readAsText(file); e.target.value='';
 }
 
-// Auto-select gender based on Title prefix
-function autoSelectGender() {
-    const prefix = document.getElementById('customerPrefix').value;
-    const genderSelect = document.getElementById('customerGender');
-    if(!genderSelect) return;
-    
-    if (prefix === 'Mr.' || prefix === 'Master') {
-        genderSelect.value = 'Male';
-    } else if (prefix === 'Mrs.' || prefix === 'Miss') {
-        genderSelect.value = 'Female';
-    }
-    
-    // Auto-update age rules based on new gender
-    checkAgeForAdd(); 
-    updateGenderColor();
-}
 </script>
 </body>
 </html>
