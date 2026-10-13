@@ -500,14 +500,16 @@ tr:hover td { background:#f8fafc; }
     
     <div class="item-check-row"><label style="margin:0;"><input type="checkbox" id="chkFrame" checked onchange="toggleItemBox('frame')"> Include Frame</label></div>
     <div class="row" id="frameWrap">
-      <div class="col"><input type="text" id="frameType" placeholder="Frame Model / Code" required></div>
-      <div class="col"><input type="number" id="frameAmount" placeholder="Frame Price (₹)" min="0" oninput="calculateTotal()" required></div>
+      <div class="col" style="flex:2.5;"><input type="text" id="frameType" placeholder="Frame Model / Code" required></div>
+      <div class="col" style="flex:1.5;"><input type="number" id="frameAmount" placeholder="MRP (₹)" min="0" oninput="calculateTotal()" required></div>
+      <div class="col" style="flex:1;"><input type="number" id="frameDiscount" placeholder="Disc (₹)" min="0" oninput="calculateTotal()"></div>
     </div>
 
     <div class="item-check-row" style="margin-top:10px;"><label style="margin:0;"><input type="checkbox" id="chkLens" checked onchange="toggleItemBox('lens')"> Include Lens</label></div>
     <div class="row" id="lensWrap">
-      <div class="col"><input type="text" id="lensType" placeholder="Lens Type / Brand" required></div>
-      <div class="col"><input type="number" id="lensAmount" placeholder="Lens Price (₹)" min="0" oninput="calculateTotal()" required></div>
+      <div class="col" style="flex:2.5;"><input type="text" id="lensType" placeholder="Lens Type / Brand" required></div>
+      <div class="col" style="flex:1.5;"><input type="number" id="lensAmount" placeholder="MRP (₹)" min="0" oninput="calculateTotal()" required></div>
+      <div class="col" style="flex:1;"><input type="number" id="lensDiscount" placeholder="Disc (₹)" min="0" oninput="calculateTotal()"></div>
     </div>
 
     <div id="extraItemsContainer"></div>
@@ -518,9 +520,9 @@ tr:hover td { background:#f8fafc; }
   <div class="form-card" id="card-payment">
     <div class="card-header"><i class="fa-solid fa-receipt"></i> Payment Summary</div>
     <div class="bill-summary">
-       <div class="bill-row"><span>Subtotal</span> <span id="lblSubtotal">₹0</span></div>
-       <div class="bill-row"><span>Discount (₹)</span> <input type="number" id="discountAmount" placeholder="0" min="0" oninput="calculateTotal()"></div>
-       <div class="bill-row strong"><span>Final Total</span> <span id="lblTotal">₹0</span></div>
+       <div class="bill-row"><span>Total MRP</span> <span id="lblSubtotal">₹0</span></div>
+       <div class="bill-row" style="color:var(--danger);"><span>Extra Discount (₹)</span> <input type="number" id="discountAmount" placeholder="0" min="0" oninput="calculateTotal()"></div>
+       <div class="bill-row strong"><span>Final Amount</span> <span id="lblTotal">₹0</span></div>
        <div class="bill-row" style="margin-top:10px;"><span>Advance Paid (₹)</span> <input type="number" id="advanceAmount" placeholder="0" min="0" oninput="calculateTotal()"></div>
        <div class="bill-row balance"><span>Balance Due</span> <span id="lblBalance">₹0</span></div>
     </div>
@@ -824,18 +826,22 @@ tr:hover td { background:#f8fafc; }
     
     <label style="margin-top:12px"><input type="checkbox" id="editChkFrame" onchange="toggleEditBoxModal('frame')"> Include Frame</label>
     <div class="row" id="editFrameWrap" style="margin-bottom:5px">
-    <div class="col"><input id="editFrameType" placeholder="Frame Name"></div>
-    <div class="col"><input type="number" id="editFrameAmount" min="0" placeholder="Price"></div></div>
+      <div class="col" style="flex:2.5;"><input id="editFrameType" placeholder="Frame Name"></div>
+      <div class="col" style="flex:1.5;"><input type="number" id="editFrameAmount" min="0" placeholder="MRP"></div>
+      <div class="col" style="flex:1;"><input type="number" id="editFrameDiscount" min="0" placeholder="Disc"></div>
+    </div>
 
     <label><input type="checkbox" id="editChkLens" onchange="toggleEditBoxModal('lens')"> Include Lens</label>
     <div class="row" id="editLensWrap" style="margin-bottom:10px">
-    <div class="col"><input id="editLensType" placeholder="Lens Name"></div>
-    <div class="col"><input type="number" id="editLensAmount" min="0" placeholder="Price"></div></div>
+      <div class="col" style="flex:2.5;"><input id="editLensType" placeholder="Lens Name"></div>
+      <div class="col" style="flex:1.5;"><input type="number" id="editLensAmount" min="0" placeholder="MRP"></div>
+      <div class="col" style="flex:1;"><input type="number" id="editLensDiscount" min="0" placeholder="Disc"></div>
+    </div>
 
     <div id="editExtraItemsContainer"></div>
     <button type="button" class="btn-secondary" style="width:100%;margin-bottom:15px;" onclick="addExtraItem('editExtraItemsContainer')"><i class="fa-solid fa-plus"></i> Add Accessory</button>
 
-    <label>Total Discount (₹):</label><input type="number" id="editDiscount" min="0" style="margin-bottom:15px;">
+    <label>Extra Bill Discount (₹):</label><input type="number" id="editDiscount" min="0" style="margin-bottom:15px;">
 
     <!-- Edit Refraction Grid -->
     <div class="eye-grid">
@@ -1425,24 +1431,31 @@ function toggleItemBox(type){
   document.getElementById(type+'Wrap').style.display = isChecked ? 'flex' : 'none';
   document.getElementById(type+'Type').required = isChecked;
   document.getElementById(type+'Amount').required = isChecked;
-  if(!isChecked) { document.getElementById(type+'Type').value=''; document.getElementById(type+'Amount').value=''; }
+  if(!isChecked) { 
+      document.getElementById(type+'Type').value=''; 
+      document.getElementById(type+'Amount').value=''; 
+      document.getElementById(type+'Discount').value=''; 
+  }
   calculateTotal();
 }
 
 function addExtraItem(containerId){
   const div = document.createElement('div'); div.className = 'row extra-item-row'; div.style.marginBottom='8px';
-  div.innerHTML = `<div class="col"><input type="text" class="extra-name" placeholder="Extra Item Name" required></div><div class="col" style="display:flex; gap:8px;"><input type="number" class="extra-price" placeholder="Price" min="0" oninput="calculateTotal()" required><button type="button" onclick="this.parentElement.parentElement.remove(); calculateTotal()" style="background:#fee2e2;color:#ef4444;border:none;border-radius:6px;padding:0 15px;cursor:pointer;"><i class="fa-solid fa-xmark"></i></button></div>`;
+  div.innerHTML = `<div class="col"><input type="text" class="extra-name" placeholder="Extra Item Name" required></div><div class="col" style="display:flex; gap:8px;"><input type="number" class="extra-price" placeholder="MRP" min="0" oninput="calculateTotal()" required><button type="button" onclick="this.parentElement.parentElement.remove(); calculateTotal()" style="background:#fee2e2;color:#ef4444;border:none;border-radius:6px;padding:0 15px;cursor:pointer;"><i class="fa-solid fa-xmark"></i></button></div>`;
   document.getElementById(containerId).appendChild(div);
 }
 
 function calculateTotal(){
   const f = document.getElementById('chkFrame').checked ? (Number(document.getElementById('frameAmount').value)||0) : 0;
+  const fD = document.getElementById('chkFrame').checked ? (Number(document.getElementById('frameDiscount').value)||0) : 0;
   const l = document.getElementById('chkLens').checked ? (Number(document.getElementById('lensAmount').value)||0) : 0;
+  const lD = document.getElementById('chkLens').checked ? (Number(document.getElementById('lensDiscount').value)||0) : 0;
   let ex = 0; document.querySelectorAll('#extraItemsContainer .extra-price').forEach(inp => ex += (Number(inp.value)||0));
   
   const subtotal = f + l + ex;
-  const discount = Math.max(0, Number(document.getElementById('discountAmount').value)||0);
-  const total = Math.max(0, subtotal - discount);
+  const extraDisc = Math.max(0, Number(document.getElementById('discountAmount').value)||0);
+  const totalDisc = fD + lD + extraDisc;
+  const total = Math.max(0, subtotal - totalDisc);
   const advance = Math.max(0, Number(document.getElementById('advanceAmount').value)||0);
   const balance = Math.max(0, total - advance);
 
@@ -1478,18 +1491,23 @@ function saveRecord(e){
  if(!chkFrame && !chkLens && extraRows.length === 0){ return showToast('Add at least one item (Frame/Lens/Extra)!', true); }
 
  const fAmt = chkFrame ? (Number(document.getElementById('frameAmount').value)||0) : 0;
+ const fDisc = chkFrame ? (Number(document.getElementById('frameDiscount').value)||0) : 0;
  const lAmt = chkLens ? (Number(document.getElementById('lensAmount').value)||0) : 0;
+ const lDisc = chkLens ? (Number(document.getElementById('lensDiscount').value)||0) : 0;
+ 
  let extraItems = []; let extrasTotal = 0;
  extraRows.forEach(row => { const n = row.querySelector('.extra-name').value.trim(), p = Number(row.querySelector('.extra-price').value)||0; if(n){ extraItems.push({name:n, price:p}); extrasTotal+=p; } });
 
  const subtotal = fAmt + lAmt + extrasTotal;
- const discount = Math.max(0,Number(document.getElementById('discountAmount').value)||0);
+ const extraDisc = Math.max(0,Number(document.getElementById('discountAmount').value)||0);
+ const totalDisc = fDisc + lDisc + extraDisc;
+ 
  let advance = Math.max(0,Number(document.getElementById('advanceAmount').value)||0);
- const total = subtotal - discount;
+ const total = subtotal - totalDisc;
  let statusWanted = document.getElementById('orderStatus').value;
  const mode = document.getElementById('paymentType').value;
 
- if(discount > subtotal) return showToast('Discount exceeds total!', true);
+ if(totalDisc > subtotal) return showToast('Discount exceeds total!', true);
  if(advance > total) return showToast('Advance exceeds payable total!', true);
  
  if(statusWanted.includes('Full Paid')) advance = total;
@@ -1503,7 +1521,7 @@ function saveRecord(e){
  if((advance > 0 || statusWanted.includes('Paid')) && !mode) return showToast('Please select Payment Mode!', true);
 
  const balance = Math.max(0, total - advance);
- const date = document.getElementById('entryDate').value || todayISO(); // Uses the selected date
+ const date = document.getElementById('entryDate').value || todayISO(); 
  const currentYearMonth = date.slice(0, 7); 
  const records = getRecords();
  
@@ -1516,14 +1534,12 @@ function saveRecord(e){
    }
  });
  
- // The invoice month code should ideally match the entry date
  const dObj = new Date(date); 
  const yy = String(dObj.getFullYear()).slice(-2);
  const mm = String(dObj.getMonth() + 1).padStart(2, '0');
  const yearMonthCode = yy + mm; 
  const seqStr = String(maxSeq + 1).padStart(3, '0'); 
  
- // Automatic Branch Prefix for Invoice
  const invoicePrefix = currentBranch === 'MVP' ? 'MVP' : 'SNS';
  const invoiceNo = `${invoicePrefix}/${yearMonthCode}/O/${seqStr}`;
 
@@ -1533,9 +1549,10 @@ function saveRecord(e){
   yearMonth:currentYearMonth, customerName:document.getElementById('customerName').value.trim(),
   phone:document.getElementById('phone').value.trim(), age:document.getElementById('customerAge').value||'-',
   gender:document.getElementById('customerGender').value||'-', address:document.getElementById('customerAddress').value.trim(),
-  frameType:chkFrame ? document.getElementById('frameType').value.trim() : '-', frameAmount:fAmt, 
-  lensType:chkLens ? document.getElementById('lensType').value.trim() : '-', lensAmount:lAmt, extraItems,
-  paymentType:mode, status:statusWanted, discountAmount:discount, totalAmount:subtotal, advanceAmount:advance, payments:[],
+  frameType:chkFrame ? document.getElementById('frameType').value.trim() : '-', frameAmount:fAmt, frameDiscount:fDisc,
+  lensType:chkLens ? document.getElementById('lensType').value.trim() : '-', lensAmount:lAmt, lensDiscount:lDisc,
+  extraItems, extraDiscount:extraDisc, discountAmount:totalDisc, totalAmount:subtotal, advanceAmount:advance, payments:[],
+  paymentType:mode, status:statusWanted, 
   rightEye:{unaided:getValP('reUnaided', 'btnReUnaidedP', 'reUnaidedPR'), sph:document.getElementById('reSph').value,cyl:document.getElementById('reCyl').value,axis:document.getElementById('reAxis').value,vision:getValP('reVision', 'btnReVisionP', 'reVisionPR'),add:document.getElementById('reAdd').value,nearVision:document.getElementById('reNearVision').value},
   leftEye:{unaided:getValP('leUnaided', 'btnLeUnaidedP', 'leUnaidedPR'), sph:document.getElementById('leSph').value,cyl:document.getElementById('leCyl').value,axis:document.getElementById('leAxis').value,vision:getValP('leVision', 'btnLeVisionP', 'leVisionPR'),add:document.getElementById('leAdd').value,nearVision:document.getElementById('leNearVision').value}
  };
@@ -1543,7 +1560,7 @@ function saveRecord(e){
  
  setRecords([item,...records]);
  document.getElementById('prescriptionForm').reset();
- document.getElementById('entryDate').value = todayISO(); // Reset back to today
+ document.getElementById('entryDate').value = todayISO(); 
  updateGenderColor(); 
  
  document.querySelectorAll('.btn-p').forEach(btn => { btn.classList.remove('active'); btn.disabled = true; });
@@ -1579,12 +1596,15 @@ function executeMarkDelivered() {
    if(idx < 0) return closeConfirmDeliveryModal();
    const item = r[idx];
    
-   if(Math.max(0, finalTotal(item) - paidFromPayments(item)) > 0) {
-       closeConfirmDeliveryModal();
-       return showToast('❌ Please clear the due balance first!', true);
+   const paid = paidFromPayments(item);
+   const total = finalTotal(item);
+   
+   if (paid >= total && total > 0) {
+       item.status = 'Full Paid / Delivered';
+   } else {
+       item.status = 'Partial Paid / Delivered';
    }
    
-   item.status = 'Full Paid / Delivered';
    item.rawReceivingDate = todayISO();
    item.receivingDateStr = formatDate(todayISO());
    
@@ -1905,15 +1925,54 @@ function closePrescriptionModal(){ document.getElementById('printPrescriptionMod
 function openBillModal(id){
  const item=getRecords().find(x=>x.id===id); if(!item) return showToast('Record Error!', true);
  activeItem=item; ensurePayments(item);
- const total=Number(item.totalAmount)||0, disc=Number(item.discountAmount)||0, final=finalTotal(item);
+ 
+ const grossTotal = Number(item.totalAmount) || 0;
+ const totalDisc = Number(item.discountAmount) || 0;
+ const final = finalTotal(item);
 
  let itemsHtml = '';
- if(item.frameType && item.frameType !== '-') itemsHtml += `<tr><td style="border-bottom:1px solid #eee;padding:5px;">Frame: ${esc(item.frameType)}</td><td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(item.frameAmount)}</td></tr>`;
- if(item.lensType && item.lensType !== '-') itemsHtml += `<tr><td style="border-bottom:1px solid #eee;padding:5px;">Lens: ${esc(item.lensType)}</td><td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(item.lensAmount)}</td></tr>`;
- if(item.extraItems) item.extraItems.forEach(ex => itemsHtml += `<tr><td style="border-bottom:1px solid #eee;padding:5px;">${esc(ex.name)}</td><td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(ex.price)}</td></tr>`);
+ if(item.frameType && item.frameType !== '-') {
+     let fP = Number(item.frameAmount)||0;
+     let fD = Number(item.frameDiscount)||0;
+     let fNet = fP - fD;
+     itemsHtml += `<tr>
+        <td style="border-bottom:1px solid #eee;padding:5px;">Frame: ${esc(item.frameType)}</td>
+        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(fP)}</td>
+        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;color:var(--danger);">${fD > 0 ? '-'+money(fD) : '-'}</td>
+        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;font-weight:bold;">${money(fNet)}</td>
+     </tr>`;
+ }
+ if(item.lensType && item.lensType !== '-') {
+     let lP = Number(item.lensAmount)||0;
+     let lD = Number(item.lensDiscount)||0;
+     let lNet = lP - lD;
+     itemsHtml += `<tr>
+        <td style="border-bottom:1px solid #eee;padding:5px;">Lens: ${esc(item.lensType)}</td>
+        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(lP)}</td>
+        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;color:var(--danger);">${lD > 0 ? '-'+money(lD) : '-'}</td>
+        <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;font-weight:bold;">${money(lNet)}</td>
+     </tr>`;
+ }
+ if(item.extraItems) {
+    item.extraItems.forEach(ex => {
+        itemsHtml += `<tr>
+            <td style="border-bottom:1px solid #eee;padding:5px;">${esc(ex.name)}</td>
+            <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;">${money(ex.price)}</td>
+            <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;color:var(--danger);">-</td>
+            <td style="text-align:right;border-bottom:1px solid #eee;padding:5px;font-weight:bold;">${money(ex.price)}</td>
+        </tr>`;
+    });
+ }
 
  let addr = item.address ? `<div style="grid-column: span 2;"><b>Address:</b> ${esc(item.address)}</div>` : '';
- let discHtml = disc > 0 ? `Discount: <b>- ${money(disc)}</b><br>` : '';
+ 
+ let discPercentStr = '';
+ if(grossTotal > 0 && totalDisc > 0) {
+     let pct = ((totalDisc / grossTotal) * 100).toFixed(1);
+     if(pct.endsWith('.0')) pct = pct.slice(0, -2);
+     discPercentStr = ` (${pct}%)`;
+ }
+ let discHtml = totalDisc > 0 ? `Total Discount: <b style="color:var(--danger);">- ${money(totalDisc)}${discPercentStr}</b><br>` : '';
 
  document.getElementById('billDetailsContent').innerHTML=`
  <div style="text-align:center;border-bottom:2px dashed #cbd5e1;padding-bottom:12px;margin-bottom:15px;">
@@ -1947,11 +2006,16 @@ function openBillModal(id){
  </div>
  
  <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:15px;">
-   <thead style="background:#ea580c;color:#fff;"><tr><th style="text-align:left;padding:5px;">Item</th><th style="text-align:right;padding:5px;">Amount</th></tr></thead>
+   <thead style="background:#ea580c;color:#fff;"><tr>
+     <th style="text-align:left;padding:5px;">Item</th>
+     <th style="text-align:right;padding:5px;">MRP</th>
+     <th style="text-align:right;padding:5px;">DISCOUNT</th>
+     <th style="text-align:right;padding:5px;">NET PRICE</th>
+   </tr></thead>
    <tbody>${itemsHtml}</tbody>
  </table>
  <div style="border-top:1px solid #ccc;padding-top:10px;font-size:13px;text-align:right;">
-    Subtotal: <b>${money(total)}</b><br>
+    Total MRP: <b>${money(grossTotal)}</b><br>
     ${discHtml}
     Final Amount: <b style="font-size:16px; color:var(--primary);">${money(final)}</b>
  </div>
@@ -2029,38 +2093,58 @@ function downloadCombinedPdf(items) {
     doc.text('ORDER SUMMARY', marginX, currentY); currentY += 4;
 
     let tableData = []; let c = 1;
-    let sumTotal = 0, sumDisc = 0, sumFinal = 0;
+    let sumGross = 0, sumDisc = 0, sumFinal = 0;
 
     items.forEach(i => {
         const finalAm = finalTotal(i);
-        sumTotal += (Number(i.totalAmount)||0);
+        sumGross += (Number(i.totalAmount)||0);
         sumDisc += (Number(i.discountAmount)||0);
         sumFinal += finalAm;
         
         let cNamePrefix = (items.length > 1 && i.customerName) ? `[${i.customerName.split(' ')[0]}] ` : '';
 
-        if(i.frameType && i.frameType !== '-') tableData.push([String(c++), cNamePrefix + 'Frame: ' + String(i.frameType).trim(), pdfMoney(i.frameAmount)]);
-        if(i.lensType && i.lensType !== '-') tableData.push([String(c++), cNamePrefix + 'Lens: ' + String(i.lensType).trim(), pdfMoney(i.lensAmount)]);
-        if(i.extraItems) i.extraItems.forEach(ex => tableData.push([String(c++), cNamePrefix + String(ex.name).trim(), pdfMoney(ex.price)]));
+        if(i.frameType && i.frameType !== '-') {
+            let fP = Number(i.frameAmount)||0; let fD = Number(i.frameDiscount)||0;
+            tableData.push([String(c++), cNamePrefix + 'Frame: ' + String(i.frameType).trim(), pdfMoney(fP), fD>0 ? '-'+pdfMoney(fD) : '-', pdfMoney(fP-fD)]);
+        }
+        if(i.lensType && i.lensType !== '-') {
+            let lP = Number(i.lensAmount)||0; let lD = Number(i.lensDiscount)||0;
+            tableData.push([String(c++), cNamePrefix + 'Lens: ' + String(i.lensType).trim(), pdfMoney(lP), lD>0 ? '-'+pdfMoney(lD) : '-', pdfMoney(lP-lD)]);
+        }
+        if(i.extraItems) i.extraItems.forEach(ex => tableData.push([String(c++), cNamePrefix + String(ex.name).trim(), pdfMoney(ex.price), '-', pdfMoney(ex.price)]));
     });
     
-    if(!tableData.length) tableData.push(['-', 'No items added', '-']);
+    if(!tableData.length) tableData.push(['-', 'No items added', '-', '-', '-']);
 
     doc.autoTable({ 
         startY: currentY, margin: { left: marginX, right: marginX }, theme: 'grid', 
         headStyles: { fillColor: mainColor, textColor: 255, fontStyle: 'bold', halign: 'center' }, 
         styles: { fontSize: 9.5, cellPadding: 4, lineColor: [226, 232, 240] }, 
-        columnStyles: { 0: { halign: 'center', cellWidth: 15 }, 1: { halign: 'left' }, 2: { halign: 'right', cellWidth: 40 } }, 
-        head: [['#', 'Item Description', 'Amount']], body: tableData 
+        columnStyles: { 
+            0: { halign: 'center', cellWidth: 10 }, 
+            1: { halign: 'left' }, 
+            2: { halign: 'right', cellWidth: 25 },
+            3: { halign: 'right', cellWidth: 25, textColor: [220, 38, 38] },
+            4: { halign: 'right', cellWidth: 25, fontStyle: 'bold' } 
+        }, 
+        head: [['#', 'Item Description', 'MRP', 'DISCOUNT', 'NET PRICE']], 
+        body: tableData 
     });
     currentY = doc.lastAutoTable.finalY + 4;
 
-    let tBody = [['Combined Subtotal', pdfMoney(sumTotal)]];
-    if(sumDisc > 0) tBody.push(['Combined Discount', '- ' + pdfMoney(sumDisc)]);
+    let discPercentStr = '';
+    if(sumGross > 0 && sumDisc > 0) {
+        let pct = ((sumDisc / sumGross) * 100).toFixed(1);
+        if(pct.endsWith('.0')) pct = pct.slice(0, -2);
+        discPercentStr = ` (${pct}%)`;
+    }
+
+    let tBody = [['Combined Total MRP', pdfMoney(sumGross)]];
+    if(sumDisc > 0) tBody.push(['Combined Total Discount' + discPercentStr, '- ' + pdfMoney(sumDisc)]);
     tBody.push(['Final Amount', pdfMoney(sumFinal)]);
 
     doc.autoTable({ 
-      startY: currentY, margin: { left: pageWidth - marginX - 80, right: marginX }, theme: 'grid', 
+      startY: currentY, margin: { left: pageWidth - marginX - 90, right: marginX }, theme: 'grid', 
       styles: { fontSize: 9.5, cellPadding: 3.5, textColor: [15, 23, 42], lineColor: [226, 232, 240] }, 
       columnStyles: { 0: { halign: 'left', fontStyle: 'bold' }, 1: { halign: 'right', fontStyle: 'bold' } }, 
       body: tBody, 
@@ -2212,24 +2296,52 @@ function downloadPdf(type){
       doc.autoTable({ startY: currentY, margin: { left: marginX, right: marginX }, theme: 'grid', headStyles: { fillColor: mainColor, textColor: 255, fontStyle: 'bold', halign: 'center' }, styles: { fontSize: 9.5, cellPadding: 4, halign: 'center', textColor: [15, 23, 42], lineColor: [226, 232, 240] }, columnStyles: { 0: { fontStyle: 'bold', halign:'left' } }, head: headRow, body: bodyRows });
       currentY = doc.lastAutoTable.finalY + 8;
     } else {
-      const total = Number(i.totalAmount)||0, disc = Number(i.discountAmount)||0, final = finalTotal(i);
+      const gross = Number(i.totalAmount)||0, disc = Number(i.discountAmount)||0, final = finalTotal(i);
       doc.setFont('helvetica', 'bold'); doc.setFontSize(10.5); doc.setTextColor(15, 23, 42); doc.text('ORDER SUMMARY', marginX, currentY); currentY += 4;
 
       let items = []; let c = 1;
-      if(i.frameType && i.frameType !== '-') items.push([String(c++), 'Frame: ' + clean(i.frameType), pdfMoney(i.frameAmount)]);
-      if(i.lensType && i.lensType !== '-') items.push([String(c++), 'Lens: ' + clean(i.lensType), pdfMoney(i.lensAmount)]);
-      if(i.extraItems) i.extraItems.forEach(ex => items.push([String(c++), clean(ex.name), pdfMoney(ex.price)]));
-      if(!items.length) items.push(['-', 'No items added', '-']);
+      if(i.frameType && i.frameType !== '-') {
+          let fP = Number(i.frameAmount)||0; let fD = Number(i.frameDiscount)||0;
+          items.push([String(c++), 'Frame: ' + clean(i.frameType), pdfMoney(fP), fD>0 ? '-'+pdfMoney(fD) : '-', pdfMoney(fP-fD)]);
+      }
+      if(i.lensType && i.lensType !== '-') {
+          let lP = Number(i.lensAmount)||0; let lD = Number(i.lensDiscount)||0;
+          items.push([String(c++), 'Lens: ' + clean(i.lensType), pdfMoney(lP), lD>0 ? '-'+pdfMoney(lD) : '-', pdfMoney(lP-lD)]);
+      }
+      if(i.extraItems) {
+          i.extraItems.forEach(ex => items.push([String(c++), clean(ex.name), pdfMoney(ex.price), '-', pdfMoney(ex.price)]));
+      }
+      if(!items.length) items.push(['-', 'No items added', '-', '-', '-']);
 
-      doc.autoTable({ startY: currentY, margin: { left: marginX, right: marginX }, theme: 'grid', headStyles: { fillColor: mainColor, textColor: 255, fontStyle: 'bold', halign: 'center' }, styles: { fontSize: 9.5, cellPadding: 4, lineColor: [226, 232, 240] }, columnStyles: { 0: { halign: 'center', cellWidth: 15 }, 1: { halign: 'left' }, 2: { halign: 'right', cellWidth: 40 } }, head: [['#', 'Item Description', 'Amount']], body: items });
+      doc.autoTable({ 
+          startY: currentY, margin: { left: marginX, right: marginX }, theme: 'grid', 
+          headStyles: { fillColor: mainColor, textColor: 255, fontStyle: 'bold', halign: 'center' }, 
+          styles: { fontSize: 9.5, cellPadding: 4, lineColor: [226, 232, 240] }, 
+          columnStyles: { 
+              0: { halign: 'center', cellWidth: 10 }, 
+              1: { halign: 'left' }, 
+              2: { halign: 'right', cellWidth: 25 },
+              3: { halign: 'right', cellWidth: 25, textColor: [220, 38, 38] },
+              4: { halign: 'right', cellWidth: 25, fontStyle: 'bold' } 
+          }, 
+          head: [['#', 'Item Description', 'MRP', 'DISCOUNT', 'NET PRICE']], 
+          body: items 
+      });
       currentY = doc.lastAutoTable.finalY + 4;
 
-      let tBody = [['Subtotal', pdfMoney(total)]];
-      if(disc > 0) tBody.push(['Discount', '- ' + pdfMoney(disc)]);
+      let discPercentStr = '';
+      if(gross > 0 && disc > 0) {
+          let pct = ((disc / gross) * 100).toFixed(1);
+          if(pct.endsWith('.0')) pct = pct.slice(0, -2);
+          discPercentStr = ` (${pct}%)`;
+      }
+
+      let tBody = [['Total MRP', pdfMoney(gross)]];
+      if(disc > 0) tBody.push(['Total Discount' + discPercentStr, '- ' + pdfMoney(disc)]);
       tBody.push(['Final Amount', pdfMoney(final)]);
 
       doc.autoTable({ 
-        startY: currentY, margin: { left: pageWidth - marginX - 80, right: marginX }, theme: 'grid', 
+        startY: currentY, margin: { left: pageWidth - marginX - 90, right: marginX }, theme: 'grid', 
         styles: { fontSize: 9.5, cellPadding: 3.5, textColor: [15, 23, 42], lineColor: [226, 232, 240] }, 
         columnStyles: { 0: { halign: 'left', fontStyle: 'bold' }, 1: { halign: 'right', fontStyle: 'bold' } }, 
         body: tBody, 
@@ -2337,7 +2449,10 @@ function confirmMarkPaid(){
 function toggleEditBoxModal(type){
   const isChecked = document.getElementById('editChk' + (type==='frame'?'Frame':'Lens')).checked;
   document.getElementById('edit' + (type==='frame'?'Frame':'Lens') + 'Wrap').style.display = isChecked ? 'flex' : 'none';
-  if(!isChecked) { document.getElementById('edit'+(type==='frame'?'Frame':'Lens')+'Amount').value=''; }
+  if(!isChecked) { 
+      document.getElementById('edit'+(type==='frame'?'Frame':'Lens')+'Amount').value=''; 
+      document.getElementById('edit'+(type==='frame'?'Frame':'Lens')+'Discount').value=''; 
+  }
 }
 
 function unlockMasterEdit() {
@@ -2362,13 +2477,16 @@ function openEditModal(id){
  
  const hasF = i.frameType && i.frameType !== '-'; document.getElementById('editChkFrame').checked = hasF; toggleEditBoxModal('frame');
  document.getElementById('editFrameType').value=hasF ? i.frameType : ''; document.getElementById('editFrameAmount').value=hasF ? i.frameAmount : '';
+ document.getElementById('editFrameDiscount').value=i.frameDiscount || '';
 
  const hasL = i.lensType && i.lensType !== '-'; document.getElementById('editChkLens').checked = hasL; toggleEditBoxModal('lens');
  document.getElementById('editLensType').value=hasL ? i.lensType : ''; document.getElementById('editLensAmount').value=hasL ? i.lensAmount : '';
+ document.getElementById('editLensDiscount').value=i.lensDiscount || '';
 
  document.getElementById('editExtraItemsContainer').innerHTML = '';
  if(i.extraItems && i.extraItems.length){ i.extraItems.forEach(ex => { addExtraItem('editExtraItemsContainer'); const rows = document.querySelectorAll('#editExtraItemsContainer .extra-item-row'); const lastRow = rows[rows.length-1]; lastRow.querySelector('.extra-name').value = ex.name; lastRow.querySelector('.extra-price').value = ex.price; }); }
- document.getElementById('editDiscount').value=i.discountAmount||0; 
+ 
+ document.getElementById('editDiscount').value=i.extraDiscount !== undefined ? i.extraDiscount : (i.discountAmount || 0); 
 
  if(i.rightEye){ setValP('editReUnaided', 'btnEditReUnaidedP', 'editReUnaidedPR', i.rightEye.unaided); document.getElementById('editReSph').value=i.rightEye.sph||''; document.getElementById('editReCyl').value=i.rightEye.cyl||''; document.getElementById('editReAxis').value=i.rightEye.axis||''; setValP('editReVision', 'btnEditReVisionP', 'editReVisionPR', i.rightEye.vision); document.getElementById('editReAdd').value=i.rightEye.add||''; document.getElementById('editReNearVision').value=i.rightEye.nearVision||''; }
  if(i.leftEye){ setValP('editLeUnaided', 'btnEditLeUnaidedP', 'editLeUnaidedPR', i.leftEye.unaided); document.getElementById('editLeSph').value=i.leftEye.sph||''; document.getElementById('editLeCyl').value=i.leftEye.cyl||''; document.getElementById('editLeAxis').value=i.leftEye.axis||''; setValP('editLeVision', 'btnEditLeVisionP', 'editLeVisionPR', i.leftEye.vision); document.getElementById('editLeAdd').value=i.leftEye.add||''; document.getElementById('editLeNearVision').value=i.leftEye.nearVision||''; }
@@ -2398,19 +2516,23 @@ function confirmEdit(){
     if(!chkF && !chkL && exRows.length === 0) return showToast('Kam se kam Frame, Lens ya Accessory jaroor honi chahiye!', true);
 
     const fAmt = chkF ? (Number(document.getElementById('editFrameAmount').value)||0) : 0;
+    const fD = chkF ? (Number(document.getElementById('editFrameDiscount').value)||0) : 0;
     const lAmt = chkL ? (Number(document.getElementById('editLensAmount').value)||0) : 0;
+    const lD = chkL ? (Number(document.getElementById('editLensDiscount').value)||0) : 0;
+    
     let exItems = [], exTotal = 0;
     exRows.forEach(row => { const n = row.querySelector('.extra-name').value.trim(), p = Number(row.querySelector('.extra-price').value)||0; if(n) { exItems.push({name:n, price:p}); exTotal += p; } });
 
     const newTotal = fAmt + lAmt + exTotal;
-    const newDisc = Math.max(0,Number(document.getElementById('editDiscount').value)||0);
+    const newExtraDisc = Math.max(0,Number(document.getElementById('editDiscount').value)||0);
+    const newTotalDisc = fD + lD + newExtraDisc;
     
-    if(newDisc>newTotal)return showToast('Discount total se bada nahi ho sakta.', true);
-    if(paid>newTotal-newDisc)return showToast('Naya total balance paid amount se kam ho raha hai.', true);
+    if(newTotalDisc > newTotal) return showToast('Discount total se bada nahi ho sakta.', true);
+    if(paid > newTotal - newTotalDisc) return showToast('Naya total balance paid amount se kam ho raha hai.', true);
     
-    i.frameType = chkF ? document.getElementById('editFrameType').value.trim() : '-'; i.frameAmount = fAmt;
-    i.lensType = chkL ? document.getElementById('editLensType').value.trim() : '-'; i.lensAmount = lAmt;
-    i.extraItems = exItems; i.totalAmount=newTotal; i.discountAmount=newDisc;
+    i.frameType = chkF ? document.getElementById('editFrameType').value.trim() : '-'; i.frameAmount = fAmt; i.frameDiscount = fD;
+    i.lensType = chkL ? document.getElementById('editLensType').value.trim() : '-'; i.lensAmount = lAmt; i.lensDiscount = lD;
+    i.extraItems = exItems; i.totalAmount = newTotal; i.extraDiscount = newExtraDisc; i.discountAmount = newTotalDisc;
 
     i.rightEye={unaided:getValP('editReUnaided', 'btnEditReUnaidedP', 'editReUnaidedPR'),sph:document.getElementById('editReSph').value,cyl:document.getElementById('editReCyl').value,axis:document.getElementById('editReAxis').value,vision:getValP('editReVision', 'btnEditReVisionP', 'editReVisionPR'),add:document.getElementById('editReAdd').value,nearVision:document.getElementById('editReNearVision').value};
     i.leftEye={unaided:getValP('editLeUnaided', 'btnEditLeUnaidedP', 'editLeUnaidedPR'),sph:document.getElementById('editLeSph').value,cyl:document.getElementById('editLeCyl').value,axis:document.getElementById('editLeAxis').value,vision:getValP('editLeVision', 'btnEditLeVisionP', 'editLeVisionPR'),add:document.getElementById('editLeAdd').value,nearVision:document.getElementById('editLeNearVision').value};
