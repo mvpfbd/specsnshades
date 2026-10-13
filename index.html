@@ -176,9 +176,9 @@ input:focus, select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rg
 .btn-secondary { background:#f8fafc; color:var(--text-main); border:1px solid var(--border-color); padding:10px 15px; font-weight:600; border-radius:6px; cursor:pointer; font-size:12px; transition:0.2s; display:flex; align-items:center; justify-content:center; gap:5px;}
 .btn-secondary:hover { background:#e2e8f0; }
 
-/* ULTRA COMPACT DASHBOARD DESKTOP */
+/* COMPACT DASHBOARD DESKTOP */
 .dash-section-title { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 15px 0 8px 4px; letter-spacing: 0.5px; }
-.dash-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
+.dash-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 15px; }
 .dash-card { padding: 12px 6px; border-radius: 8px; border: 1px solid var(--border-color); text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
 .dash-card i { font-size: 14px; margin-bottom: 5px; color: var(--text-muted); }
 .dash-title { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0; line-height: 1.2; }
@@ -247,13 +247,12 @@ tr:hover td { background:#f8fafc; }
   .btn-secondary { padding: 8px 10px; font-size: 11px; flex:1; display:flex; justify-content:center;}
   .btn-icon-only { flex: 0 0 40px; } 
 
-  /* ULTRA MINIATURE Mobile Dashboard */
-  #summaryDashboard { padding: 12px; border-radius: 10px; }
-  .dash-grid { gap: 6px; margin-bottom: 12px; }
-  .dash-card { padding: 6px 4px; border-radius: 6px; box-shadow:none; }
-  .dash-card i { font-size: 12px; margin-bottom: 4px; display:block;}
-  .dash-title { font-size: 8px; letter-spacing: 0; margin-bottom:2px;}
-  .dash-value { font-size: 12px; margin-top: 2px; }
+  /* VERY COMPACT Dashboard Grid so all 5 fit beautifully in one row */
+  .dash-grid { grid-template-columns: repeat(5, 1fr) !important; gap: 4px !important; margin-bottom: 12px; }
+  .dash-card { padding: 6px 2px !important; border-radius: 6px !important; box-shadow:none; }
+  .dash-card i { font-size: 11px !important; margin-bottom: 3px !important; display:block;}
+  .dash-title { font-size: 7px !important; letter-spacing: -0.2px !important; margin-bottom:2px;}
+  .dash-value { font-size: 10px !important; margin-top: 2px !important; padding: 0 1px; word-break: break-all;}
   .dash-section-title { font-size: 9px; margin: 4px 0 4px 2px; }
 
   /* UPDATED SMART MOBILE CARDS */
@@ -335,31 +334,62 @@ tr:hover td { background:#f8fafc; }
 <div class="nav-tabs">
   <button class="nav-tab active" onclick="switchPage('entry')"><i class="fa-solid fa-file-medical"></i> New Prescription</button>
   <button class="nav-tab" onclick="switchPage('records')"><i class="fa-solid fa-folder-open"></i> Sales & Records</button>
+  <button class="nav-tab" onclick="switchPage('summary')"><i class="fa-solid fa-chart-pie"></i> Sales Summary</button>
 </div>
 
 <!-- Mobile Nav -->
 <div class="bottom-nav">
   <div class="bottom-nav-item active" onclick="switchPage('entry')" id="mobNavEntry"><i class="fa-solid fa-file-medical"></i><span>New Presc.</span></div>
   <div class="bottom-nav-item" onclick="switchPage('records')" id="mobNavRecords"><i class="fa-solid fa-folder-open"></i><span>Records</span></div>
+  <div class="bottom-nav-item" onclick="switchPage('summary')" id="mobNavSummary"><i class="fa-solid fa-chart-pie"></i><span>Summary</span></div>
 </div>
 
 <!-- ENTRY SECTION -->
 <div id="sectionEntry" class="page-section active">
 <form id="prescriptionForm" onsubmit="saveRecord(event)">
 
-  <!-- Card 1: CUSTOMER -->
+  <!-- Card 1: NEW ENTRY -->
   <div class="form-card" id="card-customer">
-    <div class="card-header"><i class="fa-solid fa-user"></i> Customer Information</div>
+    <div class="card-header"><i class="fa-solid fa-user-plus"></i> New Entry</div>
+    
+    <!-- 1st Line: Mobile Number & Date for backdating -->
     <div class="row">
       <div class="col"><label>Mobile Number *</label><input type="tel" id="phone" placeholder="10-digit number" inputmode="numeric" required maxlength="10"></div>
+      <div class="col" style="flex: 0 0 110px; min-width: 110px;" title="Click to change date for back-entry">
+        <label>Date</label>
+        <input type="date" id="entryDate" required style="background: #f1f5f9; border: 1px dashed #cbd5e1; color: #64748b; font-weight: 700; padding: 10px 5px; font-size: 11px; cursor: pointer;">
+      </div>
+    </div>
+    
+    <div id="autoFillPrompt"><i class="fa-solid fa-clock-rotate-left"></i> Existing customer found. Click to load prescription!</div>
+    
+    <!-- 2nd Line: Prefix and Customer Name -->
+    <div class="row" style="margin-top:12px;">
+      <div class="col" style="flex: 0 0 55px; min-width: 55px;">
+        <label>Title</label>
+        <select id="customerPrefix" onchange="autoSelectGender()" style="padding: 8px 0px; font-size: 11px; text-align: center;">
+          <option value="Mr.">Mr.</option>
+          <option value="Mrs.">Mrs.</option>
+          <option value="Miss">Miss</option>
+          <option value="Master">Master</option>
+        </select>
+      </div>
       <div class="col"><label>Customer Name *</label><input type="text" id="customerName" placeholder="Full Name" required></div>
     </div>
-    <div id="autoFillPrompt"><i class="fa-solid fa-clock-rotate-left"></i> Existing customer found. Click to load prescription!</div>
+    
+    <!-- 3rd Line: Age and Gender -->
     <div class="row" style="margin-top:12px;">
       <div class="col"><label>Age</label><input type="number" id="customerAge" placeholder="Years" min="1" max="120"></div>
-      <div class="col"><label>Gender</label><select id="customerGender"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+      <div class="col"><label>Gender</label>
+        <select id="customerGender" onchange="checkAgeForAdd(); updateGenderColor();" style="background-color: #f0fdf4; border-color: #bbf7d0; color: #166534; font-weight: 700;">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
     </div>
-    <!-- ADDRESS FIELD -->
+    
+    <!-- 4th Line: Address -->
     <div class="row" style="margin-top:12px;">
       <div class="col"><label>Address / Location</label><input type="text" id="customerAddress" placeholder="City / Area / Full Address"></div>
     </div>
@@ -512,46 +542,102 @@ tr:hover td { background:#f8fafc; }
 </form>
 </div>
 
+<!-- NEW SUMMARY SECTION -->
+<div id="sectionSummary" class="page-section">
+    <!-- Auth Box for Summary -->
+    <div id="summaryAuthBox" style="max-width:400px; margin:40px auto; background:#fff; padding:30px; border-radius:16px; border:1px solid var(--border-color); box-shadow:0 10px 40px rgba(0,0,0,0.05); text-align:center;">
+       <i class="fa-solid fa-lock" style="font-size:40px; color:var(--text-muted); margin-bottom:15px;"></i>
+       <h3 style="margin-top:0; color:var(--text-main); font-size:18px;">Unlock Sales Summary</h3>
+       <p style="color:var(--text-muted); font-size:12px; margin-bottom:20px;">Please enter your branch PIN to view financials.</p>
+       <div class="login-input" style="text-align:center;">
+          <input type="password" id="summaryPinInput" placeholder="••••" inputmode="numeric" style="width:100%; max-width:200px; letter-spacing:10px; font-size:24px; text-align:center; margin:0 auto; display:block;">
+       </div>
+       <button type="button" class="btn-main" onclick="verifySummaryPin()" style="max-width:200px; margin:15px auto 0 auto;"><i class="fa-solid fa-unlock"></i> View Summary</button>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div id="summaryDashboardContent" style="display:none;">
+        <div class="filter-bar" style="margin-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
+           <div style="font-size:15px; font-weight:800; color:var(--primary);"><i class="fa-solid fa-chart-pie"></i> Financial Summary</div>
+           <select id="summaryMonthFilter" onchange="syncFilters('summaryMonthFilter')" style="width:auto; min-width:150px; font-weight:700;"></select>
+        </div>
+
+        <div style="border:1px solid var(--border-color); padding:15px; border-radius:10px; background: #fff;">
+            <div class="dash-section-title" style="margin-top:0;">This Month</div>
+            <div class="dash-grid">
+              <div class="dash-card c-total"><i class="fa-solid fa-sack-dollar"></i><div class="dash-title">Total</div><div class="dash-value" id="monthlyTotal">₹0</div></div>
+              <div class="dash-card c-cash"><i class="fa-solid fa-wallet text-green"></i><div class="dash-title text-green">Cash</div><div class="dash-value text-green" id="monthlyCash">₹0</div></div>
+              <div class="dash-card c-upi"><i class="fa-solid fa-building-columns text-blue"></i><div class="dash-title text-blue">UPI</div><div class="dash-value text-blue" id="monthlyOnline">₹0</div></div>
+              <div class="dash-card c-dues"><i class="fa-solid fa-hand-holding-dollar text-red"></i><div class="dash-title text-red">Dues</div><div class="dash-value text-red" id="monthDue">₹0</div></div>
+              <div class="dash-card c-dues" style="background:#fef2f2; border-color:#fca5a5;"><i class="fa-solid fa-arrow-trend-down text-red"></i><div class="dash-title text-red">Expenses</div><div class="dash-value text-red" id="monthlyExpense">₹0</div></div>
+            </div>
+            
+            <div class="dash-section-title">Today</div>
+            <div class="dash-grid" style="margin-bottom:0;">
+              <div class="dash-card green"><i class="fa-solid fa-calendar-day"></i><div class="dash-title">Total</div><div class="dash-value" id="dailyTotal">₹0</div></div>
+              <div class="dash-card c-cash"><i class="fa-solid fa-wallet text-green"></i><div class="dash-title text-green">Cash</div><div class="dash-value text-green" id="dailyCash">₹0</div></div>
+              <div class="dash-card c-upi"><i class="fa-solid fa-building-columns text-blue"></i><div class="dash-title text-blue">UPI</div><div class="dash-value text-blue" id="dailyOnline">₹0</div></div>
+              <div class="dash-card c-orders"><i class="fa-solid fa-cart-shopping" style="color:var(--accent);"></i><div class="dash-title" style="color:var(--accent);">Orders</div><div class="dash-value" id="todayOrders" style="color:var(--accent);">0</div></div>
+              <div class="dash-card c-dues" style="background:#fef2f2; border-color:#fca5a5;"><i class="fa-solid fa-arrow-trend-down text-red"></i><div class="dash-title text-red">Expenses</div><div class="dash-value text-red" id="dailyExpense">₹0</div></div>
+            </div>
+        </div>
+
+        <!-- Recent Orders Order Costing List -->
+        <div style="margin-top: 20px; border:1px solid var(--border-color); border-radius:10px; background:#fff; overflow:hidden;">
+            <div style="padding:10px 15px; border-bottom:1px solid var(--border-color); background:#f8fafc; font-weight:700; font-size:13px; color:var(--text-main);">
+                <i class="fa-solid fa-cart-arrow-down" style="color:var(--accent);"></i> Recent Orders (Add Purchase Cost)
+            </div>
+            <div style="max-height: 250px; overflow-y: auto;" id="quickExpenseList">
+                <!-- Orders Load Here by JS -->
+            </div>
+        </div>
+
+        <!-- Expense Table List -->
+        <div style="margin-top: 20px; border:1px solid var(--border-color); border-radius:10px; background:#fff; overflow:hidden;">
+            <div style="padding:15px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; background:#f8fafc;">
+                <h3 style="margin:0; font-size:14px; color:var(--text-main);"><i class="fa-solid fa-list text-muted"></i> Expense Log</h3>
+                <button class="btn-act pay" onclick="openExpenseModal()" style="font-size:12px; padding:8px 15px;"><i class="fa-solid fa-plus"></i> Manual Expense</button>
+            </div>
+            <div style="width:100%; overflow-x:auto;">
+                <table style="width:100%; min-width:300px; border-collapse:collapse;">
+                    <thead style="background:#f1f5f9;">
+                      <tr>
+                        <th style="padding:12px; text-align:left; color:var(--text-muted); font-size:10px; text-transform:uppercase;">Date</th>
+                        <th style="padding:12px; text-align:left; color:var(--text-muted); font-size:10px; text-transform:uppercase;">Expense Details</th>
+                        <th style="padding:12px; text-align:right; color:var(--text-muted); font-size:10px; text-transform:uppercase;">Amount (₹)</th>
+                        <th style="padding:12px; text-align:center; color:var(--text-muted); font-size:10px; text-transform:uppercase;">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="expenseTableBody">
+                        <!-- Expenses load here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- RECORDS SECTION -->
 <div id="sectionRecords" class="page-section">
-  
   <div class="filter-bar">
     <div class="filter-bar-row">
-        <select id="monthFilter" onchange="loadRecords()"></select>
+        <select id="monthFilter" onchange="syncFilters('monthFilter')"></select>
         <input type="text" id="searchInput" placeholder="Search Name/Ph..." oninput="loadRecords()">
     </div>
-    <div class="filter-bar-row">
+    <div class="filter-bar-row" style="gap:8px; width:100%; display:flex;">
         <!-- Permanent Add Sign Button -->
-        <button class="btn-secondary" style="background:#fef3c7; color:#d97706; border-color:#fcd34d;" onclick="document.getElementById('uploadSignFile').click()"><i class="fa-solid fa-signature"></i> Add Sign</button>
-        <input id="uploadSignFile" type="file" accept="image/*" style="display:none" onchange="uploadSignature(event)">
+        <button class="btn-secondary" style="background:#fef3c7; color:#d97706; border-color:#fcd34d; flex:1; padding:8px 5px; font-size:11px;" onclick="document.getElementById('uploadSignFile').click()"><i class="fa-solid fa-signature"></i> Sign</button>
         
-        <button class="btn-secondary" id="btnToggleSummary" onclick="toggleSummaryPanel()" style="background:var(--primary);color:#fff;border-color:var(--primary);flex:2;"><i class="fa-solid fa-chart-pie"></i> Summary</button>
-        <button class="btn-secondary btn-icon-only" onclick="exportBackup()"><i class="fa-solid fa-download"></i></button>
-        <button class="btn-secondary btn-icon-only" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-upload"></i></button>
+        <!-- MERGE BILL BUTTON -->
+        <button class="btn-secondary" style="background:#e0e7ff; color:#4f46e5; border-color:#c7d2fe; flex:1.5; padding:8px 5px; font-size:11px;" onclick="openMergeModal()"><i class="fa-solid fa-object-group"></i> Merge Bills</button>
+        
+        <button class="btn-secondary btn-icon-only" style="flex:0 0 35px;" onclick="exportBackup()"><i class="fa-solid fa-download"></i></button>
+        <button class="btn-secondary btn-icon-only" style="flex:0 0 35px;" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-upload"></i></button>
         <input id="importFile" type="file" accept=".json" style="display:none" onchange="importBackup(event)">
+        <input id="uploadSignFile" type="file" accept="image/*" style="display:none" onchange="uploadSignature(event)">
     </div>
   </div>
 
-  <!-- HIDDEN SUMMARY DASHBOARD -->
-  <div id="summaryDashboard" style="display:none; margin-bottom:15px; border:1px solid #93c5fd; padding:12px; border-radius:10px; background: linear-gradient(180deg, #eff6ff, #ffffff);">
-      <div class="dash-section-title">This Month</div>
-      <div class="dash-grid">
-        <div class="dash-card c-total"><i class="fa-solid fa-sack-dollar"></i><div class="dash-title">Total</div><div class="dash-value" id="monthlyTotal">₹0</div></div>
-        <div class="dash-card c-cash"><i class="fa-solid fa-wallet text-green"></i><div class="dash-title text-green">Cash</div><div class="dash-value text-green" id="monthlyCash">₹0</div></div>
-        <div class="dash-card c-upi"><i class="fa-solid fa-building-columns text-blue"></i><div class="dash-title text-blue">UPI</div><div class="dash-value text-blue" id="monthlyOnline">₹0</div></div>
-        <div class="dash-card c-dues"><i class="fa-solid fa-hand-holding-dollar text-red"></i><div class="dash-title text-red">Dues</div><div class="dash-value text-red" id="monthDue">₹0</div></div>
-      </div>
-      
-      <div class="dash-section-title">Today</div>
-      <div class="dash-grid" style="margin-bottom:0;">
-        <div class="dash-card green"><i class="fa-solid fa-calendar-day"></i><div class="dash-title">Total</div><div class="dash-value" id="dailyTotal">₹0</div></div>
-        <div class="dash-card c-cash"><i class="fa-solid fa-wallet text-green"></i><div class="dash-title text-green">Cash</div><div class="dash-value text-green" id="dailyCash">₹0</div></div>
-        <div class="dash-card c-upi"><i class="fa-solid fa-building-columns text-blue"></i><div class="dash-title text-blue">UPI</div><div class="dash-value text-blue" id="dailyOnline">₹0</div></div>
-        <div class="dash-card c-orders"><i class="fa-solid fa-cart-shopping" style="color:var(--accent);"></i><div class="dash-title" style="color:var(--accent);">Orders</div><div class="dash-value" id="todayOrders" style="color:var(--accent);">0</div></div>
-      </div>
-  </div>
-
-  <!-- Desktop Table -->
   <div class="table-wrap">
     <table>
       <thead><tr>
@@ -561,9 +647,42 @@ tr:hover td { background:#f8fafc; }
     </table>
   </div>
 
-  <!-- Mobile Cards -->
   <div class="mobile-cards-wrap" id="mobileCardsContainer"></div>
+</div>
 
+<!-- Merge Bills Modal -->
+<div id="mergeModal" class="modal-overlay">
+  <div class="modal-box" style="width:400px; max-height: 80vh; display:flex; flex-direction:column;">
+    <h3><i class="fa-solid fa-object-group text-blue"></i> Merge Bills</h3>
+    <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px; margin-top:0;">Select 2 or more orders to generate a single combined invoice.</p>
+    
+    <input type="text" id="mergeSearch" placeholder="Search Name..." oninput="renderMergeList()" style="margin-bottom:10px; width:100%; padding:10px; border-radius:6px; border:1px solid var(--border-color);">
+    
+    <div id="mergeList" style="flex:1; overflow-y:auto; border:1px solid #e2e8f0; border-radius:8px; padding:5px; background:#f8fafc; min-height: 200px;">
+        <!-- Checkboxes populated by JS -->
+    </div>
+    
+    <div class="modal-actions" style="margin-top:15px;">
+      <button class="btn-cancel" onclick="closeMergeModal()">Cancel</button>
+      <button class="btn-confirm" onclick="generateMergedBill()" style="background:var(--accent);"><i class="fa-solid fa-file-pdf"></i> Generate PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Expense Modal -->
+<div id="expenseModal" class="modal-overlay">
+  <div class="modal-box" style="width:350px;">
+    <h3><i class="fa-solid fa-money-bill-wave text-red"></i> Add Expense</h3>
+    <form onsubmit="confirmAddExpense(event)">
+      <label>Date:</label><input type="date" id="expenseDate" required style="margin-bottom:12px;">
+      <label>Expense Detail:</label><input type="text" id="expenseName" placeholder="e.g., Tea, Electricity, Repair" required style="margin-bottom:12px;">
+      <label>Amount (₹):</label><input type="number" id="expenseAmount" placeholder="0" min="1" required>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="closeExpenseModal()">Cancel</button>
+        <button type="submit" class="btn-confirm" style="background:var(--danger);"><i class="fa-solid fa-plus"></i> Save Expense</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <!-- Custom Confirm Delivery Modal -->
@@ -833,6 +952,9 @@ function executeLogout() {
     sessionStorage.removeItem('activeBranch');
     currentBranch = null;
     globalRecords = []; // Clear memory
+    isSummaryUnlocked = false; // Relock summary
+    document.getElementById('summaryAuthBox').style.display = 'block';
+    document.getElementById('summaryDashboardContent').style.display = 'none';
     showToast('Logged out successfully.');
     checkAuth();
 }
@@ -853,6 +975,7 @@ let isSummaryOpen = false;
 let currentDeliveryId = null;
 let currentDeleteId = null;
 let isMasterUnlocked = false;
+let isSummaryUnlocked = false;
 
 function showToast(msg, isError = false) {
   const toast = document.getElementById("toast");
@@ -861,7 +984,7 @@ function showToast(msg, isError = false) {
   setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
 }
 
-// SMART CLOUD SYNC FUNCTIONS (Now branch aware)
+// SMART CLOUD SYNC FUNCTIONS
 async function fetchFirebaseData() {
     if(!currentBranch) return; // safety
     try {
@@ -905,12 +1028,6 @@ function uploadSignature(e) {
   };
   reader.readAsDataURL(file);
   e.target.value = '';
-}
-
-function toggleSummaryPanel() {
-    isSummaryOpen = !isSummaryOpen;
-    document.getElementById('summaryDashboard').style.display = isSummaryOpen ? 'block' : 'none';
-    document.getElementById('btnToggleSummary').innerHTML = isSummaryOpen ? '<i class="fa-solid fa-eye-slash"></i> Hide Summary' : '<i class="fa-solid fa-chart-pie"></i> Show Summary';
 }
 
 function todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
@@ -1055,9 +1172,30 @@ function updateNextVisitDate() {
     }
 }
 
+// Function to update the background color based on Gender dropdown
+function updateGenderColor() {
+    const el = document.getElementById('customerGender');
+    if(!el) return;
+    if(el.value === 'Male') {
+        el.style.backgroundColor = '#f0fdf4'; // Light Green
+        el.style.borderColor = '#bbf7d0';
+        el.style.color = '#166534';
+    } else if(el.value === 'Female') {
+        el.style.backgroundColor = '#fdf4ff'; // Light Pink/Purple
+        el.style.borderColor = '#f0abfc';
+        el.style.color = '#a21caf';
+    } else {
+        el.style.backgroundColor = '#fffbeb'; // Light Yellow/Orange for Other
+        el.style.borderColor = '#fde68a';
+        el.style.color = '#b45309';
+    }
+}
+
 window.onload = async function() {
+  document.getElementById('entryDate').value = todayISO(); 
   populateDropdownOptions();
   populateMonthFilter();
+  updateGenderColor(); 
   
   checkAuth();
   
@@ -1073,19 +1211,25 @@ window.onload = async function() {
 
   document.getElementById('orderStatus').addEventListener('change', togglePaymentMode);
   document.getElementById('customerAge').addEventListener('input', checkAgeForAdd);
-  document.getElementById('customerGender').addEventListener('change', checkAgeForAdd);
+  document.getElementById('customerGender').addEventListener('change', function() {
+      checkAgeForAdd();
+      updateGenderColor(); 
+  });
 
   document.getElementById('phone').addEventListener('keyup', function() {
     const p = this.value.trim();
     const promptEl = document.getElementById('autoFillPrompt');
     if(p.length >= 10) {
-      const records = getRecords();
+      const records = getRecords().filter(x=>!x.isExpense);
       const cust = records.find(x => x.phone === p);
       if(cust) {
         document.getElementById('customerName').value = cust.customerName || '';
         document.getElementById('customerAddress').value = cust.address || '';
         if(cust.age && cust.age !== '-') document.getElementById('customerAge').value = cust.age;
-        if(cust.gender && cust.gender !== '-') document.getElementById('customerGender').value = cust.gender;
+        if(cust.gender && cust.gender !== '-') {
+            document.getElementById('customerGender').value = cust.gender;
+            updateGenderColor(); 
+        }
         checkAgeForAdd(); 
         
         promptEl.style.display = 'block';
@@ -1121,12 +1265,135 @@ window.onload = async function() {
 
 function switchPage(page){
  window.scrollTo(0, 0); 
- document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',(page==='entry'?i===0:i===1)));
- document.querySelectorAll('.bottom-nav-item').forEach((t,i)=>t.classList.toggle('active',(page==='entry'?i===0:i===1)));
+ const tabs = ['entry', 'records', 'summary'];
+ document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active', tabs[i] === page));
+ document.querySelectorAll('.bottom-nav-item').forEach((t,i)=>t.classList.toggle('active', tabs[i] === page));
  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
- document.getElementById(page==='entry'?'sectionEntry':'sectionRecords').classList.add('active');
- if(page==='records')loadRecords();
+ 
+ if(page === 'entry') document.getElementById('sectionEntry').classList.add('active');
+ if(page === 'records') document.getElementById('sectionRecords').classList.add('active');
+ if(page === 'summary') {
+     document.getElementById('sectionSummary').classList.add('active');
+     if(isSummaryUnlocked) loadRecords();
+ }
+ if(page==='records') loadRecords();
 }
+
+// Sync the two month dropdowns (Records vs Summary)
+function syncFilters(changedId) {
+    const val = document.getElementById(changedId).value;
+    document.getElementById('monthFilter').value = val;
+    document.getElementById('summaryMonthFilter').value = val;
+    loadRecords();
+}
+
+function verifySummaryPin() {
+    const pin = document.getElementById('summaryPinInput').value.trim();
+    if ((currentBranch === 'MVP' && pin === '1212') || (currentBranch === 'SNS' && pin === '8604')) {
+        isSummaryUnlocked = true;
+        document.getElementById('summaryAuthBox').style.display = 'none';
+        document.getElementById('summaryDashboardContent').style.display = 'block';
+        document.getElementById('summaryPinInput').value = '';
+        showToast('🔓 Summary Unlocked!');
+        loadRecords();
+    } else {
+        showToast('❌ Incorrect PIN!', true);
+    }
+}
+
+// === MERGE BILLS LOGIC ===
+function openMergeModal() {
+    document.getElementById('mergeSearch').value = '';
+    renderMergeList();
+    document.getElementById('mergeModal').classList.add('active');
+}
+
+function closeMergeModal() {
+    document.getElementById('mergeModal').classList.remove('active');
+}
+
+function renderMergeList() {
+    const q = document.getElementById('mergeSearch').value.toLowerCase().trim();
+    const records = getRecords().filter(x => !x.isExpense && (x.customerName.toLowerCase().includes(q) || x.phone.includes(q) || x.invoiceNo.toLowerCase().includes(q)));
+    
+    let html = '';
+    records.slice(0, 40).forEach(r => { 
+        html += `
+        <label style="display:flex; align-items:center; gap:10px; padding:12px; border-bottom:1px solid #e2e8f0; cursor:pointer; background:#fff; border-radius:6px; margin-bottom:5px;">
+            <input type="checkbox" class="merge-chk" value="${r.id}" style="width:18px; height:18px; accent-color:var(--primary);">
+            <div style="flex:1;">
+                <b style="color:var(--text-main); font-size:14px;">${esc(r.customerName)}</b> <span style="font-size:11px; color:var(--primary); font-weight:700;">(${esc(r.invoiceNo)})</span><br>
+                <span style="font-size:12px; color:var(--text-muted);">${formatDate(r.rawBookingDate)} | Total: <b style="color:var(--text-main);">${money(finalTotal(r))}</b></span>
+            </div>
+        </label>
+        `;
+    });
+    
+    if(html === '') html = '<div style="padding:15px; text-align:center; color:var(--text-muted);">No records found.</div>';
+    document.getElementById('mergeList').innerHTML = html;
+}
+
+function generateMergedBill() {
+    const chks = document.querySelectorAll('.merge-chk:checked');
+    if(chks.length < 2) {
+        return showToast('❌ Please select at least 2 bills to merge!', true);
+    }
+
+    const allRecords = getRecords();
+    const selectedItems = [];
+    chks.forEach(chk => {
+        const item = allRecords.find(x => String(x.id) === chk.value);
+        if(item) selectedItems.push(item);
+    });
+
+    closeMergeModal();
+    downloadCombinedPdf(selectedItems);
+}
+
+
+// Expense Management
+function openExpenseModal() {
+    document.getElementById('expenseDate').value = todayISO();
+    document.getElementById('expenseName').value = '';
+    document.getElementById('expenseAmount').value = '';
+    document.getElementById('expenseModal').classList.add('active');
+}
+function openQuickExpense(custName, itemsStr) {
+    document.getElementById('expenseDate').value = todayISO();
+    document.getElementById('expenseName').value = `Cost: ${custName} - ${itemsStr}`;
+    document.getElementById('expenseAmount').value = '';
+    document.getElementById('expenseModal').classList.add('active');
+}
+
+function closeExpenseModal() {
+    document.getElementById('expenseModal').classList.remove('active');
+}
+
+function confirmAddExpense(e) {
+    e.preventDefault();
+    const date = document.getElementById('expenseDate').value;
+    const name = document.getElementById('expenseName').value.trim();
+    const amt = Number(document.getElementById('expenseAmount').value);
+    
+    if(!name || amt <= 0) return;
+    
+    const item = {
+        id: Date.now() + Math.random(),
+        isExpense: true,
+        rawBookingDate: date,
+        bookingDateStr: formatDate(date),
+        yearMonth: date.slice(0,7),
+        expenseName: name,
+        expenseAmount: amt
+    };
+    
+    const r = getRecords();
+    setRecords([item, ...r]);
+    closeExpenseModal();
+    loadRecords();
+    showToast("Expense Added Successfully!");
+}
+
 
 function populateDropdownOptions(){
  let sph='<option value="">Sph</option>', cyl='<option value="">Cyl</option>', axis='<option value="">Axis</option>';
@@ -1193,10 +1460,14 @@ function togglePaymentMode(adv){
 }
 
 function populateMonthFilter(){
- const el=document.getElementById('monthFilter'), now=new Date(); el.innerHTML='';
+ const el1=document.getElementById('monthFilter'), el2=document.getElementById('summaryMonthFilter'), now=new Date(); 
+ el1.innerHTML=''; el2.innerHTML='';
  for(let i=0; i<18; i++){
   const d=new Date(now.getFullYear(), now.getMonth()-i, 1), v=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-  const o=document.createElement('option'); o.value=v; o.textContent=d.toLocaleString('default',{month:'long',year:'numeric'}); el.appendChild(o);
+  const t = d.toLocaleString('default',{month:'long',year:'numeric'});
+  
+  const o1=document.createElement('option'); o1.value=v; o1.textContent=t; el1.appendChild(o1);
+  const o2=document.createElement('option'); o2.value=v; o2.textContent=t; el2.appendChild(o2);
  }
 }
 
@@ -1232,20 +1503,21 @@ function saveRecord(e){
  if((advance > 0 || statusWanted.includes('Paid')) && !mode) return showToast('Please select Payment Mode!', true);
 
  const balance = Math.max(0, total - advance);
- const date = todayISO();
+ const date = document.getElementById('entryDate').value || todayISO(); // Uses the selected date
  const currentYearMonth = date.slice(0, 7); 
  const records = getRecords();
  
  let maxSeq = 10; 
  records.forEach(x => {
-   if(x.rawBookingDate && x.rawBookingDate.slice(0, 7) === currentYearMonth && x.invoiceNo){
+   if(!x.isExpense && x.rawBookingDate && x.rawBookingDate.slice(0, 7) === currentYearMonth && x.invoiceNo){
      const parts = x.invoiceNo.split('/');
      const num = parseInt(parts[3], 10);
      if(!isNaN(num) && num > maxSeq) maxSeq = num;
    }
  });
  
- const dObj = new Date(); 
+ // The invoice month code should ideally match the entry date
+ const dObj = new Date(date); 
  const yy = String(dObj.getFullYear()).slice(-2);
  const mm = String(dObj.getMonth() + 1).padStart(2, '0');
  const yearMonthCode = yy + mm; 
@@ -1271,8 +1543,9 @@ function saveRecord(e){
  
  setRecords([item,...records]);
  document.getElementById('prescriptionForm').reset();
+ document.getElementById('entryDate').value = todayISO(); // Reset back to today
+ updateGenderColor(); 
  
- // Reset P Buttons and PR Grids completely
  document.querySelectorAll('.btn-p').forEach(btn => { btn.classList.remove('active'); btn.disabled = true; });
  document.querySelectorAll('.pr-grid').forEach(grid => { grid.style.display = 'none'; grid.querySelectorAll('.pr-chk').forEach(c => c.checked = false); });
 
@@ -1284,7 +1557,8 @@ function saveRecord(e){
  calculateTotal(); checkAgeForAdd();
  
  showToast("Record Saved Successfully!");
- populateMonthFilter(); document.getElementById('monthFilter').value=item.yearMonth;
+ document.getElementById('monthFilter').value=item.yearMonth;
+ document.getElementById('summaryMonthFilter').value=item.yearMonth;
  switchPage('records');
 }
 
@@ -1321,11 +1595,18 @@ function executeMarkDelivered() {
 }
 
 function loadRecords(){
- const records=getRecords(), selected=document.getElementById('monthFilter').value||todayISO().slice(0,7), q=(document.getElementById('searchInput')?.value||'').toLowerCase().trim();
- const filtered=records.filter(x=>(x.rawBookingDate||'').slice(0,7)===selected && (String(x.customerName).toLowerCase().includes(q)||String(x.phone).includes(q)||String(x.invoiceNo).toLowerCase().includes(q)));
+ const allRecords = getRecords();
+ const selected = document.getElementById('summaryMonthFilter').value || todayISO().slice(0,7);
+ const q = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+
+ const sales = allRecords.filter(x => !x.isExpense);
+ const expenses = allRecords.filter(x => x.isExpense);
+
+ const filteredSales = sales.filter(x => (x.rawBookingDate||'').slice(0,7)===selected && (String(x.customerName).toLowerCase().includes(q)||String(x.phone).includes(q)||String(x.invoiceNo).toLowerCase().includes(q)));
+ const filteredExpenses = expenses.filter(x => (x.rawBookingDate||'').slice(0,7)===selected);
  
  let mCash=0, mOnline=0, dCash=0, dOnline=0;
- records.forEach(item=>{
+ sales.forEach(item=>{
      ensurePayments(item);
      item.payments.forEach(p=>{
        if((p.date||'').slice(0,7)===selected){ (p.mode==='Online'||p.mode==='UPI') ? mOnline+=Number(p.amount) : mCash+=Number(p.amount); }
@@ -1333,26 +1614,75 @@ function loadRecords(){
      });
  });
 
+ let mExp=0, dExp=0;
+ expenses.forEach(item => {
+    if((item.rawBookingDate||'').slice(0,7)===selected) mExp += Number(item.expenseAmount||0);
+    if(item.rawBookingDate===todayISO()) dExp += Number(item.expenseAmount||0);
+ });
+
  if(document.getElementById('monthlyTotal')) document.getElementById('monthlyTotal').textContent=money(mCash+mOnline); 
  if(document.getElementById('monthlyCash')) document.getElementById('monthlyCash').textContent=money(mCash); 
  if(document.getElementById('monthlyOnline')) document.getElementById('monthlyOnline').textContent=money(mOnline);
- if(document.getElementById('monthDue')) document.getElementById('monthDue').textContent=money(filtered.reduce((s,x)=>s+Math.max(0,finalTotal(x)-paidFromPayments(x)),0));
+ if(document.getElementById('monthDue')) document.getElementById('monthDue').textContent=money(filteredSales.reduce((s,x)=>s+Math.max(0,finalTotal(x)-paidFromPayments(x)),0));
+ if(document.getElementById('monthlyExpense')) document.getElementById('monthlyExpense').textContent=money(mExp);
  
  if(document.getElementById('dailyTotal')) document.getElementById('dailyTotal').textContent=money(dCash+dOnline);
  if(document.getElementById('dailyCash')) document.getElementById('dailyCash').textContent=money(dCash);
  if(document.getElementById('dailyOnline')) document.getElementById('dailyOnline').textContent=money(dOnline);
- if(document.getElementById('todayOrders')) document.getElementById('todayOrders').textContent=records.filter(x=>x.rawBookingDate===todayISO()).length;
+ if(document.getElementById('todayOrders')) document.getElementById('todayOrders').textContent=sales.filter(x=>x.rawBookingDate===todayISO()).length;
+ if(document.getElementById('dailyExpense')) document.getElementById('dailyExpense').textContent=money(dExp);
  
+ // ==== Render Order Costing Box ====
+ let quickExpHtml = '';
+ filteredSales.forEach(sale => {
+    let itemsArr = [];
+    if(sale.frameType && sale.frameType !== '-') itemsArr.push('Frame: ' + sale.frameType);
+    if(sale.lensType && sale.lensType !== '-') itemsArr.push('Lens: ' + sale.lensType);
+    let itemsStr = itemsArr.join(', ');
+    
+    if(itemsStr !== '') {
+        quickExpHtml += `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 15px; border-bottom:1px solid #f1f5f9;">
+            <div>
+                <div style="font-weight:700; font-size:12px; color:var(--text-main);">${esc(sale.customerName)} <span style="font-size:10px; color:var(--primary);">(${esc(sale.invoiceNo)})</span></div>
+                <div style="font-size:10.5px; color:var(--text-muted); margin-top:2px;">${esc(itemsStr)}</div>
+            </div>
+            <button onclick="openQuickExpense('${esc(sale.customerName)}', '${esc(itemsStr)}')" style="background:#fee2e2; border:1px solid #fca5a5; color:var(--danger); border-radius:4px; padding:4px 8px; font-size:11px; font-weight:700; cursor:pointer;"><i class="fa-solid fa-plus"></i> Cost</button>
+        </div>`;
+    }
+ });
+ if(quickExpHtml === '') quickExpHtml = '<div style="padding:15px; text-align:center; color:var(--text-muted); font-size:12px;">No recent item orders.</div>';
+ if(document.getElementById('quickExpenseList')) document.getElementById('quickExpenseList').innerHTML = quickExpHtml;
+
+ // ==== Render Expense Table in Summary ====
+ const expTbody = document.getElementById('expenseTableBody');
+ if(expTbody) {
+    expTbody.innerHTML = '';
+    if(filteredExpenses.length === 0) {
+        expTbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">No expenses logged for this month.</td></tr>`;
+    } else {
+        filteredExpenses.forEach(ex => {
+            expTbody.innerHTML += `<tr style="border-bottom:1px solid #f1f5f9;">
+                <td style="padding:12px; font-weight:600; color:var(--text-muted);">${esc(ex.bookingDateStr)}</td>
+                <td style="padding:12px; font-weight:700; color:var(--text-main);">${esc(ex.expenseName)}</td>
+                <td style="text-align:right; padding:12px; color:var(--danger); font-weight:800;">${money(ex.expenseAmount)}</td>
+                <td style="text-align:center; padding:12px;"><button onclick="deleteRecord(${ex.id})" style="background:#fee2e2; border:1px solid #fca5a5; color:var(--danger); border-radius:4px; cursor:pointer; padding:4px 8px;"><i class="fa-solid fa-trash"></i></button></td>
+            </tr>`;
+        });
+    }
+ }
+
+ // ==== Render Sales Table in Records ====
  const tbody=document.getElementById('dataTable'), mobContainer=document.getElementById('mobileCardsContainer');
  tbody.innerHTML=''; mobContainer.innerHTML='';
  
- if(!filtered.length){
+ if(!filteredSales.length){
     tbody.innerHTML=`<tr><td colspan="6" style="padding:40px;color:#94a3b8;font-size:14px;text-align:center;"><i class="fa-solid fa-folder-open" style="font-size:30px;display:block;margin-bottom:10px;"></i> No records found.</td></tr>`;
     mobContainer.innerHTML=`<div style="text-align:center;padding:40px;color:#94a3b8;"><i class="fa-solid fa-folder-open" style="font-size:30px;"></i><br>No records found.</div>`;
     return;
  }
 
- filtered.forEach((item,index)=>{
+ filteredSales.forEach((item,index)=>{
   const paid = paidFromPayments(item), due = Math.max(0, finalTotal(item)-paid);
   
   let ageGen = [];
@@ -1396,7 +1726,7 @@ function loadRecords(){
   const power = `<div style="font-size:10.5px;color:#475569;line-height:1.4;"><b>R:</b> ${fe(item.rightEye?.sph, item.rightEye?.cyl, item.rightEye?.axis, item.rightEye?.vision, item.rightEye?.add, item.rightEye?.nearVision)}<br><b>L:</b> ${fe(item.leftEye?.sph, item.leftEye?.cyl, item.leftEye?.axis, item.leftEye?.vision, item.leftEye?.add, item.leftEye?.nearVision)}</div>`;
 
   tbody.innerHTML += `<tr>
-    <td><b>${filtered.length-index}</b></td>
+    <td><b>${filteredSales.length-index}</b></td>
     <td><b style="color:var(--primary);font-size:11px;">${esc(item.invoiceNo)}</b><br><small>${esc(item.bookingDateStr||formatDate(item.rawBookingDate))}</small></td>
     <td>
        <b style="color:var(--text-main);font-size:13px;">${esc(item.customerName)}</b> ${ageGenStr ? `<small style="color:#64748b;">${esc(ageGenStr)}</small>` : ''}<br>
@@ -1629,6 +1959,160 @@ function openBillModal(id){
  document.getElementById('printBillModal').classList.add('active');
 }
 function closeBillModal(){ document.getElementById('printBillModal').classList.remove('active'); activeItem=null; }
+
+
+function downloadCombinedPdf(items) {
+  try {
+    const doc = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const mainColor = [234, 88, 12]; 
+    const pageWidth = doc.internal.pageSize.getWidth(), pageHeight = doc.internal.pageSize.getHeight(), marginX = 15;
+    const pdfMoney = (n) => 'Rs. ' + (Number(n)||0).toLocaleString('en-IN'); 
+
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(60); doc.setTextColor(240, 243, 248); 
+    doc.text('SPECSNSHADES', pageWidth/2, (pageHeight/2) + 40, { align: 'center', baseline: 'middle', angle: 45 });
+
+    doc.setFillColor(mainColor[0], mainColor[1], mainColor[2]); doc.rect(10, 10, pageWidth - 20, 26, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(22);
+    doc.text('MALTI VISION PLUS', pageWidth / 2, 21, { align: 'center' });
+    doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    doc.text('POWERED BY SPECSNSHADES', pageWidth / 2, 27, { align: 'center' });
+    doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+    doc.text('Near Govt Hospital, Sankisa Road, Mohammadabad, Farrukhabad, UP - 209625', pageWidth / 2, 32, { align: 'center' });
+
+    doc.setFillColor(248, 250, 252); doc.rect(10, 36, pageWidth - 20, 9, 'F');
+    doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.3); doc.rect(10, 36, pageWidth - 20, 9, 'S');
+    
+    const igY = 40.5;
+    doc.setDrawColor(219, 39, 119); doc.setLineWidth(0.4);
+    doc.roundedRect(15, igY - 2.5, 5, 5, 1, 1, 'S');
+    doc.circle(15 + 2.5, igY, 1, 'S');
+    doc.setFillColor(219, 39, 119); doc.circle(15 + 3.8, igY - 1.2, 0.3, 'F');
+    doc.setFontSize(10.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(219, 39, 119); 
+    doc.text('@specsnshades.in', 22, 42); 
+
+    const phIconX = pageWidth - 46; 
+    doc.setDrawColor(mainColor[0], mainColor[1], mainColor[2]); doc.setLineWidth(0.4);
+    doc.roundedRect(phIconX, igY - 2.5, 3.2, 5.2, 0.6, 0.6, 'S');
+    doc.setLineWidth(0.2); doc.line(phIconX + 1.1, igY + 1.8, phIconX + 2.1, igY + 1.8);
+    doc.setTextColor(mainColor[0], mainColor[1], mainColor[2]);
+    doc.text('+91-7309095557', pageWidth - 15, 42, { align: 'right' }); 
+
+    doc.setTextColor(15, 23, 42); doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
+    doc.text('COMBINED INVOICE', pageWidth / 2, 54, { align: 'center' });
+    
+    const primary = items[0];
+    const allNames = items.map(i => i.customerName).filter((v, i, a) => a.indexOf(v) === i).join(' & ');
+    const allInvoices = items.map(i => i.invoiceNo).join(', ');
+
+    doc.setFontSize(8); doc.setTextColor(100, 116, 139); 
+    doc.text('Ref Invoices: ' + allInvoices, pageWidth / 2, 60, { align: 'center' });
+
+    let currentY = 66;
+
+    doc.autoTable({
+      startY: currentY, margin: { left: marginX, right: marginX }, theme: 'grid',
+      styles: { fontSize: 9, cellPadding: 3, textColor: [15, 23, 42], lineColor: [203, 213, 225], lineWidth: 0.1 },
+      columnStyles: { 
+          0: { fontStyle: 'bold', fillColor: [248, 250, 252], cellWidth: 30 }, 
+          1: { cellWidth: 60 }, 
+          2: { fontStyle: 'bold', fillColor: [248, 250, 252], cellWidth: 30 }, 
+          3: { cellWidth: 60 } 
+      },
+      body: [ 
+          ['Customer(s)', allNames, 'Date', formatDate(primary.rawBookingDate)], 
+          ['Mobile No', primary.phone || '-', 'Address', primary.address || '-']
+      ]
+    });
+    currentY = doc.lastAutoTable.finalY + 8;
+
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10.5); doc.setTextColor(15, 23, 42); 
+    doc.text('ORDER SUMMARY', marginX, currentY); currentY += 4;
+
+    let tableData = []; let c = 1;
+    let sumTotal = 0, sumDisc = 0, sumFinal = 0;
+
+    items.forEach(i => {
+        const finalAm = finalTotal(i);
+        sumTotal += (Number(i.totalAmount)||0);
+        sumDisc += (Number(i.discountAmount)||0);
+        sumFinal += finalAm;
+        
+        let cNamePrefix = (items.length > 1 && i.customerName) ? `[${i.customerName.split(' ')[0]}] ` : '';
+
+        if(i.frameType && i.frameType !== '-') tableData.push([String(c++), cNamePrefix + 'Frame: ' + String(i.frameType).trim(), pdfMoney(i.frameAmount)]);
+        if(i.lensType && i.lensType !== '-') tableData.push([String(c++), cNamePrefix + 'Lens: ' + String(i.lensType).trim(), pdfMoney(i.lensAmount)]);
+        if(i.extraItems) i.extraItems.forEach(ex => tableData.push([String(c++), cNamePrefix + String(ex.name).trim(), pdfMoney(ex.price)]));
+    });
+    
+    if(!tableData.length) tableData.push(['-', 'No items added', '-']);
+
+    doc.autoTable({ 
+        startY: currentY, margin: { left: marginX, right: marginX }, theme: 'grid', 
+        headStyles: { fillColor: mainColor, textColor: 255, fontStyle: 'bold', halign: 'center' }, 
+        styles: { fontSize: 9.5, cellPadding: 4, lineColor: [226, 232, 240] }, 
+        columnStyles: { 0: { halign: 'center', cellWidth: 15 }, 1: { halign: 'left' }, 2: { halign: 'right', cellWidth: 40 } }, 
+        head: [['#', 'Item Description', 'Amount']], body: tableData 
+    });
+    currentY = doc.lastAutoTable.finalY + 4;
+
+    let tBody = [['Combined Subtotal', pdfMoney(sumTotal)]];
+    if(sumDisc > 0) tBody.push(['Combined Discount', '- ' + pdfMoney(sumDisc)]);
+    tBody.push(['Final Amount', pdfMoney(sumFinal)]);
+
+    doc.autoTable({ 
+      startY: currentY, margin: { left: pageWidth - marginX - 80, right: marginX }, theme: 'grid', 
+      styles: { fontSize: 9.5, cellPadding: 3.5, textColor: [15, 23, 42], lineColor: [226, 232, 240] }, 
+      columnStyles: { 0: { halign: 'left', fontStyle: 'bold' }, 1: { halign: 'right', fontStyle: 'bold' } }, 
+      body: tBody, 
+      didParseCell: function(data){ if(data.row.raw[0] === 'Final Amount') data.cell.styles.fillColor = [241, 245, 249]; } 
+    });
+    
+    currentY = doc.lastAutoTable.finalY + 6;
+
+    let signY = doc.lastAutoTable.finalY + 20;
+    if(signY > 250){ doc.addPage(); signY = 20; doc.setDrawColor(mainColor[0], mainColor[1], mainColor[2]); doc.rect(10, 10, pageWidth - 20, pageHeight - 20); }
+
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(15, 23, 42); doc.text('Terms & Conditions:', marginX, signY);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(100, 116, 139);
+    doc.text('1. Goods once sold will not be returned.\n2. Warranty as per company policy.\n3. Advance payment is non-refundable.', marginX, signY + 5);
+
+    doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.2); 
+    doc.line(pageWidth - marginX - 45, signY + 10, pageWidth - marginX - 5, signY + 10);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(71, 85, 105); doc.text('Authorized Signatory', pageWidth - marginX - 25, signY + 14, { align: 'center' });
+    
+    // SMART SIGNATURE RENDERING LOGIC
+    let mySignatureImage = localStorage.getItem('savedSignature') || '';
+    if(mySignatureImage && mySignatureImage.trim() !== '') {
+        try {
+           let format = mySignatureImage.includes('image/png') ? 'PNG' : 'JPEG';
+           doc.addImage(mySignatureImage, format, pageWidth - marginX - 40, signY - 6, 35, 15);
+        } catch(e) {
+           doc.setFont('times', 'italic'); doc.setFontSize(16); doc.setTextColor(15, 23, 42);
+           doc.text('Shailendra Yadav', pageWidth - marginX - 25, signY + 8, { align: 'center' });
+        }
+    } else {
+        doc.setFont('times', 'italic'); doc.setFontSize(16); doc.setTextColor(15, 23, 42);
+        doc.text('Shailendra Yadav', pageWidth - marginX - 25, signY + 8, { align: 'center' });
+    }
+
+    doc.setFont('helvetica', 'italic'); doc.setFontSize(8); doc.setTextColor(160, 160, 160); 
+    doc.text('* This is a system-generated combined document.', pageWidth / 2, pageHeight - 12, { align: 'center' });
+
+    const safeName = (allNames || 'Customer').replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 20);
+    let dParts = (todayISO()).split('-');
+    let dateStr = dParts.length === 3 ? `_${dParts[2]}${dParts[1]}${dParts[0]}` : ''; 
+    const finalFileName = `Combined_Invoice_${safeName}${dateStr}.pdf`;
+    
+    if (window.AndroidDownloader && window.AndroidDownloader.saveDynamicPdf) {
+        window.AndroidDownloader.saveDynamicPdf(doc.output('datauristring'), finalFileName);
+        showToast("Combined PDF Saved in Phone Downloads! 📁");
+    } else {
+        doc.save(finalFileName);
+        showToast("Combined PDF Downloaded Successfully!");
+    }
+
+  } catch (err) { alert('PDF Error: ' + err.message); console.error(err); }
+}
 
 function downloadPdf(type){
   let i = activeItem; 
@@ -1984,6 +2468,23 @@ function exportBackup(){
 function importBackup(e){
  const file=e.target.files[0]; if(!file)return; const reader=new FileReader();
  reader.onload=function(){try{const d=JSON.parse(reader.result),r=Array.isArray(d)?d:d.records; if(!Array.isArray(r))throw Error(); if(!confirm('Restore backup? Existing data will be replaced.'))return; setRecords(r); loadRecords(); showToast('Data Restored!');}catch(err){showToast('Invalid backup file.', true);}}; reader.readAsText(file); e.target.value='';
+}
+
+// Auto-select gender based on Title prefix
+function autoSelectGender() {
+    const prefix = document.getElementById('customerPrefix').value;
+    const genderSelect = document.getElementById('customerGender');
+    if(!genderSelect) return;
+    
+    if (prefix === 'Mr.' || prefix === 'Master') {
+        genderSelect.value = 'Male';
+    } else if (prefix === 'Mrs.' || prefix === 'Miss') {
+        genderSelect.value = 'Female';
+    }
+    
+    // Auto-update age rules based on new gender
+    checkAgeForAdd(); 
+    updateGenderColor();
 }
 </script>
 </body>
